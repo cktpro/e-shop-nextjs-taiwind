@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 function ArrowButtonCarousel(props) {
   const { prev, next } = props;
   return (
-    <div className="absolute top-[-5.4rem] right-[1rem] xl:right-0 2xl:right-[8.5rem] flex gap-[0.5rem]">
+    <div className="absolute top-[-5.4rem] right-[1rem] xl:right-0 2xl:right-[8.3rem] flex gap-[0.5rem]">
       <button
         type="button"
         className="flex items-center justify-center w-[2.875rem] h-[2.875rem] bg-secondary-1 rounded-[5rem]"

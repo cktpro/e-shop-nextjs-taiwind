@@ -1,18 +1,24 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 import { ChevronRight } from "lucide-react";
 // import Image from "next/image";
 import Link from "next/link";
 
 // import banner1 from "@/assets/images/banner/banner1.jpg";
-import data from "@/data/categories.json";
+import { useTrans } from "@/helper/chanLang";
 
 import Banner from "../banner";
 
 import styles from "./slider.module.scss";
 
 function Slider() {
+  const data = useTrans("slideBar");
+
   const [categories, setCategories] = useState(data);
+
+  useEffect(() => {
+    setCategories(data);
+  }, [categories, data]);
 
   const toggleFrameCategories = useCallback(
     (event, index) => {
@@ -27,7 +33,7 @@ function Slider() {
   return (
     <div className="container flex items-center">
       <div className="hidden lg:block w-fit mr-auto border-r-gray-400 border-r-[1px]">
-        <ul className="text-black font-poppins pt-[2.5rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
+        <ul className="text-black font-poppins gap-[1rem] pt-[2.5rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
           {categories?.map((item, index) => {
             if (item?.child) {
               return (
@@ -37,7 +43,7 @@ function Slider() {
                   className="relative"
                   key={item.name}
                 >
-                  <li className="hover:bg-gray-300 h-[2.5rem] flex justify-between items-center cursor-pointer ">
+                  <li className="hover:bg-gray-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
                     <span className="mr-[3.19rem] !whitespace-nowrap">{item.name}</span>
 
                     <ChevronRight className="mr-[1rem]" />
@@ -45,7 +51,7 @@ function Slider() {
 
                   <ul
                     className={classNames(
-                      `${styles.custom_shadow} bg-white rounded-md absolute left-[13rem] top-[0] z-[2] w-full h-[20rem] px-2 py-3 flex flex-col`,
+                      `${styles.custom_shadow} bg-white rounded-md absolute gap-[1rem] left-[13rem] top-[0] z-[2] w-full h-[20rem] px-2 py-3 flex flex-col`,
                       !item?.isExtend && "hidden",
                     )}
                   >
@@ -53,7 +59,7 @@ function Slider() {
                       return (
                         <li
                           key={child.name}
-                          className="hover:bg-gray-300 flex items-center h-[2.5rem] !whitespace-nowrap"
+                          className="hover:bg-gray-300 flex items-center max-h-[1.5rem] !whitespace-nowrap"
                         >
                           <Link className="px-2 py-1 block w-full" href="./">
                             {child.name}
@@ -67,7 +73,7 @@ function Slider() {
             }
 
             return (
-              <li className="hover:bg-gray-300 flex items-center h-[2.5rem]" key={item.name}>
+              <li className="hover:bg-gray-300 flex items-center max-h-[1.5rem]" key={item.name}>
                 <Link className="!whitespace-nowrap block w-full" href="./">
                   {item.name}
                 </Link>

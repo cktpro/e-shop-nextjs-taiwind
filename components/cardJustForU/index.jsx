@@ -10,7 +10,7 @@ function CardJustForU(props) {
 
   return (
     <div className="flex flex-col items-start gap-[1rem]">
-      <div className="group relative w-[16.875rem] h-[15.625rem] rounded-[0.25rem] bg-secondary-1">
+      <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
         <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
           <span className="text-text-1 font-poppins text-[0.75rem] font-[400] leading-[1.125rem]">-40%</span>
         </div>
@@ -24,16 +24,14 @@ function CardJustForU(props) {
           </button>
         </div>
 
-        <div className="mx-[2.5rem] my-[2.19rem] px-[0.56rem] py-[0.88rem] box-border w-[11.875rem] h-[11.25rem] flex-shrink-0">
-          <Image
-            className="w-[10.75rem] h-[9.5rem] object-contain"
-            src={product.image}
-            alt="..."
-            width={172}
-            height={152}
-            priority
-          />
-        </div>
+        <Image
+          className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
+          src={product.image}
+          alt="..."
+          width={172}
+          height={152}
+          priority
+        />
 
         <button
           type="button"

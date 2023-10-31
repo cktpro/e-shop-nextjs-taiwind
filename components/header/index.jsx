@@ -13,15 +13,23 @@ import {
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { useTrans } from "@/helper/chanLang";
+import useOutsideClick from "@/helper/clickOutsideElement";
 
 import DropDown from "../svg/dropDown";
 
 function Header() {
+  const router = useRouter();
+
   const [token, setToken] = useState(false);
 
   const [openRight, setOpenRight] = useState(false);
 
   const [openLanguage, setOpenLanguage] = useState(false);
+
+  const [openLanguageInDrawder, setOpenLanguageInDrawder] = useState(false);
 
   const [openUserSetting, setOpenUserSetting] = useState(false);
 
@@ -29,11 +37,29 @@ function Header() {
 
   const closeDrawerRight = useCallback(() => setOpenRight(false), []);
 
-  const openSelectLanguage = useCallback(() => setOpenLanguage((open) => !open), []);
+  const openSelectLanguage = useCallback(() => setOpenLanguage(true), []);
+
+  const openSelectLanguageInDrawder = useCallback(() => setOpenLanguageInDrawder(true), []);
 
   const openUserSettingMenu = useCallback(() => setOpenUserSetting(true), []);
 
-  const closeUserSettingMenu = useCallback(() => setOpenUserSetting(false), []);
+  const handleClickOutsideLanguage = useCallback(() => {
+    setOpenLanguage(false);
+  }, []);
+
+  const refClickLanguage = useOutsideClick(handleClickOutsideLanguage);
+
+  const handleClickOutsideLanguageInDrawder = useCallback(() => {
+    setOpenLanguageInDrawder(false);
+  }, []);
+
+  const refClickLanguageInDrawder = useOutsideClick(handleClickOutsideLanguageInDrawder);
+
+  const handleClickOutsideUser = useCallback(() => {
+    setOpenUserSetting(false);
+  }, []);
+
+  const refClickUser = useOutsideClick(handleClickOutsideUser);
 
   useEffect(() => {
     const getToken = localStorage.getItem("TOKEN");
@@ -47,6 +73,13 @@ function Header() {
     setOpenUserSetting(false);
   }, []);
 
+  const changeLang = useCallback(
+    (lang) => {
+      router.push("/", "/", { locale: lang });
+    },
+    [router],
+  );
+
   return (
     <>
       <section className="bg-black z-[1] font-poppins text-text-1 text-[0.875rem] leading-[1.3125rem] py-3">
@@ -56,14 +89,19 @@ function Header() {
           <div className="col-span-12 md:col-span-10: lg:col-span-8 md:flex items-center md:justify-start lg:justify-center text-center">
             <span className="mr-2">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</span>
 
-            <Link className="font-[600] underline" href="./products">
-              ShopNow
+            <Link className="font-[600] underline" href="/products">
+              {useTrans("shopNow")}
             </Link>
           </div>
 
           <div className="hidden col-span-2 lg:flex justify-end relative">
-            <button className="flex items-center justify-between gap-1" type="button" onClick={openSelectLanguage}>
-              <span className="font-[400]">English</span>
+            <button
+              className="flex items-center justify-between gap-1"
+              type="button"
+              ref={refClickLanguage}
+              onClick={openSelectLanguage}
+            >
+              <span className="font-[400]">{useTrans("navBar.lang")}</span>
 
               <DropDown />
             </button>
@@ -75,13 +113,13 @@ function Header() {
               )}
             >
               <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
-                <button onClick={openSelectLanguage} type="button" className="w-full text-left px-1 py-1">
+                <button type="button" onClick={() => changeLang("en")} className="w-full text-left px-1 py-1">
                   English
                 </button>
               </li>
 
               <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
-                <button onClick={openSelectLanguage} type="button" className="w-full text-left px-1 py-1">
+                <button type="button" onClick={() => changeLang("vi")} className="w-full text-left px-1 py-1">
                   Tiếng Việt
                 </button>
               </li>
@@ -91,35 +129,47 @@ function Header() {
       </section>
 
       <header className="sticky top-0 z-[3] text-black bg-white border-b-gray-400 border-b-[1px]">
-        <div className="container pt-[40px] pb-[15px] flex items-center">
-          <Link href="./" className="font-inter font-[700] text-[1.5rem] leading-[1.5rem] mr-auto">
-            Exclusive
+        <div className="container pt-[40px] pb-[16px] flex items-center">
+          <Link href="/" className="font-inter font-[700] text-[1.5rem] leading-[1.5rem] tracking-[0.045rem] mr-auto">
+            <h1>Exclusive</h1>
           </Link>
 
-          <div className="hidden lg:flex gap-[3rem] text-[1rem] font-[400] leading-[1.5rem]">
-            <Link className="font-poppins border-b-gray-400 border-b-[2px]" href="./">
-              Home
+          <div className="hidden lg:flex items-start gap-[3rem]">
+            <Link
+              className="flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+              href="/"
+            >
+              {useTrans("navBar.home")}
             </Link>
 
-            <Link className="font-poppins" href="./products">
-              Contact
+            <Link
+              className="min-w-[4.125rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
+              href="/products"
+            >
+              {useTrans("navBar.contact")}
             </Link>
 
-            <Link className="font-poppins" href="./products">
-              About
+            <Link
+              className="min-w-[3rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
+              href="/products"
+            >
+              {useTrans("navBar.about")}
             </Link>
 
-            <Link className="font-poppins" href="./signUp">
-              Sign Up
+            <Link
+              className="min-w-[3.8125rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
+              href="/signUp"
+            >
+              {useTrans("navBar.signup")}
             </Link>
           </div>
 
-          <div className="hidden ml-[8.12rem] md:flex items-center justify-center">
-            <form className="relative w-[15.1875rem] h-[2.375rem]">
+          <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
+            <form className="relative min-w-[15.1875rem] max-h-[2.375rem]">
               <input
                 type="text"
-                placeholder="What are you looking for?"
-                className="h-10 w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
+                placeholder={useTrans("navBar.inputSearch")}
+                className="min-w-[15.1875rem] min-h-[2.375rem] bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
 
               <button type="submit" className="absolute top-2 right-1">
@@ -127,94 +177,39 @@ function Header() {
               </button>
             </form>
 
-            <Link
-              className="w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
-              href="./wishList"
-            >
+            <Link className="w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center" href="/wishList">
               <Heart />
             </Link>
 
-            <Link className="w-[2rem] h-[2rem] flex items-center justify-center" href="./cart">
+            <Link className="w-[2rem] h-[2rem] flex items-center justify-center" href="/cart">
               <ShoppingCart />
             </Link>
 
             <button
+              ref={refClickUser}
+              onClick={openUserSettingMenu}
               type="button"
-              onMouseEnter={openUserSettingMenu}
-              onMouseLeave={closeUserSettingMenu}
-              className="group relative flex items-center justify-center w-[2rem] h-[2rem] ml-[1rem] rounded-full hover:bg-secondary-2"
+              className={classNames(
+                "group flex items-center justify-center w-[2rem] h-[2rem] ml-[1rem] rounded-full hover:bg-secondary-2",
+                openUserSetting && "bg-secondary-2",
+              )}
             >
-              <User className="group-hover:text-text-1" />
+              <User className={classNames("group-hover:text-text-1", openUserSetting && "text-text-1")} />
+            </button>
 
-              <div
-                className={classNames(
-                  "absolute right-0 top-[1.7rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
-                  !openUserSetting && "hidden",
-                )}
-              >
-                {token ? (
-                  <div className="flex flex-col items-start gap-[0.8125rem]">
-                    <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
-                      <User className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem]  font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Manage My Account
-                      </span>
-                    </Link>
-
-                    <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
-                      <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Order
-                      </span>
-                    </Link>
-
-                    <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
-                      <XCircle className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Cancellations
-                      </span>
-                    </Link>
-
-                    <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
-                      <Star className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Reviews
-                      </span>
-                    </Link>
-
-                    <Link
-                      href="./logIn"
-                      onClick={handleLogout}
-                      className="flex items-center gap-[1rem] hover:bg-gray-500"
-                    >
-                      <LogOut className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Logout
-                      </span>
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-start gap-[0.8125rem]">
-                    <Link
-                      href="./logIn"
-                      onClick={handleLogout}
-                      className="flex items-center gap-[1rem] hover:bg-gray-500"
-                    >
-                      <LogIn className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Login
-                      </span>
-                    </Link>
-                  </div>
-                )}
-                {/* <div className="flex flex-col items-start gap-[0.8125rem]">
-                  <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
+            <div
+              className={classNames(
+                "absolute right-0 top-[2.5rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
+                !openUserSetting && "hidden",
+              )}
+            >
+              {token ? (
+                <div className="flex flex-col items-start gap-[0.8125rem]">
+                  <Link
+                    // onClick={closeUserSettingMenu}
+                    href="/"
+                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                  >
                     <User className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem]  font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -222,7 +217,11 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
+                  <Link
+                    // onClick={closeUserSettingMenu}
+                    href="/"
+                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                  >
                     <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -230,7 +229,11 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
+                  <Link
+                    // onClick={closeUserSettingMenu}
+                    href="/"
+                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                  >
                     <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -238,7 +241,11 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link href="./" className="flex items-center gap-[1rem] hover:bg-gray-500">
+                  <Link
+                    // onClick={closeUserSettingMenu}
+                    href="/"
+                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                  >
                     <Star className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -246,20 +253,26 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link
-                    href="./logIn"
-                    onClick={handleLogout}
-                    className="flex items-center gap-[1rem] hover:bg-gray-500"
-                  >
+                  <Link href="/logIn" onClick={handleLogout} className="flex items-center gap-[1rem] hover:bg-gray-500">
                     <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Logout
                     </span>
                   </Link>
-                </div> */}
-              </div>
-            </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-start gap-[0.8125rem]">
+                  <Link href="/logIn" onClick={handleLogout} className="flex items-center gap-[1rem] hover:bg-gray-500">
+                    <LogIn className="w-[2rem] h-[2rem] text-text-1" />
+
+                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      Login
+                    </span>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           <button onClick={openDrawerRight} className="lg:hidden ml-5" type="button">
@@ -293,9 +306,10 @@ function Header() {
             <button
               className="px-2 py-1 mt-5 rounded-lg bg-black text-text-1 flex items-center justify-between gap-1"
               type="button"
-              onClick={openSelectLanguage}
+              ref={refClickLanguageInDrawder}
+              onClick={openSelectLanguageInDrawder}
             >
-              <span className="font-[400]">English</span>
+              <span className="font-[400]">{useTrans("navBar.lang")}</span>
 
               <DropDown />
             </button>
@@ -303,13 +317,13 @@ function Header() {
             <ul
               className={classNames(
                 "absolute rounded-lg z-[4] text-text-1 top-[3.5rem] px-2 py-2 right-30 flex flex-col justify-start bg-black",
-                !openLanguage && "hidden",
+                !openLanguageInDrawder && "hidden",
               )}
             >
               <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
                 <button
-                  onClick={openSelectLanguage}
                   type="button"
+                  onClick={() => changeLang("en")}
                   className="w-full text-left px-1 py-1 !whitespace-nowrap"
                 >
                   English
@@ -318,8 +332,8 @@ function Header() {
 
               <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
                 <button
-                  onClick={openSelectLanguage}
                   type="button"
+                  onClick={() => changeLang("vi")}
                   className="w-full text-left px-1 py-1 !whitespace-nowrap"
                 >
                   Tiếng Việt
@@ -341,11 +355,11 @@ function Header() {
               </button>
             </form>
             <div className="flex mt-[2rem] gap-3">
-              <Link className="flex items-center" href="./products">
+              <Link className="flex items-center" href="/products">
                 <Heart />
               </Link>
 
-              <Link className="flex items-center ml-[1rem]" href="./products">
+              <Link className="flex items-center ml-[1rem]" href="/products">
                 <ShoppingCart />
               </Link>
 
@@ -356,20 +370,20 @@ function Header() {
           </div>
 
           <div className="lg:hidden mt-[3rem] w-full flex flex-col items-start gap-[2rem] text-[1rem] font-[400] leading-[1.5rem]">
-            <Link className="font-poppins w-fit border-b-gray-400 border-b-[2px]" href="./products">
-              Home
+            <Link className="font-poppins w-fit border-b-gray-400 border-b-[2px]" href="/products">
+              {useTrans("navBar.home")}
             </Link>
 
-            <Link className="font-poppins w-fit" href="./products">
-              Contact
+            <Link className="font-poppins w-fit" href="/products">
+              {useTrans("navBar.contact")}
             </Link>
 
-            <Link className="font-poppins w-fit" href="./products">
-              About
+            <Link className="font-poppins w-fit" href="/products">
+              {useTrans("navBar.about")}
             </Link>
 
-            <Link onClick={closeDrawerRight} className="font-poppins w-fit" href="./signUp">
-              Sign Up
+            <Link onClick={closeDrawerRight} className="font-poppins w-fit" href="/signUp">
+              {useTrans("navBar.signup")}
             </Link>
           </div>
         </div>
