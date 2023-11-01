@@ -3,8 +3,6 @@ const getTime = (date) => {
 
   const endDate = new Date(date);
 
-  endDate.setHours(23, 59, 59, 0);
-
   const daysUntilEndDate = Math.floor(endDate - now) / 1000;
 
   if (daysUntilEndDate < 0) {

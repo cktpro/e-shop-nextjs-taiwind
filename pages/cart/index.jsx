@@ -36,7 +36,7 @@ function CartPage() {
 
             <div className="inline-flex items-center justify-start w-[73.125rem] h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom">
               <Image
-                className="w-[3.125rem] h-[2.4375rem] flex-shrink-0 ml-[2.5rem]"
+                className="w-[3.125rem] h-[2.4375rem] flex-shrink-0 ml-[2.5rem] object-contain"
                 src="/assets/images/products/chuotda.webp"
                 alt="..."
                 width={1000}
@@ -74,7 +74,7 @@ function CartPage() {
 
             <div className="inline-flex items-center justify-start w-[73.125rem] h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom">
               <Image
-                className="w-[3.125rem] h-[2.4375rem] flex-shrink-0 ml-[2.5rem]"
+                className="w-[3.125rem] h-[2.4375rem] flex-shrink-0 ml-[2.5rem] object-contain"
                 src="/assets/images/products/chuotda.webp"
                 alt="..."
                 width={1000}
