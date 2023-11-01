@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 import {
   AlignJustify,
+  ChevronDown,
   Heart,
   LogIn,
   LogOut,
@@ -13,6 +14,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { useTrans } from "@/helper/chanLang";
@@ -22,6 +24,10 @@ import DropDown from "../svg/dropDown";
 
 function Header() {
   const router = useRouter();
+
+  const pathname = usePathname();
+
+  const [isActiveNavbar, setIsActiveNavbar] = useState(pathname);
 
   const [token, setToken] = useState(false);
 
@@ -80,6 +86,10 @@ function Header() {
     [router],
   );
 
+  useEffect(() => {
+    setIsActiveNavbar(pathname);
+  }, [pathname]);
+
   return (
     <>
       <section className="bg-black z-[1] font-poppins text-text-1 text-[0.875rem] leading-[1.3125rem] py-3">
@@ -96,7 +106,10 @@ function Header() {
 
           <div className="hidden col-span-2 lg:flex justify-end relative">
             <button
-              className="flex items-center justify-between gap-1"
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center justify-between gap-1",
+                openLanguage && "opacity-50",
+              )}
               type="button"
               ref={refClickLanguage}
               onClick={openSelectLanguage}
@@ -112,13 +125,13 @@ function Header() {
                 !openLanguage && "hidden",
               )}
             >
-              <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
+              <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
                 <button type="button" onClick={() => changeLang("en")} className="w-full text-left px-1 py-1">
                   English
                 </button>
               </li>
 
-              <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
+              <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
                 <button type="button" onClick={() => changeLang("vi")} className="w-full text-left px-1 py-1">
                   Tiếng Việt
                 </button>
@@ -136,28 +149,40 @@ function Header() {
 
           <div className="hidden lg:flex items-start gap-[3rem]">
             <Link
-              className="flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
+              )}
               href="/"
             >
               {useTrans("navBar.home")}
             </Link>
 
             <Link
-              className="min-w-[4.125rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
-              href="/products"
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
+              )}
+              href="/contact"
             >
               {useTrans("navBar.contact")}
             </Link>
 
             <Link
-              className="min-w-[3rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
-              href="/products"
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
+              )}
+              href="/about"
             >
               {useTrans("navBar.about")}
             </Link>
 
             <Link
-              className="min-w-[3.8125rem] min-h-[1.5rem] flex items-center justify-center text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]"
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
+              )}
               href="/signUp"
             >
               {useTrans("navBar.signup")}
@@ -172,17 +197,26 @@ function Header() {
                 className="min-w-[15.1875rem] min-h-[2.375rem] bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
 
-              <button type="submit" className="absolute top-2 right-1">
+              <button
+                type="submit"
+                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-2 right-1"
+              >
                 <Search />
               </button>
             </form>
 
-            <Link className="w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center" href="/wishList">
-              <Heart />
+            <Link
+              className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
+              href="/wishList"
+            >
+              <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
 
-            <Link className="w-[2rem] h-[2rem] flex items-center justify-center" href="/cart">
-              <ShoppingCart />
+            <Link
+              className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+              href="/cart"
+            >
+              <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
 
             <button
@@ -190,11 +224,16 @@ function Header() {
               onClick={openUserSettingMenu}
               type="button"
               className={classNames(
-                "group flex items-center justify-center w-[2rem] h-[2rem] ml-[1rem] rounded-full hover:bg-secondary-2",
+                "group flex items-center justify-center w-[2rem] h-[2rem] ml-[1rem] rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300",
                 openUserSetting && "bg-secondary-2",
               )}
             >
-              <User className={classNames("group-hover:text-text-1", openUserSetting && "text-text-1")} />
+              <User
+                className={classNames(
+                  "group-hover:text-text-1 transition-colors ease-in-out duration-300",
+                  openUserSetting && "text-text-1",
+                )}
+              />
             </button>
 
             <div
@@ -206,21 +245,19 @@ function Header() {
               {token ? (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
-                    // onClick={closeUserSettingMenu}
                     href="/"
-                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <User className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem]  font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Manage My Account
                     </span>
                   </Link>
 
                   <Link
-                    // onClick={closeUserSettingMenu}
                     href="/"
-                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
@@ -230,9 +267,8 @@ function Header() {
                   </Link>
 
                   <Link
-                    // onClick={closeUserSettingMenu}
                     href="/"
-                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
@@ -242,9 +278,8 @@ function Header() {
                   </Link>
 
                   <Link
-                    // onClick={closeUserSettingMenu}
                     href="/"
-                    className="flex items-center gap-[1rem] hover:bg-gray-500"
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <Star className="w-[2rem] h-[2rem] text-text-1" />
 
@@ -253,7 +288,11 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link href="/logIn" onClick={handleLogout} className="flex items-center gap-[1rem] hover:bg-gray-500">
+                  <Link
+                    href="/logIn"
+                    onClick={handleLogout}
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                  >
                     <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -263,7 +302,11 @@ function Header() {
                 </div>
               ) : (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
-                  <Link href="/logIn" onClick={handleLogout} className="flex items-center gap-[1rem] hover:bg-gray-500">
+                  <Link
+                    href="/logIn"
+                    onClick={handleLogout}
+                    className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                  >
                     <LogIn className="w-[2rem] h-[2rem] text-text-1" />
 
                     <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
@@ -298,20 +341,36 @@ function Header() {
             !openRight && "hidden",
           )}
         >
-          <button type="button" onClick={closeDrawerRight} className="absolute top-3 left-3">
+          <button
+            type="button"
+            onClick={closeDrawerRight}
+            className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-3 left-3"
+          >
             <XCircle />
           </button>
 
           <div className="lg:hidden flex justify-center relative">
             <button
-              className="px-2 py-1 mt-5 rounded-lg bg-black text-text-1 flex items-center justify-between gap-1"
+              className="group px-2 py-1 mt-5 rounded-lg bg-black text-text-1 flex items-center justify-between gap-1"
               type="button"
               ref={refClickLanguageInDrawder}
               onClick={openSelectLanguageInDrawder}
             >
-              <span className="font-[400]">{useTrans("navBar.lang")}</span>
+              <span
+                className={classNames(
+                  "group-hover:opacity-50 transition-opacity ease-in-out duration-300 font-[400]",
+                  openLanguageInDrawder && "opacity-50",
+                )}
+              >
+                {useTrans("navBar.lang")}
+              </span>
 
-              <DropDown />
+              <ChevronDown
+                className={classNames(
+                  "group-hover:opacity-50 transition-opacity ease-in-out duration-300",
+                  openLanguageInDrawder && "opacity-50",
+                )}
+              />
             </button>
 
             <ul
@@ -320,7 +379,7 @@ function Header() {
                 !openLanguageInDrawder && "hidden",
               )}
             >
-              <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
+              <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
                 <button
                   type="button"
                   onClick={() => changeLang("en")}
@@ -330,7 +389,7 @@ function Header() {
                 </button>
               </li>
 
-              <li className="cursor-pointer hover:text-text-2 hover:bg-secondary-1">
+              <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
                 <button
                   type="button"
                   onClick={() => changeLang("vi")}
@@ -350,7 +409,10 @@ function Header() {
                 className="h-10 w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
 
-              <button type="submit" className="absolute top-2 right-1">
+              <button
+                type="submit"
+                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-2 right-1"
+              >
                 <Search />
               </button>
             </form>
@@ -370,19 +432,44 @@ function Header() {
           </div>
 
           <div className="lg:hidden mt-[3rem] w-full flex flex-col items-start gap-[2rem] text-[1rem] font-[400] leading-[1.5rem]">
-            <Link className="font-poppins w-fit border-b-gray-400 border-b-[2px]" href="/products">
+            <Link
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
+              )}
+              // className="font-poppins w-fit border-b-gray-400 border-b-[2px]"
+              href="/"
+            >
               {useTrans("navBar.home")}
             </Link>
 
-            <Link className="font-poppins w-fit" href="/products">
+            <Link
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
+              )}
+              href="/contact"
+            >
               {useTrans("navBar.contact")}
             </Link>
 
-            <Link className="font-poppins w-fit" href="/products">
+            <Link
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
+              )}
+              href="/about"
+            >
               {useTrans("navBar.about")}
             </Link>
 
-            <Link onClick={closeDrawerRight} className="font-poppins w-fit" href="/signUp">
+            <Link
+              className={classNames(
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
+              )}
+              href="/signUp"
+            >
               {useTrans("navBar.signup")}
             </Link>
           </div>

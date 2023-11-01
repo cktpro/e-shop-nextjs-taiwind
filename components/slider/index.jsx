@@ -43,7 +43,7 @@ function Slider() {
                   className="relative"
                   key={item.name}
                 >
-                  <li className="hover:bg-gray-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
+                  <li className="hover:opacity-50 transition-opacity ease-in-out duration-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
                     <span className="mr-[3.19rem] !whitespace-nowrap">{item.name}</span>
 
                     <ChevronRight className="mr-[1rem]" />
@@ -59,7 +59,7 @@ function Slider() {
                       return (
                         <li
                           key={child.name}
-                          className="hover:bg-gray-300 flex items-center max-h-[1.5rem] !whitespace-nowrap"
+                          className="hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center max-h-[1.5rem] !whitespace-nowrap"
                         >
                           <Link className="px-2 py-1 block w-full" href="./">
                             {child.name}
@@ -73,7 +73,10 @@ function Slider() {
             }
 
             return (
-              <li className="hover:bg-gray-300 flex items-center max-h-[1.5rem]" key={item.name}>
+              <li
+                className="hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center max-h-[1.5rem]"
+                key={item.name}
+              >
                 <Link className="!whitespace-nowrap block w-full" href="./">
                   {item.name}
                 </Link>

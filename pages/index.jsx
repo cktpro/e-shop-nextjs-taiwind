@@ -11,7 +11,7 @@ import SaleHunter from "@/components/saleHunter";
 import Services from "@/components/services";
 import Slider from "@/components/slider";
 
-import categories from "@/data/categoriesItems.json";
+import { categories } from "@/data/categoriesItems.jsx";
 
 export default function Home({ products, bestSelling }) {
   return (

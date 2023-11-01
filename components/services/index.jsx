@@ -6,8 +6,16 @@ function Services() {
     <div className="container flex items-center justify-center">
       <div className="grid grid-cols-12 lg:inline-flex justify-center items-center lg:gap-[5.5rem] mt-[8.75rem]">
         <div className="col-span-12 flex flex-col items-center justify-center gap-[1.5rem]">
-          <div className="w-[5rem] h-[5rem]">
-            <Image src="/assets/images/services/services.png" width={80} height={80} alt="..." priority />
+          <div className="min-w-[5rem] min-h-[5rem]">
+            <Image
+              src="/assets/images/services/services.png"
+              className="min-w-[5rem] min-h-[5rem]"
+              width={80}
+              height={80}
+              alt="..."
+              priority
+              style={{ height: "auto" }}
+            />
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">
@@ -22,8 +30,16 @@ function Services() {
         </div>
 
         <div className="col-span-12 flex flex-col items-center justify-center gap-[1.5rem] mt-[3rem] lg:mt-[0]">
-          <div className="w-[5rem] h-[5rem]">
-            <Image src="/assets/images/services/custom.png" width={80} height={80} alt="..." priority />
+          <div className="min-w-[5rem] min-h-[5rem]">
+            <Image
+              src="/assets/images/services/custom.png"
+              className="min-w-[5rem] min-h-[5rem]"
+              width={80}
+              height={80}
+              alt="..."
+              priority
+              style={{ width: "100%", height: "auto" }}
+            />
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">
@@ -38,8 +54,16 @@ function Services() {
         </div>
 
         <div className="col-span-12 flex flex-col items-center justify-center gap-[1.5rem] mt-[3rem] lg:mt-[0]">
-          <div className="w-[5rem] h-[5rem]">
-            <Image src="/assets/images/services/security.png" width={80} height={80} alt="..." priority />
+          <div className="min-w-[5rem] min-h-[5rem]">
+            <Image
+              src="/assets/images/services/security.png"
+              className="min-w-[5rem] min-h-[5rem]"
+              width={80}
+              height={80}
+              alt="..."
+              priority
+              style={{ width: "100%", height: "auto" }}
+            />
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">

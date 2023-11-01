@@ -34,7 +34,7 @@ function FlashSale(props) {
               </span>
             </div>
 
-            <div className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] whitespace-nowrap">
+            <div className="text-text-2 font-inter text-[1.5rem] sm:text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] whitespace-nowrap">
               {useTrans("flashSale.flashSale")}
             </div>
           </div>
@@ -43,7 +43,7 @@ function FlashSale(props) {
         </div>
       </div>
 
-      <div className="max-w-[1440px] pl-0 xl:pl-[4rem] 2xl:pl-[8.5rem] mx-auto">
+      <div className="max-w-[90rem] mr-auto ml-auto">
         <FlashSaleCarousel products={products} />
       </div>
 
@@ -51,7 +51,7 @@ function FlashSale(props) {
         <ViewAllProducts />
       </div>
 
-      <div className="container mt-[3.75rem] mb-[4.38rem]">
+      <div className="container mt-[3.75rem] mb-[5rem]">
         <hr className="border-1 border-solid border-black border-opacity-30" />
       </div>
     </>

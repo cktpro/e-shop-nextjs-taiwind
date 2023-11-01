@@ -8,8 +8,8 @@ function CategoriesBrowse(props) {
   const { categories } = props;
   return (
     <div className="container">
-      <div className="sm:flex items-end mb-[8.5rem] sm:mb-[2.5rem]">
-        <div className="sm:flex h-[6.4375rem] flex-col items-start gap-[1.5rem]">
+      <div className="sm:flex items-end mb-[6rem] sm:mb-[3.75rem]">
+        <div className="sm:flex max-h-[6.4375rem] flex-col items-start gap-[1.5rem]">
           <div className="flex items-center gap-[1rem]">
             <div className="w-[1.25rem] h-[2.5rem]">
               <Rectangle />
@@ -18,7 +18,7 @@ function CategoriesBrowse(props) {
             <span className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Categories</span>
           </div>
 
-          <div className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
+          <div className="mt-[0.5rem] sm:mt-0 text-text-2 font-inter text-[1.5rem] sm:text-[2.25rem] font-[600] leading-[2rem] sm:leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
             Browse By Category
           </div>
         </div>

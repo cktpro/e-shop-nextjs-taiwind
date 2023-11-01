@@ -7,10 +7,10 @@ const trans = {
 
   navBar: {
     lang: "English",
-    home: "home",
-    contact: "contact",
-    about: "about",
-    signup: "signup",
+    home: "Home",
+    contact: "Contact",
+    about: "About",
+    signup: "Sign Up",
     inputSearch: "What are you looking for?",
   },
 
