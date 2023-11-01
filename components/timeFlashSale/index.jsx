@@ -42,21 +42,21 @@ function TimeFlashSale(props) {
   }, [interval, numOfSecond]);
 
   return (
-    <div className="flex lg:flex mb-[4rem] sm:mb-0 col-span-12 w-[18.875rem] h-[3.125rem]">
-      <div className="inline-flex h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
+    <div className="flex lg:flex mb-[4rem] sm:mb-0 col-span-12 max-w-[18.875rem] min-h-[3.125rem]">
+      <div className="inline-flex min-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
         <span className="min-w-[1.9375rem] max-h-[1.125rem] text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.days")}
         </span>
 
         <span
-          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.day)}
         </span>
       </div>
 
-      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[1.06rem] mr-[1.06rem]">
+      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[0.75rem] md:ml-[1.06rem] mr-[0.75rem] md:mr-[1.06rem]">
         <Dot /> <Dot />
       </div>
 
@@ -66,14 +66,14 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.hour)}
         </span>
       </div>
 
-      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[1.06rem] mr-[1.06rem]">
+      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[0.75rem] md:ml-[1.06rem] mr-[0.75rem] md:mr-[1.06rem]">
         <Dot /> <Dot />
       </div>
 
@@ -83,14 +83,14 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.minute)}
         </span>
       </div>
 
-      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[1.06rem] mr-[1.06rem]">
+      <div className="inline-flex flex-col items-start gap-[0.5rem] mt-[1.63rem] ml-[0.75rem] md:ml-[1.06rem] mr-[0.75rem] md:mr-[1.06rem]">
         <Dot /> <Dot />
       </div>
 
@@ -100,7 +100,7 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.second)}
@@ -113,5 +113,5 @@ function TimeFlashSale(props) {
 export default TimeFlashSale;
 
 TimeFlashSale.propTypes = {
-  second: PropTypes.instanceOf(Number).isRequired,
+  second: PropTypes.number.isRequired,
 };

@@ -38,6 +38,7 @@ function Card(props) {
           width={172}
           height={152}
           priority
+          style={{ width: "100%", height: "auto" }}
         />
 
         <button

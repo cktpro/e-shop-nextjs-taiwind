@@ -41,9 +41,21 @@ function FlashSaleCarousel(props) {
 
       {/* Multi Carousel FlashSale */}
       <Swiper
+        breakpoints={{
+          0: {
+            slidesOffsetBefore: 16,
+          },
+          1170: {
+            slidesOffsetBefore: 16,
+          },
+          1440: {
+            slidesOffsetBefore: 135,
+          },
+        }}
         ref={swiperFlashSale}
         slidesPerView="auto"
         spaceBetween={30}
+        // slidesOffsetBefore={120}
         autoplay={{
           delay: 2000,
           disableOnInteraction: false,

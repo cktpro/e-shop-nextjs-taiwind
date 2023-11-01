@@ -7,67 +7,67 @@ const trans = {
 
   navBar: {
     lang: "Tiếng Việt",
-    home: "Trang chủ",
-    contact: "Liên hệ",
-    about: "Thông tin",
-    signup: "Đăng ký",
+    home: "Trang Chủ",
+    contact: "Liên Hệ",
+    about: "Thông Tin",
+    signup: "Đăng Ký",
     inputSearch: "Bạn đang tìm gì?",
   },
 
   slideBar: [
     {
-      name: "Thời trang nữ",
+      name: "Thời Trang Nữ",
       child: [
         {
-          name: "Thời trang nữ 1",
+          name: "Thời Trang Nữ 1",
         },
         {
-          name: "Thời trang nữ 2",
+          name: "Thời Trang Nữ 2",
         },
         {
-          name: "Thời trang nữ 3",
+          name: "Thời Trang Nữ 3",
         },
       ],
     },
     {
-      name: "Thời trang nam",
+      name: "Thời Trang Nam",
       child: [
         {
-          name: "Thời trang nam 1",
+          name: "Thời Trang Nam 1",
         },
         {
-          name: "Thời trang nam 2",
+          name: "Thời Trang Nam 2",
         },
         {
-          name: "Thời trang nam 3",
+          name: "Thời Trang Nam 3",
         },
       ],
     },
     {
-      name: "Đồ điện tử",
+      name: "Đồ Điện Tử",
     },
     {
-      name: "Nhà & Phong cách sống",
+      name: "Nhà & Phong Cách Sống",
     },
     {
-      name: "Dược phẩm",
+      name: "Dược Phẩm",
     },
     {
-      name: "Thể thao & Ngoài trời",
+      name: "Thể Thao & Ngoài Trời",
     },
     {
-      name: "Đồ chơi trẻ em",
+      name: "Đồ Chơi Trẻ Em",
     },
     {
-      name: "Tạp hóa & Thú cưng",
+      name: "Tạp Hóa & Thú Cưng",
     },
     {
-      name: "Sức khỏe & Làm đẹp",
+      name: "Sức Khỏe & Làm Đẹp",
     },
   ],
 
   flashSale: {
-    today: "Hôm nay",
+    today: "Hôm Nay",
     flashSale: "Giảm Nhanh",
     days: "Ngày",
     hours: "Giờ",

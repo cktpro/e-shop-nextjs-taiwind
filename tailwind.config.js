@@ -43,12 +43,12 @@ module.exports = {
         },
         center: true,
         screens: {
-          // DEFAULT: "81.5rem",
+          DEFAULT: "75.125rem",
           // sm: "41.5rem",
           // md: "51.5rem",
           // lg: "61.5rem",
           // xl: "71.5rem",
-          "2xl": "75.125rem",
+          // "2xl": "75.125rem",
         },
       },
       boxShadow: {
