@@ -421,6 +421,7 @@ function Header() {
               />
 
               <button
+                onClick={closeDrawerRight}
                 type="submit"
                 className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-2 right-1"
               >
@@ -430,6 +431,7 @@ function Header() {
 
             <div className="relative flex mt-[2rem] gap-1">
               <Link
+                onClick={closeDrawerRight}
                 className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
                 href="/wishList"
               >
@@ -437,6 +439,7 @@ function Header() {
               </Link>
 
               <Link
+                onClick={closeDrawerRight}
                 className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
                 href="/cart"
               >
@@ -469,6 +472,7 @@ function Header() {
                 {token ? (
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
+                      onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
@@ -480,6 +484,7 @@ function Header() {
                     </Link>
 
                     <Link
+                      onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
@@ -491,6 +496,7 @@ function Header() {
                     </Link>
 
                     <Link
+                      onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
@@ -502,6 +508,7 @@ function Header() {
                     </Link>
 
                     <Link
+                      onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
@@ -514,7 +521,10 @@ function Header() {
 
                     <Link
                       href="/logIn"
-                      onClick={handleLogout}
+                      onClick={() => {
+                        handleLogout();
+                        closeDrawerRight();
+                      }}
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
                       <LogOut className="w-[2rem] h-[2rem] text-text-1" />
@@ -528,7 +538,10 @@ function Header() {
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
                       href="/logIn"
-                      onClick={handleLogout}
+                      onClick={() => {
+                        handleLogout();
+                        closeDrawerRight();
+                      }}
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
                       <LogIn className="w-[2rem] h-[2rem] text-text-1" />
@@ -545,6 +558,7 @@ function Header() {
 
           <div className="lg:hidden mt-[3rem] w-full flex flex-col items-start gap-[2rem] text-[1rem] font-[400] leading-[1.5rem]">
             <Link
+              onClick={closeDrawerRight}
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
@@ -555,6 +569,7 @@ function Header() {
             </Link>
 
             <Link
+              onClick={closeDrawerRight}
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
@@ -565,6 +580,7 @@ function Header() {
             </Link>
 
             <Link
+              onClick={closeDrawerRight}
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
@@ -575,6 +591,7 @@ function Header() {
             </Link>
 
             <Link
+              onClick={closeDrawerRight}
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
