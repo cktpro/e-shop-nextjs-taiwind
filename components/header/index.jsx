@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { useTrans } from "@/helper/chanLang";
-import useOutsideClick from "@/helper/clickOutsideElement";
+import { useOutsideClick, useOutsideDrawderClick } from "@/helper/clickOutsideElement";
 
 import DropDown from "../svg/dropDown";
 
@@ -31,41 +31,53 @@ function Header() {
 
   const [token, setToken] = useState(false);
 
-  const [openRight, setOpenRight] = useState(false);
+  const [isOpenDrawderRight, setIsOpenDrawderRight] = useState(false);
 
-  const [openLanguage, setOpenLanguage] = useState(false);
+  const [isOpenLanguage, setIsOpenLanguage] = useState(false);
 
-  const [openLanguageInDrawder, setOpenLanguageInDrawder] = useState(false);
+  const [isOpenLanguageOnDrawder, setIsOpenLanguageOnDrawder] = useState(false);
 
-  const [openUserSetting, setOpenUserSetting] = useState(false);
+  const [isOpenUserSetting, setIsOpenUserSetting] = useState(false);
 
-  const openDrawerRight = useCallback(() => setOpenRight(true), []);
+  const [isOpenUserSettingOnDrawder, setIsOpenUserSettingOnDrawder] = useState(false);
 
-  const closeDrawerRight = useCallback(() => setOpenRight(false), []);
+  const openDrawerRight = useCallback(() => setIsOpenDrawderRight(true), []);
 
-  const openSelectLanguage = useCallback(() => setOpenLanguage(true), []);
+  const closeDrawerRight = useCallback(() => setIsOpenDrawderRight(false), []);
 
-  const openSelectLanguageInDrawder = useCallback(() => setOpenLanguageInDrawder(true), []);
+  const openSelectLanguage = useCallback(() => setIsOpenLanguage(true), []);
 
-  const openUserSettingMenu = useCallback(() => setOpenUserSetting(true), []);
+  const openSelectLanguageInDrawder = useCallback(() => setIsOpenLanguageOnDrawder(true), []);
+
+  const openUserSettingMenu = useCallback(() => setIsOpenUserSetting(true), []);
+
+  const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
+
+  const refClickDrawder = useOutsideDrawderClick(openDrawerRight, closeDrawerRight, isOpenDrawderRight);
 
   const handleClickOutsideLanguage = useCallback(() => {
-    setOpenLanguage(false);
+    setIsOpenLanguage(false);
   }, []);
 
   const refClickLanguage = useOutsideClick(handleClickOutsideLanguage);
 
   const handleClickOutsideLanguageInDrawder = useCallback(() => {
-    setOpenLanguageInDrawder(false);
+    setIsOpenLanguageOnDrawder(false);
   }, []);
 
   const refClickLanguageInDrawder = useOutsideClick(handleClickOutsideLanguageInDrawder);
 
   const handleClickOutsideUser = useCallback(() => {
-    setOpenUserSetting(false);
+    setIsOpenUserSetting(false);
   }, []);
 
   const refClickUser = useOutsideClick(handleClickOutsideUser);
+
+  const handleClickOutsideUserOnDrawder = useCallback(() => {
+    setIsOpenUserSettingOnDrawder(false);
+  }, []);
+
+  const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
   useEffect(() => {
     const getToken = localStorage.getItem("TOKEN");
@@ -76,7 +88,7 @@ function Header() {
   const handleLogout = useCallback(() => {
     localStorage.removeItem("TOKEN");
 
-    setOpenUserSetting(false);
+    setIsOpenUserSetting(false);
   }, []);
 
   const changeLang = useCallback(
@@ -108,7 +120,7 @@ function Header() {
             <button
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center justify-between gap-1",
-                openLanguage && "opacity-50",
+                isOpenLanguage && "opacity-50",
               )}
               type="button"
               ref={refClickLanguage}
@@ -122,7 +134,7 @@ function Header() {
             <ul
               className={classNames(
                 "absolute !z-[4] rounded-lg top-10 px-3 py-2 right-1 flex flex-col justify-start bg-black",
-                !openLanguage && "hidden",
+                !isOpenLanguage && "hidden",
               )}
             >
               <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
@@ -225,13 +237,13 @@ function Header() {
               type="button"
               className={classNames(
                 "group flex items-center justify-center w-[2rem] h-[2rem] ml-[1rem] rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300",
-                openUserSetting && "bg-secondary-2",
+                isOpenUserSetting && "bg-secondary-2",
               )}
             >
               <User
                 className={classNames(
                   "group-hover:text-text-1 transition-colors ease-in-out duration-300",
-                  openUserSetting && "text-text-1",
+                  isOpenUserSetting && "text-text-1",
                 )}
               />
             </button>
@@ -239,7 +251,7 @@ function Header() {
             <div
               className={classNames(
                 "absolute right-0 top-[2.5rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
-                !openUserSetting && "hidden",
+                !isOpenUserSetting && "hidden",
               )}
             >
               {token ? (
@@ -318,27 +330,23 @@ function Header() {
             </div>
           </div>
 
-          <button onClick={openDrawerRight} className="lg:hidden ml-5" type="button">
+          <button ref={!isOpenDrawderRight ? refClickDrawder : null} className="lg:hidden ml-5" type="button">
             <AlignJustify />
           </button>
         </div>
 
         <div
-          onClick={closeDrawerRight}
-          onKeyDown={closeDrawerRight}
-          role="button"
-          tabIndex={0}
-          aria-label="close"
           className={classNames(
             "h-screen w-screen bg-opacity-50 fixed top-0 backdrop-blur-sm cursor-default",
-            !openRight && "hidden",
+            !isOpenDrawderRight && "hidden",
           )}
         />
 
         <div
+          ref={isOpenDrawderRight ? refClickDrawder : null}
           className={classNames(
             "h-screen w-fit shadow-2xl fixed flex flex-col items-center !p-[2rem] top-0 right-0 z-[9999] bg-white",
-            !openRight && "hidden",
+            !isOpenDrawderRight && "hidden",
           )}
         >
           <button
@@ -359,7 +367,7 @@ function Header() {
               <span
                 className={classNames(
                   "group-hover:opacity-50 transition-opacity ease-in-out duration-300 font-[400]",
-                  openLanguageInDrawder && "opacity-50",
+                  isOpenLanguageOnDrawder && "opacity-50",
                 )}
               >
                 {useTrans("navBar.lang")}
@@ -368,7 +376,7 @@ function Header() {
               <ChevronDown
                 className={classNames(
                   "group-hover:opacity-50 transition-opacity ease-in-out duration-300",
-                  openLanguageInDrawder && "opacity-50",
+                  isOpenLanguageOnDrawder && "opacity-50",
                 )}
               />
             </button>
@@ -376,7 +384,7 @@ function Header() {
             <ul
               className={classNames(
                 "absolute rounded-lg z-[4] text-text-1 top-[3.5rem] px-2 py-2 right-30 flex flex-col justify-start bg-black",
-                !openLanguageInDrawder && "hidden",
+                !isOpenLanguageOnDrawder && "hidden",
               )}
             >
               <li className="cursor-pointer hover:opacity-50 transition-opacity ease-in-out duration-300">
@@ -416,18 +424,119 @@ function Header() {
                 <Search />
               </button>
             </form>
-            <div className="flex mt-[2rem] gap-3">
-              <Link className="flex items-center" href="/products">
-                <Heart />
+
+            <div className="relative flex mt-[2rem] gap-1">
+              <Link
+                className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+                href="/wishList"
+              >
+                <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
 
-              <Link className="flex items-center ml-[1rem]" href="/products">
-                <ShoppingCart />
+              <Link
+                className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
+                href="/cart"
+              >
+                <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
 
-              <button type="button" className="ml-[1rem]">
-                <User />
+              <button
+                onClick={openUserSettingMenuOnDrawder}
+                ref={refClickUserOnDrawder}
+                type="button"
+                className={classNames(
+                  "group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1rem] flex items-center justify-center",
+                  isOpenUserSettingOnDrawder && "bg-secondary-2",
+                )}
+              >
+                <User
+                  className={classNames(
+                    "group-hover:text-text-1 transition-colors ease-in-out duration-300",
+                    isOpenUserSettingOnDrawder && "text-text-1",
+                  )}
+                />
               </button>
+
+              <div
+                className={classNames(
+                  "absolute right-[-3rem] top-[2.5rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
+                  !isOpenUserSettingOnDrawder && "hidden",
+                )}
+              >
+                {token ? (
+                  <div className="flex flex-col items-start gap-[0.8125rem]">
+                    <Link
+                      href="/"
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <User className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        Manage My Account
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/"
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        My Order
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/"
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <XCircle className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        My Cancellations
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/"
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <Star className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        My Reviews
+                      </span>
+                    </Link>
+
+                    <Link
+                      href="/logIn"
+                      onClick={handleLogout}
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <LogOut className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        Logout
+                      </span>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-start gap-[0.8125rem]">
+                    <Link
+                      href="/logIn"
+                      onClick={handleLogout}
+                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
+                    >
+                      <LogIn className="w-[2rem] h-[2rem] text-text-1" />
+
+                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                        Login
+                      </span>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
