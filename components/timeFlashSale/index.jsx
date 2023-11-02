@@ -49,7 +49,7 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.day)}
@@ -66,7 +66,7 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.hour)}
@@ -83,7 +83,7 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.minute)}
@@ -100,7 +100,7 @@ function TimeFlashSale(props) {
         </span>
 
         <span
-          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[1.5rem] md:text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.second)}

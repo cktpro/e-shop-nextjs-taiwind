@@ -22,8 +22,8 @@ function FlashSale(props) {
   return (
     <>
       <div className="container mt-[8.75rem]">
-        <div className="lg:flex grid grid-cols-12 items-end lg:gap-[5.4375rem] mb-[2.5rem]">
-          <div className="lg:flex col-span-12 max-w-[37.5rem] max-h-[6.4375rem] flex-col items-start gap-[1.5rem]">
+        <div className="lg:flex grid grid-cols-12 items-end gap-[2rem] lg:gap-[5.4375rem] mb-[2.5rem]">
+          <div className="lg:flex grid col-span-12 max-w-[37.5rem] max-h-[6.4375rem] flex-col items-start gap-[1.5rem]">
             <div className="flex items-center gap-[1rem]">
               <div className="min-w-[1.25rem] min-h-[2.5rem]">
                 <Rectangle />
@@ -34,7 +34,7 @@ function FlashSale(props) {
               </span>
             </div>
 
-            <div className="text-text-2 font-inter text-[1.5rem] sm:text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] whitespace-nowrap">
+            <div className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] whitespace-nowrap">
               {useTrans("flashSale.flashSale")}
             </div>
           </div>
