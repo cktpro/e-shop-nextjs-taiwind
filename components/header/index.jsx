@@ -22,6 +22,8 @@ import { useOutsideClick, useOutsideDrawderClick } from "@/helper/clickOutsideEl
 
 import DropDown from "../svg/dropDown";
 
+import styles from "./header.module.scss";
+
 function Header() {
   const router = useRouter();
 
@@ -347,6 +349,7 @@ function Header() {
           className={classNames(
             "h-screen w-fit shadow-2xl fixed flex flex-col items-center !p-[2rem] top-0 right-0 z-[9999] bg-white",
             !isOpenDrawderRight && "hidden",
+            styles.drawder,
           )}
         >
           <button
@@ -546,7 +549,6 @@ function Header() {
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
               )}
-              // className="font-poppins w-fit border-b-gray-400 border-b-[2px]"
               href="/"
             >
               {useTrans("navBar.home")}

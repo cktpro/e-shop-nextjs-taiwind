@@ -1,0 +1,11 @@
+.drawder {
+  animation-name: fade-in;
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translateX(15rem);
+  }
+}
