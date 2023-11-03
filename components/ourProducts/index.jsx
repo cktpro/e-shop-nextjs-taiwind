@@ -9,10 +9,10 @@ function OurProducts(props) {
   const { products } = props;
   return (
     <div className="container mt-[4.44rem]">
-      <div className="sm:flex items-end mb-[8.5rem] sm:mb-[2.5rem]">
-        <div className="sm:flex h-[6.4375rem] flex-col items-start gap-[1.5rem]">
+      <div className="sm:flex items-end mb-[8.5rem] sm:mb-[4rem]">
+        <div className="sm:flex h-[6.4375rem] flex-col items-start gap-[1.25rem]">
           <div className="flex items-center gap-[1rem]">
-            <div className="w-[1.25rem] h-[2.5rem]">
+            <div className="min-w-[1.25rem] min-h-[2.5rem]">
               <Rectangle />
             </div>
 
@@ -24,6 +24,7 @@ function OurProducts(props) {
           </div>
         </div>
       </div>
+
       <div className="">
         <OurProductsCarousel products={products} />
       </div>

@@ -14,6 +14,7 @@ function Services() {
               height={80}
               alt="..."
               priority
+              style={{ height: "auto" }}
               // style={{ width: "100%", height: "auto" }}
             />
           </div>

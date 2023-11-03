@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 // import Image from "next/image";
 import Link from "next/link";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -47,26 +47,9 @@ function Banner() {
         {data.map((item) => {
           return (
             <SwiperSlide key={item.name}>
-              <div className="relative w-[892px] h-[344px] bg-banner-1">
-                {/* <Image
-                  width={892}
-                  height={344}
-                  src={banner1}
-                  alt="..."
-                  priority
-                /> */}
-
-                <Link
-                  href="./"
-                  className="absolute left-[4.19rem] bottom-[3.19rem] inline-flex items-center gap-[0.5rem] text-text-1"
-                >
-                  <span className="mb-[0.5rem] text-text-1 text-center text-[1rem] font-[500] leading-[1.5rem] border-b-white border-b-[0.1rem]">
-                    Shop Now
-                  </span>
-
-                  <ArrowRight />
-                </Link>
-              </div>
+              <Link href="/cart" className="max-w-[892px] max-h-[344px]">
+                <Image width={892} height={344} src="/assets/images/banner/banner1.jpg" alt="..." priority />
+              </Link>
             </SwiperSlide>
           );
         })}
