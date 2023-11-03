@@ -50,23 +50,23 @@ function Card(props) {
       </div>
 
       <div className="flex flex-col items-start gap-[0.5rem]">
-        <div className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
+        <h4 className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
           {product?.title}
-        </div>
+        </h4>
 
         <div className="flex items-start gap-[0.57rem]">
-          <div className="text-secondary-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">{product?.price}</div>
+          <div className="text-secondary-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">${product?.price}</div>
 
           <div className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] line-through opacity-[0.5]">
-            {product?.price}
+            ${product?.price}
           </div>
         </div>
 
         <div className="flex items-start gap-[0.5rem]">
           <div className="flex items-start">{renderStars(product?.rating?.rate)}</div>
 
-          <div className="min-w-[2rem] min-h-[1.25rem] text-text-2 text-[0.875rem] font-[600] leading-[1.3125rem] opacity-[0.5]">
-            {product?.rating?.count}
+          <div className="min-w-[2rem] min-h-[1.25rem] text-text-2 font-poppins text-[0.875rem] font-[600] leading-[1.3125rem] opacity-[0.5]">
+            ({product?.rating?.count})
           </div>
         </div>
       </div>

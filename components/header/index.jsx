@@ -161,47 +161,55 @@ function Header() {
             <h1>Exclusive</h1>
           </Link>
 
-          <div className="hidden lg:flex items-start gap-[3rem]">
-            <Link
-              className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
-              )}
-              href="/"
-            >
-              {useTrans("navBar.home")}
-            </Link>
+          <ul className="hidden lg:flex items-start gap-[3rem]">
+            <li>
+              <Link
+                className={classNames(
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
+                )}
+                href="/"
+              >
+                {useTrans("navBar.home")}
+              </Link>
+            </li>
 
-            <Link
-              className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
-              )}
-              href="/contact"
-            >
-              {useTrans("navBar.contact")}
-            </Link>
+            <li>
+              <Link
+                className={classNames(
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
+                )}
+                href="/contact"
+              >
+                {useTrans("navBar.contact")}
+              </Link>
+            </li>
 
-            <Link
-              className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
-              )}
-              href="/about"
-            >
-              {useTrans("navBar.about")}
-            </Link>
+            <li>
+              <Link
+                className={classNames(
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
+                )}
+                href="/about"
+              >
+                {useTrans("navBar.about")}
+              </Link>
+            </li>
 
-            <Link
-              className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
-              )}
-              href="/signUp"
-            >
-              {useTrans("navBar.signup")}
-            </Link>
-          </div>
+            <li>
+              <Link
+                className={classNames(
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
+                )}
+                href="/signUp"
+              >
+                {useTrans("navBar.signup")}
+              </Link>
+            </li>
+          </ul>
 
           <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
             <form className="relative min-w-[15.1875rem] max-h-[2.375rem]">
@@ -213,7 +221,7 @@ function Header() {
 
               <button
                 type="submit"
-                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-2 right-1"
+                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-[5px] lg:top-[7px] right-[12px]"
               >
                 <Search />
               </button>
@@ -252,7 +260,7 @@ function Header() {
 
             <div
               className={classNames(
-                "absolute right-0 top-[2.5rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
+                "absolute right-0 top-[2.5rem] max-w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
                 !isOpenUserSetting && "hidden",
               )}
             >
@@ -264,7 +272,7 @@ function Header() {
                   >
                     <User className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Manage My Account
                     </span>
                   </Link>
@@ -275,7 +283,7 @@ function Header() {
                   >
                     <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Order
                     </span>
                   </Link>
@@ -286,7 +294,7 @@ function Header() {
                   >
                     <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Cancellations
                     </span>
                   </Link>
@@ -297,7 +305,7 @@ function Header() {
                   >
                     <Star className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Reviews
                     </span>
                   </Link>
@@ -309,7 +317,7 @@ function Header() {
                   >
                     <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Logout
                     </span>
                   </Link>
@@ -323,7 +331,7 @@ function Header() {
                   >
                     <LogIn className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Login
                     </span>
                   </Link>
@@ -339,7 +347,7 @@ function Header() {
 
         <div
           className={classNames(
-            "h-screen w-screen bg-opacity-50 fixed top-0 backdrop-blur-sm cursor-default",
+            "h-screen w-screen bg-opacity-50 fixed top-0 bg-gray-400",
             !isOpenDrawderRight && "hidden",
           )}
         />
@@ -413,17 +421,17 @@ function Header() {
           </div>
 
           <div className="md:hidden ml-auto flex flex-col items-center">
-            <form className="relative mt-5 w-[15.1875rem] h-[2.375rem]">
+            <form className="relative mt-5 min-w-[15.1875rem] max-h-[2.375rem]">
               <input
                 type="text"
                 placeholder="What are you looking for?"
-                className="h-10 w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
+                className="min-h-[2.5rem] w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
 
               <button
                 onClick={closeDrawerRight}
                 type="submit"
-                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-2 right-1"
+                className="hover:opacity-50 transition-opacity ease-in-out duration-300 absolute top-[3px] right-[6px]"
               >
                 <Search />
               </button>
@@ -432,18 +440,18 @@ function Header() {
             <div className="relative flex mt-[2rem] gap-1">
               <Link
                 onClick={closeDrawerRight}
-                className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+                className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
                 href="/wishList"
               >
-                <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
+                <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
 
               <Link
                 onClick={closeDrawerRight}
-                className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
+                className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
                 href="/cart"
               >
-                <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
+                <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
 
               <button
@@ -451,13 +459,13 @@ function Header() {
                 ref={refClickUserOnDrawder}
                 type="button"
                 className={classNames(
-                  "group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1rem] flex items-center justify-center",
+                  "group min-w-[2.5rem] min-h-[2.5rem] rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1rem] flex items-center justify-center",
                   isOpenUserSettingOnDrawder && "bg-secondary-2",
                 )}
               >
                 <User
                   className={classNames(
-                    "group-hover:text-text-1 transition-colors ease-in-out duration-300",
+                    "max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300",
                     isOpenUserSettingOnDrawder && "text-text-1",
                   )}
                 />
@@ -465,7 +473,7 @@ function Header() {
 
               <div
                 className={classNames(
-                  "absolute right-[-3rem] top-[2.5rem] w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
+                  "absolute whitespace-nowrap right-[-3rem] top-[2.5rem] max-w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
                   !isOpenUserSettingOnDrawder && "hidden",
                 )}
               >
@@ -478,7 +486,7 @@ function Header() {
                     >
                       <User className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Manage My Account
                       </span>
                     </Link>
@@ -490,7 +498,7 @@ function Header() {
                     >
                       <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Order
                       </span>
                     </Link>
@@ -502,7 +510,7 @@ function Header() {
                     >
                       <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Cancellations
                       </span>
                     </Link>
@@ -514,7 +522,7 @@ function Header() {
                     >
                       <Star className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Reviews
                       </span>
                     </Link>
@@ -529,7 +537,7 @@ function Header() {
                     >
                       <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Logout
                       </span>
                     </Link>
@@ -546,7 +554,7 @@ function Header() {
                     >
                       <LogIn className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Login
                       </span>
                     </Link>

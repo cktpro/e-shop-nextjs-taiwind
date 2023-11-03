@@ -16,12 +16,12 @@ function BestSelling(props) {
               <Rectangle />
             </div>
 
-            <span className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">This Month</span>
+            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">This Month</h3>
           </div>
 
-          <div className="mt-[0.5rem] sm:mt-0 text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
+          <h2 className="mt-[0.5rem] sm:mt-0 text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
             Best Selling Products
-          </div>
+          </h2>
         </div>
       </div>
 

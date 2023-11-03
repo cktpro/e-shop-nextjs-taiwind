@@ -8,7 +8,7 @@ function ArrowCategoriesCarousel(props) {
     <div className="absolute top-[-6.6rem] right-0 flex gap-[0.5rem]">
       <button
         type="button"
-        className="flex items-center justify-center w-[2.875rem] h-[2.875rem] bg-secondary-1 rounded-[5rem]"
+        className="flex items-center justify-center min-w-[2.875rem] min-h-[2.875rem] bg-secondary-1 rounded-[5rem]"
         onClick={prev}
       >
         <ArrowLeft />
@@ -16,7 +16,7 @@ function ArrowCategoriesCarousel(props) {
 
       <button
         type="button"
-        className="flex items-center justify-center w-[2.875rem] h-[2.875rem] bg-secondary-1 rounded-[5rem]"
+        className="flex items-center justify-center min-w-[2.875rem] min-h-[2.875rem] bg-secondary-1 rounded-[5rem]"
         onClick={next}
       >
         <ArrowRight />

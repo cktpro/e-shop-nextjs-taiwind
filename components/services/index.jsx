@@ -20,9 +20,9 @@ function Services() {
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
+            <h4 className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
               FREE AND FAST DELIVERY
-            </span>
+            </h4>
 
             <span className="text-text-2 text-center font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
               Free delivery for all orders over $140
@@ -44,9 +44,9 @@ function Services() {
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
+            <h4 className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
               24/7 CUSTOMER SERVICE
-            </span>
+            </h4>
 
             <span className="text-text-2 text-center font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
               Friendly 24/7 customer support
@@ -68,9 +68,9 @@ function Services() {
           </div>
 
           <div className="flex flex-col items-center justify-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
+            <h4 className="text-text-2 font-poppins text-[1.25rem] font-[600] leading-[1.75rem]">
               MONEY BACK GUARANTEE
-            </span>
+            </h4>
 
             <span className="text-text-2 text-center font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
               We reurn money within 30 days

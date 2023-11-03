@@ -14,12 +14,12 @@ function NewArrival() {
               <Rectangle />
             </div>
 
-            <span className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Featured</span>
+            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Featured</h3>
           </div>
 
-          <div className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] max-w-[13.5rem] max-h-[3rem] whitespace-nowrap">
+          <h2 className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] max-w-[13.5rem] max-h-[3rem] whitespace-nowrap">
             New Arrival
-          </div>
+          </h2>
         </div>
 
         <div className="hidden xl:max-w-[73.125rem] xl:max-h-fit xl:gap-[1.875rem] xl:flex xl:items-start">
@@ -37,9 +37,9 @@ function NewArrival() {
 
             <div className="absolute bottom-[2rem] left-[2rem] flex flex-col items-start gap-[1rem]">
               <div className="flex flex-col items-start gap-[1rem]">
-                <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                   PlayStation 5
-                </span>
+                </h4>
 
                 <span className="max-w-[15.125rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Black and White version of the PS5 coming out on sale.
@@ -70,9 +70,9 @@ function NewArrival() {
 
               <div className="absolute bottom-[1.63rem] left-[1.5rem] inline-flex flex-col items-start gap-[1rem]">
                 <div className="flex flex-col items-start gap-[1rem]">
-                  <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                  <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                     Women’s Collections
-                  </span>
+                  </h4>
 
                   <span className="max-w-[15.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                     Featured woman collections that give you another vibe.
@@ -103,9 +103,9 @@ function NewArrival() {
 
                 <div className="absolute bottom-[1.5rem] left-[1.5rem] inline-flex flex-col items-start gap-[0.5rem]">
                   <div className="flex flex-col items-start gap-[0.5rem]">
-                    <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                    <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                       Speakers
-                    </span>
+                    </h4>
 
                     <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Amazon wireless speakers
@@ -136,9 +136,9 @@ function NewArrival() {
 
                 <div className="absolute bottom-[1.5rem] left-[1.5rem] inline-flex flex-col items-start gap-[0.5rem]">
                   <div className="flex flex-col items-start gap-[0.5rem]">
-                    <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                    <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                       Perfume
-                    </span>
+                    </h4>
 
                     <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       GUCCI INTENSE OUD EDP
@@ -172,9 +172,9 @@ function NewArrival() {
 
               <div className="absolute bottom-[2rem] left-[2rem] flex flex-col items-start gap-[1rem]">
                 <div className="flex flex-col items-start gap-[1rem]">
-                  <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                  <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                     PlayStation 5
-                  </span>
+                  </h4>
 
                   <span className="max-w-[15.125rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                     Black and White version of the PS5 coming out on sale.
@@ -206,9 +206,9 @@ function NewArrival() {
 
                   <div className="absolute bottom-[1.63rem] left-[1.5rem] inline-flex flex-col items-start gap-[1rem]">
                     <div className="flex flex-col items-start gap-[1rem]">
-                      <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                      <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                         Women’s Collections
-                      </span>
+                      </h4>
 
                       <span className="max-w-[15.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Featured woman collections that give you another vibe.
@@ -240,9 +240,9 @@ function NewArrival() {
 
                       <div className="absolute bottom-[1.5rem] left-[1.5rem] inline-flex flex-col items-start gap-[0.5rem]">
                         <div className="flex flex-col items-start gap-[0.5rem]">
-                          <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                          <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                             Speakers
-                          </span>
+                          </h4>
 
                           <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                             Amazon wireless speakers
@@ -273,9 +273,9 @@ function NewArrival() {
 
                       <div className="absolute bottom-[1.5rem] left-[1.5rem] inline-flex flex-col items-start gap-[0.5rem]">
                         <div className="flex flex-col items-start gap-[0.5rem]">
-                          <span className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+                          <h4 className="text-text-1 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
                             Perfume
-                          </span>
+                          </h4>
 
                           <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                             GUCCI INTENSE OUD EDP
