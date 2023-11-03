@@ -58,8 +58,10 @@ Home.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get("https://fakestoreapi.com/products");
-    const bestSelling = await axios.get("https://fakestoreapi.com/products?limit=4");
+    const [response, bestSelling] = await Promise.all([
+      axios.get("https://fakestoreapi.com/products"),
+      axios.get("https://fakestoreapi.com/products?limit=4"),
+    ]);
 
     return {
       props: {

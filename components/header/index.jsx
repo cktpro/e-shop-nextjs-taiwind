@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
+import { deleteCookie, getCookie } from "cookies-next";
 import {
   AlignJustify,
   ChevronDown,
@@ -30,8 +31,6 @@ function Header() {
   const pathname = usePathname();
 
   const [isActiveNavbar, setIsActiveNavbar] = useState(pathname);
-
-  const [token, setToken] = useState(false);
 
   const [isOpenDrawderRight, setIsOpenDrawderRight] = useState(false);
 
@@ -81,17 +80,21 @@ function Header() {
 
   const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
-  useEffect(() => {
-    const getToken = localStorage.getItem("TOKEN");
+  const getToken = getCookie("TOKEN");
 
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
     setToken(getToken);
-  }, []);
+  }, [getToken]);
 
   const handleLogout = useCallback(() => {
-    localStorage.removeItem("TOKEN");
+    deleteCookie("TOKEN");
 
     setIsOpenUserSetting(false);
-  }, []);
+
+    router.push("/logIn");
+  }, [router]);
 
   const changeLang = useCallback(
     (lang) => {
@@ -310,8 +313,8 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link
-                    href="/logIn"
+                  <button
+                    type="button"
                     onClick={handleLogout}
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
@@ -320,13 +323,13 @@ function Header() {
                     <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Logout
                     </span>
-                  </Link>
+                  </button>
                 </div>
               ) : (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/logIn"
-                    onClick={handleLogout}
+                    // onClick={handleLogout}
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <LogIn className="w-[2rem] h-[2rem] text-text-1" />

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import classNames from "classnames";
+import { getCookie, setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -14,10 +15,10 @@ function LogIn() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("TOKEN");
+    const token = getCookie("TOKEN");
 
     if (token) {
-      push("./");
+      push("/");
     }
   }, [push]);
 
@@ -38,11 +39,11 @@ function LogIn() {
 
         const responsive = await axios.post("https://fakestoreapi.com/auth/login", data);
 
-        localStorage.setItem("TOKEN", responsive.data.token);
+        setCookie("TOKEN", responsive.data.token);
 
-        push("./");
+        // setIsLoading(false);
 
-        setIsLoading(false);
+        push("/");
       } catch (error) {
         setIsLoading(false);
       }
