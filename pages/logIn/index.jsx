@@ -14,13 +14,19 @@ function LogIn() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const token = getCookie("TOKEN");
+  const getToken = getCookie("TOKEN");
 
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(getToken);
+  }, [getToken]);
+
+  useEffect(() => {
     if (token) {
       push("/");
     }
-  }, [push]);
+  }, [push, token]);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -53,7 +59,7 @@ function LogIn() {
 
   return (
     <>
-      {isLoading && (
+      {(isLoading || token) && (
         <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
