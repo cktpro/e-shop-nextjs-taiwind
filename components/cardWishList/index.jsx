@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
+
+import useCartStore from "@/store/cart/useCartStore";
 
 function CardWishList(props) {
   const { product } = props;
+
+  const router = useRouter();
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const getToken = getCookie("TOKEN");
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(getToken);
+  }, [getToken]);
+
+  const handleClickAddToCart = useCallback(
+    (item) => {
+      if (token) {
+        const data = {
+          id: item.id,
+          name: item.title,
+          image: item.image,
+          price: item.price,
+          quantity: 1,
+        };
+
+        addToCart(data);
+      } else {
+        router.push("/logIn");
+      }
+    },
+    [addToCart, router, token],
+  );
 
   return (
     <div className="flex flex-col items-start gap-[1rem]">
@@ -32,6 +67,7 @@ function CardWishList(props) {
         />
 
         <button
+          onClick={() => handleClickAddToCart(product)}
           type="button"
           className="absolute bottom-0 flex w-[16.875rem] h-[2.5625rem] items-center justify-center transition-all duration-300 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
         >

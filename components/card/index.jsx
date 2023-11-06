@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import { renderStars } from "@/helper/renderStar";
+import useCartStore from "@/store/cart/useCartStore";
 
 function Card(props) {
   const { product } = props;
+
+  const router = useRouter();
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const getToken = getCookie("TOKEN");
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(getToken);
+  }, [getToken]);
+
+  const handleClickAddToCart = useCallback(
+    (item) => {
+      if (token) {
+        const data = {
+          id: item.id,
+          name: item.title,
+          image: item.image,
+          price: item.price,
+          quantity: 1,
+        };
+
+        addToCart(data);
+      } else {
+        router.push("/logIn");
+      }
+    },
+    [addToCart, router, token],
+  );
 
   return (
     <div className="flex flex-col items-start gap-[1rem]">
@@ -42,6 +76,7 @@ function Card(props) {
         />
 
         <button
+          onClick={() => handleClickAddToCart(product)}
           type="button"
           className="absolute bottom-0 flex min-w-[16.875rem] min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
         >

@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 
 import { useTrans } from "@/helper/chanLang";
 import { useOutsideClick, useOutsideDrawderClick } from "@/helper/clickOutsideElement";
+import useCartStore from "@/store/cart/useCartStore";
 
 import DropDown from "../svg/dropDown";
 
@@ -29,6 +30,12 @@ function Header() {
   const router = useRouter();
 
   const pathname = usePathname();
+
+  const totalCartItem = useCartStore((state) => state.totalItem);
+
+  const resetCartItem = useCartStore((state) => state.resetCart);
+
+  // console.log("««««« totalCartItem »»»»»", totalCartItem);
 
   const [isActiveNavbar, setIsActiveNavbar] = useState(pathname);
 
@@ -89,12 +96,14 @@ function Header() {
   }, [getToken]);
 
   const handleLogout = useCallback(() => {
+    resetCartItem();
+
     deleteCookie("TOKEN");
 
     setIsOpenUserSetting(false);
 
     router.push("/logIn");
-  }, [router]);
+  }, [resetCartItem, router]);
 
   const changeLang = useCallback(
     (lang) => {
@@ -238,10 +247,16 @@ function Header() {
             </Link>
 
             <Link
-              className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+              className="group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
               href={token ? "/cart" : "/logIn"}
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
+
+              <div className="absolute top-[-0.5rem] right-[-0.5rem] min-w-[fix-content] min-h-[fix-content] px-[0.4rem] py-[0.07rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
+                <span className="min-w-[0.4375rem] min-h-[1.0625rem] flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem">
+                  {totalCartItem || 0}
+                </span>
+              </div>
             </Link>
 
             <button
