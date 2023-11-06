@@ -96,7 +96,7 @@ function LogIn() {
         className={classNames(
           isHaveError
             ? "fixed top-0 z-[9999] w-screen h-screen flex items-center justify-center bg-gray-400 bg-opacity-50"
-            : "fixed top-0 z-[-9999] opacity-0",
+            : "fixed top-0 opacity-0 transition-all duration-300 z-[-9999] w-screen h-screen flex items-center justify-center bg-gray-400 bg-opacity-50",
         )}
       >
         <div
