@@ -7,6 +7,7 @@ import Rectangle from "../svg/rectangle";
 
 function WishList(props) {
   const { wishList } = props;
+
   return (
     <div className="container flex flex-col items-center justify-center gap-[5rem] mt-[5rem] whitespace-nowrap">
       <div className="flex flex-col items-center gap-[3.75rem]">

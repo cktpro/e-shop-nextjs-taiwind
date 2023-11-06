@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function CartPage() {
-  return (
+  const router = useRouter();
+
+  const [isHaveToken, setIsHaveToken] = useState(false);
+
+  useEffect(() => {
+    const getToken = getCookie("TOKEN");
+
+    if (!getToken) {
+      router.push("/logIn");
+    } else {
+      setIsHaveToken(true);
+    }
+  }, [router]);
+
+  return isHaveToken ? (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem]">
         <Link
@@ -133,7 +149,7 @@ function CartPage() {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default CartPage;

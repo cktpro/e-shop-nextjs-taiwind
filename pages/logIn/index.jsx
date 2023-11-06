@@ -5,6 +5,7 @@ import { getCookie, setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import BtnOk from "@/components/buttons/btnOk";
 import Loading from "@/components/svg/loading";
 
 import styles from "./logIn.module.scss";
@@ -13,6 +14,10 @@ function LogIn() {
   const { push } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isHaveError, setIsHaveError] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const getToken = getCookie("TOKEN");
 
@@ -52,10 +57,32 @@ function LogIn() {
         push("/");
       } catch (error) {
         setIsLoading(false);
+
+        setIsHaveError(true);
+
+        setErrorMessage(error.response.data);
       }
     },
     [push],
   );
+
+  const handleClickOk = useCallback(() => {
+    setIsHaveError(false);
+  }, []);
+
+  useEffect(() => {
+    const blockEnterKey = (event) => {
+      if (event.keyCode === 13 && (isLoading || isHaveError)) {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("keypress", blockEnterKey);
+
+    return () => {
+      document.removeEventListener("keypress", blockEnterKey);
+    };
+  }, [isHaveError, isLoading]);
 
   return (
     <>
@@ -64,6 +91,26 @@ function LogIn() {
           <Loading />
         </div>
       )}
+
+      <div
+        className={classNames(
+          isHaveError
+            ? "fixed top-0 z-[9999] w-screen h-screen flex items-center justify-center bg-gray-400 bg-opacity-50"
+            : "fixed top-0 z-[-9999] opacity-0",
+        )}
+      >
+        <div
+          className={classNames(
+            isHaveError
+              ? "min-w-[20rem] min-h-[10rem] scale-100 transition-all duration-300 flex flex-col py-[3rem] items-center justify-center gap-[2rem] bg-white rounded-[1rem]"
+              : "min-w-[20rem] min-h-[10rem] scale-0 transition-all duration-300 flex flex-col py-[3rem] items-center justify-center gap-[2rem] bg-white rounded-[1rem]",
+          )}
+        >
+          <span className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.5rem]">{errorMessage}</span>
+
+          <BtnOk handleClickOk={handleClickOk} />
+        </div>
+      </div>
 
       <div className="container mt-[3.75rem] max-w-[1480px] flex justify-center 2xl:justify-start items-center gap-[8.0625rem]">
         <div className="hidden 2xl:flex w-[50.3125rem] h-[48.8125rem] pt-[75px] justify-end items-center rounded-tl-0 rounded-tr-0.25rem rounded-br-0.25rem rounded-bl-0 bg-[#CBE4E8]">

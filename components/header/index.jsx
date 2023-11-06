@@ -232,14 +232,14 @@ function Header() {
 
             <Link
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
-              href="/wishList"
+              href={token ? "/wishList" : "/logIn"}
             >
               <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
 
             <Link
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-              href="/cart"
+              href={token ? "/cart" : "/logIn"}
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
@@ -444,7 +444,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-                href="/wishList"
+                href={token ? "/wishList" : "/logIn"}
               >
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
@@ -452,7 +452,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
-                href="/cart"
+                href={token ? "/cart" : "/logIn"}
               >
                 <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
