@@ -26,7 +26,7 @@ function ProductDetails(props) {
       </div>
 
       <div className="min-w-full mt-[5rem] grid grid-cols-12">
-        <div className="col-span-2 flex flex-col items-start justify-start gap-[1rem]">
+        <div className="hidden col-span-12 xl:col-span-2 xl:flex flex-col items-start justify-start gap-[1rem]">
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
@@ -68,7 +68,7 @@ function ProductDetails(props) {
           </div>
         </div>
 
-        <div className="col-span-5 pl-[1.4rem]">
+        <div className="col-span-12 xl:col-span-5 pl-[1.4rem] flex justify-center">
           <div className="flex w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
               className="object-contain max-w-[31.25rem] max-h-[37.5rem]"
@@ -80,7 +80,7 @@ function ProductDetails(props) {
           </div>
         </div>
 
-        <div className="col-span-5 flex flex-col items-start justify-start pl-[5.45rem]">
+        <div className="col-span-12 xl:col-span-5 flex flex-col items-center xl:items-start justify-start mt-[2rem] xl:mt-0 xl:pl-[5.45rem]">
           <h2 className="max-w-[24rem] whitespace-nowrap overflow-hidden text-ellipsis text-text-2 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
             {product.title}
           </h2>
@@ -95,7 +95,7 @@ function ProductDetails(props) {
             />
 
             <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
-              (150 Reviews)
+              ({product.rating.count} Reviews)
             </span>
 
             <div className="ml-[1rem] mt-[0.1rem] min-h-[1rem] min-w-[0.0625rem] bg-black opacity-[0.5]" />
@@ -106,12 +106,11 @@ function ProductDetails(props) {
           </div>
 
           <span className="mt-[1rem] text-text-2 font-inter text-[1.5rem] font-[400] leading-[1.5rem] tracking-[0.045rem]">
-            $192.00
+            ${parseFloat(product.price).toFixed(2)}
           </span>
 
-          <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-            PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install &
-            mess free removal Pressure sensitive.
+          <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+            {product.description}
           </span>
 
           <hr className="mt-[1.5rem] min-w-[25rem] border-solid border-[1px] border-gray-400" />
@@ -259,10 +258,13 @@ function ProductDetails(props) {
           <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Related Item</h3>
         </div>
 
-        <div className="flex items-start gap-[1.875rem]">
+        <div className="min-w-full grid grid-cols-12 xl:flex items-start xl:gap-[1.875rem]">
           {relatedItem.map((item) => {
             return (
-              <div key={item.title}>
+              <div
+                className="mb-[3rem] xl:mb-0 col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 flex items-center justify-center"
+                key={item.title}
+              >
                 <Card product={item} />
               </div>
             );

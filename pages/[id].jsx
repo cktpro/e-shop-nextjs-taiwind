@@ -21,9 +21,10 @@ export async function getServerSideProps(req) {
   try {
     const { params } = req;
 
-    const response = await axios.get(`https://fakestoreapi.com/products/${params.id}`);
-
-    const relatedItem = await axios.get("https://fakestoreapi.com/products?limit=4");
+    const [response, relatedItem] = await Promise.all([
+      axios.get(`https://fakestoreapi.com/products/${params.id}`),
+      axios.get("https://fakestoreapi.com/products?limit=4"),
+    ]);
 
     return {
       props: {
