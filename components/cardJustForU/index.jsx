@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import { Eye, ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
@@ -50,12 +51,12 @@ function CardJustForU(props) {
         </div>
 
         <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
-          <button
-            type="button"
+          <Link
+            href={`/${product.id}`}
             className="flex items-center justify-center bg-white rounded-full w-[2.125rem] h-[2.125rem]"
           >
             <Eye />
-          </button>
+          </Link>
         </div>
 
         <Image

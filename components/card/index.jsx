@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getCookie } from "cookies-next";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
@@ -57,12 +58,12 @@ function Card(props) {
             <Heart />
           </button>
 
-          <button
-            type="button"
+          <Link
+            href={`/${product.id}`}
             className="flex items-center justify-center bg-white rounded-full min-w-[2.125rem] min-h-[2.125rem]"
           >
             <Eye />
-          </button>
+          </Link>
         </div>
 
         <Image
