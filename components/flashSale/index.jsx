@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import PropTypes from "prop-types";
 
 import { endOfSale } from "@/constant";
@@ -48,7 +49,9 @@ function FlashSale(props) {
       </div>
 
       <div className="text-center mt-[3.75rem]">
-        <ViewAllProducts text="View All Products" />
+        <Link href="/">
+          <ViewAllProducts text="View All Products" type="button" onClick={() => {}} />
+        </Link>
       </div>
 
       <div className="container mt-[3.75rem] mb-[5rem]">

@@ -74,7 +74,7 @@ function CartPage() {
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
         <Link
-          href="./"
+          href="/"
           className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
         >
           Home
@@ -241,9 +241,9 @@ function CartPage() {
                 </span>
               </div>
 
-              <div className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
-                <ViewAllProducts text="Procees to checkout" />
-              </div>
+              <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
+                <ViewAllProducts text="Procees to checkout" type="button" />
+              </Link>
             </div>
           </div>
         </div>

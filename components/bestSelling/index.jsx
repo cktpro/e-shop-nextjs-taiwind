@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import PropTypes from "prop-types";
 
 import ViewAll from "../buttons/viewAll";
@@ -26,7 +27,9 @@ function BestSelling(props) {
       </div>
 
       <div className="relative flex items-center justify-center">
-        <ViewAll />
+        <Link href="/">
+          <ViewAll />
+        </Link>
 
         <div className="grid grid-cols-12 sm:gap-[1.875rem]">
           {bestSelling.map((item) => {
