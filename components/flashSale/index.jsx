@@ -48,7 +48,7 @@ function FlashSale(props) {
       </div>
 
       <div className="text-center mt-[3.75rem]">
-        <ViewAllProducts />
+        <ViewAllProducts text="View All Products" />
       </div>
 
       <div className="container mt-[3.75rem] mb-[5rem]">

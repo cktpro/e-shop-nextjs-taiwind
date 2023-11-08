@@ -252,8 +252,8 @@ function Header() {
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
-              <div className="absolute top-[-0.5rem] right-[-0.5rem] min-w-[fix-content] min-h-[fix-content] px-[0.4rem] py-[0.07rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
-                <span className="min-w-[0.4375rem] min-h-[1.0625rem] flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem">
+              <div className="absolute top-[-0.5rem] right-[-0.5rem] w-[1.5rem] h-[1.5rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
+                <span className="flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
                   {totalCartItem || 0}
                 </span>
               </div>
@@ -466,10 +466,16 @@ function Header() {
 
               <Link
                 onClick={closeDrawerRight}
-                className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
+                className="group relative rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
                 href={token ? "/cart" : "/logIn"}
               >
                 <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
+
+                <div className="absolute top-[-0.5rem] right-[-0.5rem] w-[1.5rem] h-[1.5rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
+                  <span className="flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
+                    {totalCartItem || 0}
+                  </span>
+                </div>
               </Link>
 
               <button

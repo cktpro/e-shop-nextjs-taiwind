@@ -30,7 +30,7 @@ function OurProducts(props) {
       </div>
 
       <div className="text-center mt-[3.75rem]">
-        <ViewAllProducts />
+        <ViewAllProducts text="View All Products" />
       </div>
     </div>
   );
