@@ -69,9 +69,9 @@ function ProductDetails(props) {
         </div>
 
         <div className="col-span-12 xl:col-span-5 pl-[1.4rem] flex justify-center">
-          <div className="flex w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
+          <div className="flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
-              className="object-contain max-w-[31.25rem] max-h-[37.5rem]"
+              className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
               src={product.image}
               alt="..."
               width={500}
