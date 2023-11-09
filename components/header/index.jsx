@@ -20,7 +20,12 @@ import { useRouter } from "next/router";
 
 import keySearch from "@/data/keySearch.json";
 import { useTrans } from "@/helper/chanLang";
-import { useOutsideClick, useOutsideDrawderClick, useOutsideSuggestClick } from "@/helper/clickOutsideElement";
+import {
+  useOutsideClick,
+  useOutsideDrawderClick,
+  useOutsideSuggestClick,
+  useOutsideSuggestDrawderClick,
+} from "@/helper/clickOutsideElement";
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 
@@ -44,6 +49,8 @@ function Header() {
   const [filterKeySearch, setFilterKeySearch] = useState([]);
 
   const [isOpenSuggest, setIsOpenSuggest] = useState(false);
+
+  const [isOpenSuggestOnDrawder, setIsOpenSuggestOnDrawder] = useState(false);
 
   const [isActiveNavbar, setIsActiveNavbar] = useState(pathname);
 
@@ -69,9 +76,15 @@ function Header() {
 
   const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
 
+  const handleClickOutsideSuggestOnDrawder = useCallback(() => {
+    setIsOpenSuggestOnDrawder(false);
+  }, []);
+
   const handleClickOutsideSuggest = useCallback(() => {
     setIsOpenSuggest(false);
   }, []);
+
+  const refClickSuggestOnDrawder = useOutsideSuggestDrawderClick(handleClickOutsideSuggestOnDrawder);
 
   const refClickSuggest = useOutsideSuggestClick(handleClickOutsideSuggest);
 
@@ -163,8 +176,10 @@ function Header() {
   useEffect(() => {
     if (filterKeySearch.length > 0) {
       setIsOpenSuggest(true);
+      setIsOpenSuggestOnDrawder(true);
     } else {
       setIsOpenSuggest(false);
+      setIsOpenSuggestOnDrawder(false);
     }
   }, [filterKeySearch]);
 
@@ -531,12 +546,53 @@ function Header() {
           </div>
 
           <div className="md:hidden ml-auto flex flex-col items-center">
-            <form className="relative mt-5 min-w-[15.1875rem] max-h-[2.375rem]">
+            <form
+              ref={refClickSuggestOnDrawder}
+              onSubmit={handleSubmitSearch}
+              className="relative mt-5 min-w-[15.1875rem] max-h-[2.375rem]"
+            >
               <input
+                ref={inputSearchRef}
+                name="inputSearch"
                 type="text"
+                autoComplete="off"
+                onFocus={() => {
+                  if (filterKeySearch.length > 0) {
+                    setIsOpenSuggestOnDrawder(true);
+                  }
+                }}
                 placeholder="What are you looking for?"
+                onChange={(e) => setInputSearch(e.target.value)}
                 className="min-h-[2.5rem] w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
+
+              {isOpenSuggestOnDrawder && (
+                <ul
+                  className={classNames(
+                    "absolute z-[10000] top-11 right-0 flex flex-col items-start justify-center gap-[1rem] w-[20rem] max-h-[25rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
+                    styles.suggest,
+                  )}
+                >
+                  {filterKeySearch?.map((item) => {
+                    return (
+                      <li
+                        key={item.title}
+                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.125rem]"
+                      >
+                        <Link
+                          onClick={() => {
+                            inputSearchRef.current.value = "";
+                            setInputSearch("");
+                          }}
+                          href={`/search-products?key=${item.title}`}
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
               <button
                 onClick={closeDrawerRight}
