@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { deleteCookie, getCookie } from "cookies-next";
 import {
@@ -18,8 +18,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
+import keySearch from "@/data/keySearch.json";
 import { useTrans } from "@/helper/chanLang";
 import { useOutsideClick, useOutsideDrawderClick } from "@/helper/clickOutsideElement";
+import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 
 import DropDown from "../svg/dropDown";
@@ -29,13 +31,19 @@ import styles from "./header.module.scss";
 function Header() {
   const router = useRouter();
 
+  const inputSearchRef = useRef(null);
+
   const pathname = usePathname();
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
   const resetCartItem = useCartStore((state) => state.resetCart);
 
-  // console.log("««««« totalCartItem »»»»»", totalCartItem);
+  const [inputSearch, setInputSearch] = useState("");
+
+  const [filterKeySearch, setFilterKeySearch] = useState([]);
+
+  const [isOpenSuggest, setIsOpenSuggest] = useState(false);
 
   const [isActiveNavbar, setIsActiveNavbar] = useState(pathname);
 
@@ -102,7 +110,7 @@ function Header() {
 
     setIsOpenUserSetting(false);
 
-    router.push("/logIn");
+    router.push("/log-in");
   }, [resetCartItem, router]);
 
   const changeLang = useCallback(
@@ -115,6 +123,44 @@ function Header() {
   useEffect(() => {
     setIsActiveNavbar(pathname);
   }, [pathname]);
+
+  const handleSubmitSearch = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const search = e.target.inputSearch.value;
+
+      router.push(`search-products?key=${search}`);
+
+      inputSearchRef.current.value = "";
+
+      setInputSearch("");
+    },
+    [router],
+  );
+
+  useEffect(() => {
+    if (!inputSearch) {
+      setFilterKeySearch([]);
+    }
+
+    if (inputSearch) {
+      const filterKey = keySearch.filter((item) => {
+        const keySearchRegex = fuzzySearch(inputSearch);
+        return keySearchRegex.test(item.title);
+      });
+
+      setFilterKeySearch(filterKey);
+    }
+  }, [inputSearch]);
+
+  useEffect(() => {
+    if (filterKeySearch.length > 0) {
+      setIsOpenSuggest(true);
+    } else {
+      setIsOpenSuggest(false);
+    }
+  }, [filterKeySearch]);
 
   return (
     <>
@@ -224,12 +270,48 @@ function Header() {
           </ul>
 
           <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
-            <form className="relative min-w-[15.1875rem] max-h-[2.375rem]">
+            <form onSubmit={handleSubmitSearch} className="relative min-w-[15.1875rem] max-h-[2.375rem]">
               <input
+                ref={inputSearchRef}
+                name="inputSearch"
                 type="text"
+                autoComplete="off"
+                onBlur={() => {
+                  inputSearchRef.current.value = "";
+                  setInputSearch("");
+                }}
                 placeholder={useTrans("navBar.inputSearch")}
+                onChange={(e) => setInputSearch(e.target.value)}
                 className="min-w-[15.1875rem] min-h-[2.375rem] bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
               />
+
+              {isOpenSuggest && (
+                <ul
+                  className={classNames(
+                    "absolute top-11 flex flex-col items-start justify-center gap-[1rem] max-w-[30rem] max-h-[25rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
+                    styles.suggest,
+                  )}
+                >
+                  {filterKeySearch?.map((item) => {
+                    return (
+                      <li
+                        key={item.title}
+                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.125rem]"
+                      >
+                        <Link
+                          onClick={() => {
+                            inputSearchRef.current.value = "";
+                            setInputSearch("");
+                          }}
+                          href={`/search-products?key=${item.title}`}
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
               <button
                 type="submit"
@@ -241,14 +323,14 @@ function Header() {
 
             <Link
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
-              href={token ? "/wishList" : "/logIn"}
+              href={token ? "/wishList" : "/log-in"}
             >
               <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
 
             <Link
               className="group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-              href={token ? "/cart" : "/logIn"}
+              href={token ? "/cart" : "/log-in"}
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
@@ -343,7 +425,7 @@ function Header() {
               ) : (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
-                    href="/logIn"
+                    href="/log-in"
                     // onClick={handleLogout}
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
@@ -459,7 +541,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-                href={token ? "/wishList" : "/logIn"}
+                href={token ? "/wishList" : "/log-in"}
               >
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
@@ -467,7 +549,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group relative rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
-                href={token ? "/cart" : "/logIn"}
+                href={token ? "/cart" : "/log-in"}
               >
                 <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
@@ -552,7 +634,7 @@ function Header() {
                     </Link>
 
                     <Link
-                      href="/logIn"
+                      href="/log-in"
                       onClick={() => {
                         handleLogout();
                         closeDrawerRight();
@@ -569,7 +651,7 @@ function Header() {
                 ) : (
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
-                      href="/logIn"
+                      href="/log-in"
                       onClick={() => {
                         handleLogout();
                         closeDrawerRight();

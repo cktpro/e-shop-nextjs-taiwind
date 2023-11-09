@@ -37,7 +37,7 @@ function Card(props) {
 
         addToCart(data);
       } else {
-        router.push("/logIn");
+        router.push("/log-in");
       }
     },
     [addToCart, router, token],

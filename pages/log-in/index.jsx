@@ -10,7 +10,7 @@ import Loading from "@/components/svg/loading";
 
 import styles from "./logIn.module.scss";
 
-function LogIn() {
+function Login() {
   const { push } = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -168,4 +168,4 @@ function LogIn() {
   );
 }
 
-export default LogIn;
+export default Login;

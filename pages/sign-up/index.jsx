@@ -79,7 +79,7 @@ function SignUp() {
                 </span>
 
                 <Link
-                  href="./logIn"
+                  href="./log-in"
                   className="flex items-start h-[1.65rem] border-solid border-b-black border-b-[1px] border-opacity-50 text-text-2 font-poppins text-[1rem] font-[600] leading-[1.5rem] opacity-[0.7]"
                 >
                   Log in

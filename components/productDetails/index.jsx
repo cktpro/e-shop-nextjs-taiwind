@@ -22,7 +22,9 @@ function ProductDetails(props) {
 
         <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">{product.title}</span>
+        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+          {product?.title}
+        </span>
       </div>
 
       <div className="min-w-full mt-[5rem] grid grid-cols-12">
@@ -30,7 +32,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product.image}
+              src={product?.image}
               alt="..."
               width={270}
               height={250}
@@ -40,7 +42,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product.image}
+              src={product?.image}
               alt="..."
               width={270}
               height={250}
@@ -50,7 +52,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product.image}
+              src={product?.image}
               alt="..."
               width={270}
               height={250}
@@ -60,7 +62,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product.image}
+              src={product?.image}
               alt="..."
               width={270}
               height={250}
@@ -72,7 +74,7 @@ function ProductDetails(props) {
           <div className="flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
               className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
-              src={product.image}
+              src={product?.image}
               alt="..."
               width={500}
               height={500}
@@ -82,7 +84,7 @@ function ProductDetails(props) {
 
         <div className="col-span-12 xl:col-span-5 flex flex-col items-center xl:items-start justify-start mt-[2rem] xl:mt-0 xl:pl-[5.45rem]">
           <h2 className="max-w-[24rem] whitespace-nowrap overflow-hidden text-ellipsis text-text-2 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
-            {product.title}
+            {product?.title}
           </h2>
 
           <div className="mt-[1rem] max-h-[1.3125rem] flex items-start justify-start">
@@ -95,7 +97,7 @@ function ProductDetails(props) {
             />
 
             <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
-              ({product.rating.count} Reviews)
+              ({product?.rating?.count} Reviews)
             </span>
 
             <div className="ml-[1rem] mt-[0.1rem] min-h-[1rem] min-w-[0.0625rem] bg-black opacity-[0.5]" />
@@ -106,11 +108,11 @@ function ProductDetails(props) {
           </div>
 
           <span className="mt-[1rem] text-text-2 font-inter text-[1.5rem] font-[400] leading-[1.5rem] tracking-[0.045rem]">
-            ${parseFloat(product.price).toFixed(2)}
+            ${parseFloat(product?.price).toFixed(2)}
           </span>
 
           <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-            {product.description}
+            {product?.description}
           </span>
 
           <hr className="mt-[1.5rem] min-w-[25rem] border-solid border-[1px] border-gray-400" />

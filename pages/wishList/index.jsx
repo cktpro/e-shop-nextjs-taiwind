@@ -17,7 +17,7 @@ function WhishListPage(props) {
     const getToken = getCookie("TOKEN");
 
     if (!getToken) {
-      router.push("/logIn");
+      router.push("/log-in");
     } else {
       setIsHaveToken(true);
     }

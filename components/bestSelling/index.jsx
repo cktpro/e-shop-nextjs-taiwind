@@ -8,6 +8,7 @@ import Rectangle from "../svg/rectangle";
 
 function BestSelling(props) {
   const { bestSelling } = props;
+
   return (
     <div className="container">
       <div className="sm:flex items-end mb-[7.5rem] sm:mb-[3.75rem]">

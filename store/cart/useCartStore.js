@@ -59,6 +59,8 @@ const useCartStore = create((set, get) => ({
   increase: (product) => {
     const { cart } = get();
 
+    const shipping = 5;
+
     const updatedCart = cart.map((item) => {
       return item.id === product.id ? { ...item, quantity: parseInt(item.quantity, 10) + 1 } : item;
     });
@@ -70,9 +72,11 @@ const useCartStore = create((set, get) => ({
 
       subtotal: (parseFloat(state.subtotal) + parseFloat(product.price)).toFixed(2),
 
+      shipping: parseFloat(shipping).toFixed(2),
+
       coupon: "",
 
-      total: (parseFloat(state.subtotal) + parseFloat(state.shipping) + parseFloat(product.price)).toFixed(2),
+      total: (parseFloat(state.subtotal) + parseFloat(shipping) + parseFloat(product.price)).toFixed(2),
     }));
   },
 
