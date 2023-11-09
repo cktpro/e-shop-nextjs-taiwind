@@ -349,7 +349,7 @@ function Header() {
 
             <Link
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
-              href={token ? "/wishList" : "/log-in"}
+              href={token ? "/wish-list" : "/log-in"}
             >
               <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
@@ -393,7 +393,7 @@ function Header() {
               {token ? (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
-                    href="/"
+                    href="/account"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <User className="w-[2rem] h-[2rem] text-text-1" />
@@ -480,7 +480,7 @@ function Header() {
         <div
           ref={isOpenDrawderRight ? refClickDrawder : null}
           className={classNames(
-            "h-screen w-fit shadow-2xl fixed flex flex-col items-center !p-[2rem] top-0 right-0 z-[9999] bg-white",
+            "h-screen w-fit shadow-2xl fixed flex flex-col items-center !p-[2rem] top-0 right-0 !z-[9999] bg-white",
             !isOpenDrawderRight && "hidden",
             styles.drawder,
           )}
@@ -607,7 +607,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-                href={token ? "/wishList" : "/log-in"}
+                href={token ? "/wish-list" : "/log-in"}
               >
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
@@ -653,7 +653,7 @@ function Header() {
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
                       onClick={closeDrawerRight}
-                      href="/"
+                      href="/account"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                     >
                       <User className="w-[2rem] h-[2rem] text-text-1" />
