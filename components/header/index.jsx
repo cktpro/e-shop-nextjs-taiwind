@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 
 import keySearch from "@/data/keySearch.json";
 import { useTrans } from "@/helper/chanLang";
-import { useOutsideClick, useOutsideDrawderClick } from "@/helper/clickOutsideElement";
+import { useOutsideClick, useOutsideDrawderClick, useOutsideSuggestClick } from "@/helper/clickOutsideElement";
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 
@@ -68,6 +68,12 @@ function Header() {
   const openUserSettingMenu = useCallback(() => setIsOpenUserSetting(true), []);
 
   const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
+
+  const handleClickOutsideSuggest = useCallback(() => {
+    setIsOpenSuggest(false);
+  }, []);
+
+  const refClickSuggest = useOutsideSuggestClick(handleClickOutsideSuggest);
 
   const refClickDrawder = useOutsideDrawderClick(openDrawerRight, closeDrawerRight, isOpenDrawderRight);
 
@@ -270,15 +276,20 @@ function Header() {
           </ul>
 
           <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
-            <form onSubmit={handleSubmitSearch} className="relative min-w-[15.1875rem] max-h-[2.375rem]">
+            <form
+              ref={refClickSuggest}
+              onSubmit={handleSubmitSearch}
+              className="relative min-w-[15.1875rem] max-h-[2.375rem]"
+            >
               <input
                 ref={inputSearchRef}
                 name="inputSearch"
                 type="text"
                 autoComplete="off"
-                onBlur={() => {
-                  inputSearchRef.current.value = "";
-                  setInputSearch("");
+                onFocus={() => {
+                  if (filterKeySearch.length > 0) {
+                    setIsOpenSuggest(true);
+                  }
                 }}
                 placeholder={useTrans("navBar.inputSearch")}
                 onChange={(e) => setInputSearch(e.target.value)}
@@ -426,7 +437,6 @@ function Header() {
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/log-in"
-                    // onClick={handleLogout}
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <LogIn className="w-[2rem] h-[2rem] text-text-1" />

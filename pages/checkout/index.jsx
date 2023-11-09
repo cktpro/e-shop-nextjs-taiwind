@@ -150,7 +150,7 @@ function Checkout() {
 
           <label
             htmlFor="saveInfo"
-            className="max-w-[20rem] sm:max-w-fit lg:min-w-full hover:opacity-70 transition-opacity max-h-[1.5rem] flex items-center justify-start gap-[1rem]"
+            className="max-w-[20rem] sm:max-w-fit lg:min-w-full transition-opacity max-h-[1.5rem] flex items-center justify-start gap-[1rem]"
           >
             <input
               type="checkbox"
@@ -222,10 +222,7 @@ function Checkout() {
           </div>
 
           <div className="min-w-[20rem] sm:min-w-[26.6875rem] flex items-center justify-between">
-            <label
-              htmlFor="bank"
-              className="hover:opacity-70 transition-opacity flex items-center justify-center gap-[1rem]"
-            >
+            <label htmlFor="bank" className="transition-opacity flex items-center justify-center gap-[1rem]">
               <input className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2" type="radio" id="bank" name="bank" />
 
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
@@ -280,7 +277,7 @@ function Checkout() {
 
           <label
             htmlFor="cash"
-            className="min-w-[20rem] sm:min-w-[26.6rem] hover:opacity-70 transition-opacity flex items-center justify-start gap-[1rem]"
+            className="min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]"
           >
             <input className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2" type="radio" id="cash" name="cash" />
 
