@@ -40,7 +40,7 @@ function AccountPage() {
         ref={isOpenDrawderLeft ? leftDrawderRef : null}
         className={classNames(
           styles.left_drawder,
-          "fixed top-[5rem] left-0 h-screen min-w-fit shadow-md bg-text-1 z-[2]",
+          "fixed top-[7rem] left-0 h-screen min-w-fit shadow-md bg-text-1 z-[2]",
           !isOpenDrawderLeft && "hidden",
         )}
       >
