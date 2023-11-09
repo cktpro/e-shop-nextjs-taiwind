@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import ProductDetails from "@/components/productDetails";
 
 function ProductDetailPage(props) {
   const { product, relatedItem } = props;
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (Object.keys(product).length === 0) {
+      router.push("/not-found");
+    }
+  }, [product, router]);
+
+  if (Object.keys(product).length === 0) {
+    return null;
+  }
 
   return <ProductDetails product={product} relatedItem={relatedItem} />;
 }
@@ -28,7 +41,7 @@ export async function getServerSideProps(req) {
 
     return {
       props: {
-        product: response.data,
+        product: response.data || {},
         relatedItem: relatedItem.data,
       },
     };

@@ -15,7 +15,7 @@ function Checkout() {
           Home
         </Link>
 
-        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
+        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
 
         <Link
           href="/cart"
@@ -24,7 +24,7 @@ function Checkout() {
           Cart
         </Link>
 
-        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
+        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
 
         <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
       </div>
