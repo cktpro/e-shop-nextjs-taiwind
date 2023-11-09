@@ -266,9 +266,9 @@ function Header() {
               <Link
                 className={classNames(
                   "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                  isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
+                  isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
                 )}
-                href="/signUp"
+                href="/sign-up"
               >
                 {useTrans("navBar.signup")}
               </Link>
@@ -718,9 +718,9 @@ function Header() {
               onClick={closeDrawerRight}
               className={classNames(
                 "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/signUp" && "border-b-gray-400 border-b-[2px]",
+                isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
               )}
-              href="/signUp"
+              href="/sign-up"
             >
               {useTrans("navBar.signup")}
             </Link>
