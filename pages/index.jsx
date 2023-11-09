@@ -15,7 +15,7 @@ import { categories } from "@/data/categoriesItems.jsx";
 
 export default function Home({ products, bestSelling }) {
   return (
-    <main className="subpixel-antialiased">
+    <main className="">
       <section>
         <Slider />
       </section>

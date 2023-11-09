@@ -13,6 +13,7 @@ export default function App({ Component, pageProps }) {
         <title>Exclusive</title>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
+
       <Layout>
         <Component {...pageProps} />
       </Layout>
