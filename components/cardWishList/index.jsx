@@ -28,7 +28,7 @@ function CardWishList(props) {
         const data = {
           id: item.id,
           name: item.title,
-          image: item.image,
+          image: item?.image || item?.images[0],
           price: item.price,
           quantity: 1,
         };
@@ -59,11 +59,12 @@ function CardWishList(props) {
 
         <Image
           className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
-          src={product.image}
+          src={product?.image || product?.images[0]}
           alt="..."
           width={172}
           height={152}
           priority
+          style={{ width: "100%", height: "auto" }}
         />
 
         <button

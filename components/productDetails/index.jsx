@@ -1,14 +1,80 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import classNames from "classnames";
+import { getCookie } from "cookies-next";
 import { Heart, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
+
+import useCartStore from "@/store/cart/useCartStore";
 
 import Card from "../card";
 import Rectangle from "../svg/rectangle";
 
+import styles from "./productDetails.module.scss";
+
 function ProductDetails(props) {
   const { product, relatedItem } = props;
+
+  const router = useRouter();
+
+  const [inputQuantity, setInputQuantity] = useState(1);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const getToken = getCookie("TOKEN");
+
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    setToken(getToken);
+  }, [getToken]);
+
+  const handleClickAddToCart = useCallback(
+    (item) => {
+      if (token) {
+        const data = {
+          id: item.id,
+          name: item.title,
+          image: item?.image || item?.images[0],
+          price: item.price,
+          quantity: parseInt(inputQuantity, 10),
+        };
+
+        addToCart(data);
+      } else {
+        router.push("/log-in");
+      }
+    },
+    [addToCart, inputQuantity, router, token],
+  );
+
+  const handleClickPlus = useCallback(() => {
+    setInputQuantity((num) => parseInt(num, 10) + 1);
+  }, []);
+
+  const handleClickMinus = useCallback(() => {
+    if (inputQuantity <= 1) {
+      setInputQuantity(1);
+    } else {
+      setInputQuantity((num) => parseInt(num, 10) - 1);
+    }
+  }, [inputQuantity]);
+
+  const handleChangeInputQuantity = useCallback((e) => {
+    if (e.target.value) {
+      setInputQuantity(e.target.value);
+    } else {
+      setInputQuantity("");
+    }
+  }, []);
+
+  const handleBlurInputQuantity = useCallback((e) => {
+    if (!e.target.value || e.target.value <= 0) {
+      setInputQuantity(1);
+    }
+  }, []);
 
   return (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
@@ -32,7 +98,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={product?.image || product?.images[0]}
               alt="..."
               width={270}
               height={250}
@@ -42,7 +108,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={product?.image || product?.images[1]}
               alt="..."
               width={270}
               height={250}
@@ -52,7 +118,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={product?.image || product?.images[0]}
               alt="..."
               width={270}
               height={250}
@@ -62,7 +128,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={product?.image || product?.images[1]}
               alt="..."
               width={270}
               height={250}
@@ -74,7 +140,7 @@ function ProductDetails(props) {
           <div className="flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
               className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
-              src={product?.image}
+              src={product?.image || product?.images[0]}
               alt="..."
               width={500}
               height={500}
@@ -180,22 +246,39 @@ function ProductDetails(props) {
           </div>
 
           <div className="mt-[1.5rem] flex items-center justify-start">
-            <div className="flex items-center justify-center min-w-[2.5rem] min-h-[2.75rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)] rounded-tl-[0.25rem] rounded-bl-[0.25rem]">
+            <button
+              onClick={() => handleClickMinus()}
+              type="button"
+              className="flex items-center justify-center min-w-[2.5rem] min-h-[2.75rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)] rounded-tl-[0.25rem] rounded-bl-[0.25rem]"
+            >
               <span className="min-w-[1.5rem] min-h-[1.5rem] flex-shrink-0">
                 <Minus />
               </span>
-            </div>
+            </button>
 
             <input
-              className="flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]"
-              type="text"
+              type="number"
+              value={inputQuantity}
+              onBlur={(e) => handleBlurInputQuantity(e)}
+              onChange={(e) => handleChangeInputQuantity(e)}
+              className={classNames(
+                "flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]",
+                styles.no_arrow_input,
+              )}
             />
 
-            <div className="rounded-tr-[0.25rem] rounded-br-[0.25rem] flex min-w-[2.5625rem] min-h-[2.75rem] flex-col items-center justify-center bg-secondary-2">
-              <Plus className="text-text-1" />
-            </div>
+            <button
+              onClick={() => handleClickPlus()}
+              type="button"
+              className="rounded-tr-[0.25rem] rounded-br-[0.25rem] flex min-w-[2.5625rem] min-h-[2.75rem] flex-col items-center justify-center bg-secondary-2"
+            >
+              <span className="min-w-[1.5rem] min-h-[1.5rem] flex-shrink-0">
+                <Plus className="text-text-1" />
+              </span>
+            </button>
 
             <button
+              onClick={() => handleClickAddToCart(product)}
               type="button"
               className="whitespace-nowrap ml-[1rem] inline-flex px-[3rem] py-[0.625rem] items-center justify-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2"
             >

@@ -43,15 +43,28 @@ function Login() {
         const username = e.target.username.value;
         const password = e.target.password.value;
 
+        // const data = {
+        //   username,
+        //   password,
+        // };
+
         const data = {
-          username,
+          email: username,
           password,
         };
 
-        const responsive = await axios.post("https://fakestoreapi.com/auth/login", data);
+        // const responsive = await axios.post("https://fakestoreapi.com/auth/login", data);
 
-        if (responsive.data.token) {
-          setCookie("TOKEN", responsive.data.token);
+        const responsive = await axios.post("https://api.escuelajs.co/api/v1/auth/login", data);
+
+        // if (responsive.data.token) {
+        //   setCookie("TOKEN", responsive.data.token);
+
+        //   push("/");
+        // }
+
+        if (responsive.data.access_token) {
+          setCookie("TOKEN", responsive.data.access_token);
 
           push("/");
         }
@@ -60,7 +73,9 @@ function Login() {
 
         setIsHaveError(true);
 
-        setErrorMessage(error?.response?.data || "Internal Server Error");
+        // setErrorMessage(error?.response?.data || "Internal Server Error");
+
+        setErrorMessage(error?.response?.data?.message || "Internal Server Error");
       }
     },
     [push],

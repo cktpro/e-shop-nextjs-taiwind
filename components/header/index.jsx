@@ -18,7 +18,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
-import keySearch from "@/data/keySearch.json";
+// import keySearch from "@/data/keySearch.json";
 import { useTrans } from "@/helper/chanLang";
 import {
   useOutsideClick,
@@ -28,6 +28,7 @@ import {
 } from "@/helper/clickOutsideElement";
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
+import useKeySearch from "@/store/keySearch/useKeySearch";
 
 import DropDown from "../svg/dropDown";
 
@@ -39,6 +40,8 @@ function Header() {
   const inputSearchRef = useRef(null);
 
   const pathname = usePathname();
+
+  const keySearch = useKeySearch((state) => state.keySearch);
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
@@ -174,7 +177,7 @@ function Header() {
   }, [inputSearch]);
 
   useEffect(() => {
-    if (filterKeySearch.length > 0) {
+    if (filterKeySearch.length > 0 && filterKeySearch.length <= 8) {
       setIsOpenSuggest(true);
       setIsOpenSuggestOnDrawder(true);
     } else {
@@ -302,7 +305,7 @@ function Header() {
                 type="text"
                 autoComplete="off"
                 onFocus={() => {
-                  if (filterKeySearch.length > 0) {
+                  if (filterKeySearch.length > 0 && filterKeySearch.length <= 8) {
                     setIsOpenSuggest(true);
                   }
                 }}
@@ -314,7 +317,7 @@ function Header() {
               {isOpenSuggest && (
                 <ul
                   className={classNames(
-                    "absolute top-11 flex flex-col items-start justify-center gap-[1rem] max-w-[30rem] max-h-[25rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
+                    "absolute top-11 flex flex-col items-start justify-center gap-[1rem] max-w-[30rem] min-h-fit max-h-[40rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
                     styles.suggest,
                   )}
                 >

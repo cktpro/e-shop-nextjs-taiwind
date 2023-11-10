@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import ProductDetails from "@/components/productDetails";
+
+import { axiosUser } from "@/helper/axios";
 
 function ProductDetailPage(props) {
   const { product, relatedItem } = props;
@@ -34,9 +35,14 @@ export async function getServerSideProps(req) {
   try {
     const { params } = req;
 
+    // const [response, relatedItem] = await Promise.all([
+    //   axios.get(`https://fakestoreapi.com/products/${params.id}`),
+    //   axios.get("https://fakestoreapi.com/products?limit=4"),
+    // ]);
+
     const [response, relatedItem] = await Promise.all([
-      axios.get(`https://fakestoreapi.com/products/${params.id}`),
-      axios.get("https://fakestoreapi.com/products?limit=4"),
+      axiosUser.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
+      axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
     ]);
 
     return {

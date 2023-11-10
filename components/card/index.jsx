@@ -30,7 +30,7 @@ function Card(props) {
         const data = {
           id: item.id,
           name: item.title,
-          image: item.image,
+          image: item?.image || item?.images[0],
           price: item.price,
           quantity: 1,
         };
@@ -68,7 +68,7 @@ function Card(props) {
 
         <Image
           className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
-          src={product.image}
+          src={product?.images[0] || product?.image}
           alt="..."
           width={172}
           height={152}
@@ -99,10 +99,10 @@ function Card(props) {
         </div>
 
         <div className="flex items-start gap-[0.5rem]">
-          <div className="flex items-start">{renderStars(product?.rating?.rate)}</div>
+          <div className="flex items-start">{renderStars(product?.rating?.rate || 4.5)}</div>
 
           <div className="min-w-[2rem] min-h-[1.25rem] text-text-2 font-poppins text-[0.875rem] font-[600] leading-[1.3125rem] opacity-[0.5]">
-            ({product?.rating?.count})
+            ({product?.rating?.count || 99})
           </div>
         </div>
       </div>

@@ -77,7 +77,7 @@ SearchProductsPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    const search = await axios.get("https://fakestoreapi.com/products");
+    const search = await axios.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20");
 
     return {
       props: {

@@ -21,13 +21,15 @@ const useCartStore = create((set, get) => ({
 
     if (cartItem) {
       const updatedCart = cart.map((item) => {
-        return item.id === product.id ? { ...item, quantity: parseInt(item.quantity, 10) + 1 } : item;
+        return item.id === product.id
+          ? { ...item, quantity: parseInt(item.quantity, 10) + parseInt(product.quantity, 10) }
+          : item;
       });
 
       set((state) => ({
         cart: updatedCart,
 
-        totalItem: parseInt(state.totalItem, 10) + 1,
+        totalItem: parseInt(state.totalItem, 10) + product.quantity,
 
         subtotal: (parseFloat(state.subtotal) + parseFloat(product.price)).toFixed(2),
 
@@ -38,12 +40,12 @@ const useCartStore = create((set, get) => ({
         total: (parseFloat(state.subtotal) + parseFloat(shipping) + parseFloat(product.price)).toFixed(2),
       }));
     } else {
-      const updatedCart = [...cart, { ...product, quantity: 1 }];
+      const updatedCart = [...cart, { ...product, quantity: product.quantity }];
 
       set((state) => ({
         cart: updatedCart,
 
-        totalItem: parseInt(state.totalItem, 10) + 1,
+        totalItem: parseInt(state.totalItem, 10) + product.quantity,
 
         subtotal: (parseFloat(state.subtotal) + parseFloat(product.price)).toFixed(2),
 
