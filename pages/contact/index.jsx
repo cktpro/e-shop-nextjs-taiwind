@@ -114,13 +114,6 @@ function Contact() {
             </div>
 
             <label htmlFor="yourMessage">
-              {/* <input
-                className="min-w-full sm:min-w-[46.0625rem] min-h-[12.9375rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
-                type="text"
-                id="yourMessage"
-                name="yourMessage"
-                placeholder="Your Message"
-              /> */}
               <textarea
                 className="min-w-full sm:min-w-[46.0625rem] min-h-[12.9375rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
                 id="yourMessage"
