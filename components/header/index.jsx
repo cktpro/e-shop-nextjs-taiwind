@@ -27,6 +27,7 @@ import {
 } from "@/helper/clickOutsideElement";
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
+import useScaleCart from "@/store/isScaleCart";
 import useKeySearch from "@/store/keySearch/useKeySearch";
 import useNotification from "@/store/showNotification";
 import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
@@ -47,6 +48,8 @@ function Header() {
   const isOpenNotification = useNotification((state) => state.isOpenNotification);
 
   const isOpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.isOpenNotification);
+
+  const isScaleCart = useScaleCart((state) => state.isScaleCart);
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
@@ -387,7 +390,10 @@ function Header() {
             </Link>
 
             <Link
-              className="group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+              className={classNames(
+                "group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center",
+                isScaleCart && "scale-[1.6]",
+              )}
               href={token ? "/cart" : "/log-in"}
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />

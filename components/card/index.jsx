@@ -8,19 +8,27 @@ import PropTypes from "prop-types";
 
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
+import useScaleCart from "@/store/isScaleCart";
 import useNotification from "@/store/showNotification";
 
 function Card(props) {
   const { product } = props;
 
-  const timeoutRef = useRef(null);
+  const timeoutNotificationRef = useRef(null);
+
+  const timeoutScaleRef = useRef(null);
 
   const router = useRouter();
 
   const addToCart = useCartStore((state) => state.addToCart);
 
   const openNotification = useNotification((state) => state.openNotification);
+
   const closeNotification = useNotification((state) => state.closeNotification);
+
+  const openScaleCart = useScaleCart((state) => state.openScaleCart);
+
+  const closeScaleCart = useScaleCart((state) => state.closeScaleCart);
 
   const getToken = getCookie("TOKEN");
 
@@ -43,24 +51,38 @@ function Card(props) {
 
         addToCart(data);
 
-        openNotification();
+        openScaleCart();
 
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
+        if (timeoutScaleRef.current) {
+          clearTimeout(timeoutScaleRef.current);
         }
 
-        timeoutRef.current = setTimeout(() => {
+        timeoutScaleRef.current = setTimeout(() => {
+          closeScaleCart();
+
+          clearTimeout(timeoutScaleRef.current);
+
+          timeoutScaleRef.current = null;
+        }, 100);
+
+        openNotification();
+
+        if (timeoutNotificationRef.current) {
+          clearTimeout(timeoutNotificationRef.current);
+        }
+
+        timeoutNotificationRef.current = setTimeout(() => {
           closeNotification();
 
-          clearTimeout(timeoutRef.current);
+          clearTimeout(timeoutNotificationRef.current);
 
-          timeoutRef.current = null;
+          timeoutNotificationRef.current = null;
         }, 3000);
       } else {
         router.push("/log-in");
       }
     },
-    [addToCart, closeNotification, openNotification, router, token],
+    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router, token],
   );
 
   return (
