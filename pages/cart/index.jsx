@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getCookie } from "cookies-next";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import CanCel from "@/components/svg/cancel";
 
 import useCartStore from "@/store/cart/useCartStore";
+import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 function CartPage() {
   const router = useRouter();
@@ -16,6 +17,10 @@ function CartPage() {
   const [isHaveToken, setIsHaveToken] = useState(false);
 
   const [inputCoupon, setInputCoupon] = useState("");
+
+  const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
+
+  const CloseNotificationUpdateCart = useNotificationUpdateCart((state) => state.closeNotification);
 
   const cartData = useCartStore((state) => state);
 
@@ -26,6 +31,8 @@ function CartPage() {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
 
   const applyCoupon = useCartStore((state) => state.applyCoupon);
+
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
     const getToken = getCookie("TOKEN");
@@ -69,6 +76,22 @@ function CartPage() {
     },
     [applyCoupon, inputCoupon],
   );
+
+  const handleClickUpdateCart = useCallback(() => {
+    OpenNotificationUpdateCart();
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      CloseNotificationUpdateCart();
+
+      clearTimeout(timeoutRef.current);
+
+      timeoutRef.current = null;
+    }, 3000);
+  }, [CloseNotificationUpdateCart, OpenNotificationUpdateCart]);
 
   return isHaveToken ? (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
@@ -184,6 +207,7 @@ function CartPage() {
             </button>
 
             <button
+              onClick={() => handleClickUpdateCart()}
               type="button"
               className="min-w-[13.7rem] sm:min-w-fit flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
             >

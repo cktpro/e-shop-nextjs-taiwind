@@ -29,6 +29,7 @@ import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 import useKeySearch from "@/store/keySearch/useKeySearch";
 import useNotification from "@/store/showNotification";
+import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 import DropDown from "../svg/dropDown";
 
@@ -44,6 +45,8 @@ function Header() {
   const keySearch = useKeySearch((state) => state.keySearch);
 
   const isOpenNotification = useNotification((state) => state.isOpenNotification);
+
+  const isOpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.isOpenNotification);
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
@@ -243,8 +246,8 @@ function Header() {
         <div
           className={classNames(
             isOpenNotification
-              ? "absolute top-[7rem] right-[2rem] opacity-100 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
-              : "absolute top-[7rem] right-[2rem] z-[-10] scale-0 opacity-0 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
+              ? "absolute top-[7rem] right-[1rem] scale-100 opacity-100 transition-all duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
+              : "absolute top-[7rem] right-[1rem] z-[-10] scale-0 opacity-0 transition-all duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
           )}
         >
           <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">
@@ -254,9 +257,9 @@ function Header() {
 
         <div
           className={classNames(
-            isOpenNotification
-              ? "absolute top-[7rem] right-[2rem] opacity-100 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
-              : "absolute top-[7rem] right-[2rem] z-[-10] scale-0 opacity-0 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
+            isOpenNotificationUpdateCart
+              ? "absolute top-[7rem] right-[1rem] scale-100 opacity-100 transition-all duration-300 max-w-[20rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
+              : "absolute top-[7rem] right-[1rem] z-[-10] scale-0 opacity-0 transition-all duration-300 max-w-[20rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
           )}
         >
           <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">

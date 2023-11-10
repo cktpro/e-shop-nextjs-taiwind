@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getCookie } from "cookies-next";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
@@ -12,6 +12,8 @@ import useNotification from "@/store/showNotification";
 
 function Card(props) {
   const { product } = props;
+
+  const timeoutRef = useRef(null);
 
   const router = useRouter();
 
@@ -43,8 +45,16 @@ function Card(props) {
 
         openNotification();
 
-        setTimeout(() => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+
+        timeoutRef.current = setTimeout(() => {
           closeNotification();
+
+          clearTimeout(timeoutRef.current);
+
+          timeoutRef.current = null;
         }, 3000);
       } else {
         router.push("/log-in");
