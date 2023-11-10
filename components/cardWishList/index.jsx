@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import useCartStore from "@/store/cart/useCartStore";
+import useNotification from "@/store/showNotification";
 
 function CardWishList(props) {
   const { product } = props;
@@ -13,6 +14,9 @@ function CardWishList(props) {
   const router = useRouter();
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const openNotification = useNotification((state) => state.openNotification);
+  const closeNotification = useNotification((state) => state.closeNotification);
 
   const getToken = getCookie("TOKEN");
 
@@ -34,11 +38,17 @@ function CardWishList(props) {
         };
 
         addToCart(data);
+
+        openNotification();
+
+        setTimeout(() => {
+          closeNotification();
+        }, 3000);
       } else {
         router.push("/log-in");
       }
     },
-    [addToCart, router, token],
+    [addToCart, closeNotification, openNotification, router, token],
   );
 
   return (

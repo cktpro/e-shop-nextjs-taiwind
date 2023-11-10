@@ -18,7 +18,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 
-// import keySearch from "@/data/keySearch.json";
 import { useTrans } from "@/helper/chanLang";
 import {
   useOutsideClick,
@@ -29,6 +28,7 @@ import {
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 import useKeySearch from "@/store/keySearch/useKeySearch";
+import useNotification from "@/store/showNotification";
 
 import DropDown from "../svg/dropDown";
 
@@ -42,6 +42,8 @@ function Header() {
   const pathname = usePathname();
 
   const keySearch = useKeySearch((state) => state.keySearch);
+
+  const isOpenNotification = useNotification((state) => state.isOpenNotification);
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
@@ -174,7 +176,7 @@ function Header() {
 
       setFilterKeySearch(filterKey);
     }
-  }, [inputSearch]);
+  }, [inputSearch, keySearch]);
 
   useEffect(() => {
     if (filterKeySearch.length > 0 && filterKeySearch.length <= 8) {
@@ -238,6 +240,30 @@ function Header() {
       </section>
 
       <header className="sticky top-0 z-[3] text-black bg-white border-b-gray-400 border-b-[1px]">
+        <div
+          className={classNames(
+            isOpenNotification
+              ? "absolute top-[7rem] right-[2rem] opacity-100 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
+              : "absolute top-[7rem] right-[2rem] z-[-10] scale-0 opacity-0 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
+          )}
+        >
+          <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">
+            product added to cart!!!
+          </span>
+        </div>
+
+        <div
+          className={classNames(
+            isOpenNotification
+              ? "absolute top-[7rem] right-[2rem] opacity-100 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
+              : "absolute top-[7rem] right-[2rem] z-[-10] scale-0 opacity-0 transition-opacity duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
+          )}
+        >
+          <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">
+            The shopping cart has been updated!!!
+          </span>
+        </div>
+
         <div className="container pt-[40px] pb-[16px] flex items-center">
           <Link href="/" className="font-inter font-[700] text-[1.5rem] leading-[1.5rem] tracking-[0.045rem] mr-auto">
             <h1>Exclusive</h1>

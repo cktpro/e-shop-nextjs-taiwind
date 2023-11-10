@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import useCartStore from "@/store/cart/useCartStore";
+import useNotification from "@/store/showNotification";
 
 import Card from "../card";
 import Rectangle from "../svg/rectangle";
@@ -22,6 +23,9 @@ function ProductDetails(props) {
   const [inputQuantity, setInputQuantity] = useState(1);
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const openNotification = useNotification((state) => state.openNotification);
+  const closeNotification = useNotification((state) => state.closeNotification);
 
   const getToken = getCookie("TOKEN");
 
@@ -43,11 +47,17 @@ function ProductDetails(props) {
         };
 
         addToCart(data);
+
+        openNotification();
+
+        setTimeout(() => {
+          closeNotification();
+        }, 3000);
       } else {
         router.push("/log-in");
       }
     },
-    [addToCart, inputQuantity, router, token],
+    [addToCart, closeNotification, inputQuantity, openNotification, router, token],
   );
 
   const handleClickPlus = useCallback(() => {

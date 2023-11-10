@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
+import useNotification from "@/store/showNotification";
 
 function Card(props) {
   const { product } = props;
@@ -15,6 +16,9 @@ function Card(props) {
   const router = useRouter();
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const openNotification = useNotification((state) => state.openNotification);
+  const closeNotification = useNotification((state) => state.closeNotification);
 
   const getToken = getCookie("TOKEN");
 
@@ -36,11 +40,17 @@ function Card(props) {
         };
 
         addToCart(data);
+
+        openNotification();
+
+        setTimeout(() => {
+          closeNotification();
+        }, 3000);
       } else {
         router.push("/log-in");
       }
     },
-    [addToCart, router, token],
+    [addToCart, closeNotification, openNotification, router, token],
   );
 
   return (
