@@ -32,33 +32,47 @@ export default function OurProductsCarousel(props) {
     swiperOurProducts?.current?.swiper?.slidePrev();
   }, []);
 
-  return (
-    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="relative cover_carousel_flash_sale">
-      <ArrowCategoriesCarousel prev={handlePrev} next={handleNext} />
-
-      <Swiper
-        ref={swiperOurProducts}
-        slidesPerView="auto"
-        grid={{
-          rows: 2,
-          fill: "row",
-        }}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
-        spaceBetween={30}
-        modules={[Grid, Autoplay]}
-        className="swiper_our_products"
+  if (products.length > 0) {
+    return (
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="relative cover_carousel_flash_sale"
       >
-        {products.map((item) => {
-          return (
-            <SwiperSlide key={item.title}>
-              <Card product={item} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+        <ArrowCategoriesCarousel prev={handlePrev} next={handleNext} />
+
+        <Swiper
+          ref={swiperOurProducts}
+          slidesPerView="auto"
+          grid={{
+            rows: 2,
+            fill: "row",
+          }}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+          }}
+          spaceBetween={30}
+          modules={[Grid, Autoplay]}
+          className="swiper_our_products"
+        >
+          {products.map((item) => {
+            return (
+              <SwiperSlide key={item.title}>
+                <Card product={item} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-center">
+      <span className="text-secondary-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem]">
+        Internal Server Error
+      </span>
     </div>
   );
 }

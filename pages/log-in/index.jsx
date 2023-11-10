@@ -50,17 +50,17 @@ function Login() {
 
         const responsive = await axios.post("https://fakestoreapi.com/auth/login", data);
 
-        setCookie("TOKEN", responsive.data.token);
+        if (responsive.data.token) {
+          setCookie("TOKEN", responsive.data.token);
 
-        // setIsLoading(false);
-
-        push("/");
+          push("/");
+        }
       } catch (error) {
         setIsLoading(false);
 
         setIsHaveError(true);
 
-        setErrorMessage(error.response.data);
+        setErrorMessage(error?.response?.data || "Internal Server Error");
       }
     },
     [push],

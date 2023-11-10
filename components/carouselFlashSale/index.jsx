@@ -35,45 +35,59 @@ function FlashSaleCarousel(props) {
     swiperFlashSale?.current?.swiper?.slidePrev();
   }, []);
 
-  return (
-    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="relative cover_carousel_flash_sale">
-      <ArrowButtonCarousel prev={handlePrev} next={handleNext} />
-
-      {/* Multi Carousel FlashSale */}
-      <Swiper
-        breakpoints={{
-          0: {
-            slidesOffsetBefore: 16,
-          },
-          1170: {
-            slidesOffsetBefore: 16,
-          },
-          1440: {
-            slidesOffsetBefore: 135,
-          },
-        }}
-        ref={swiperFlashSale}
-        slidesPerView="auto"
-        spaceBetween={30}
-        // slidesOffsetBefore={120}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
-        loop
-        // loopedSlidesLimit={false}
-        // loopedSlides={1}
-        modules={[Autoplay]}
-        className="swiper_flash_sale"
+  if (products.length > 0) {
+    return (
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="relative cover_carousel_flash_sale"
       >
-        {products.map((item) => {
-          return (
-            <SwiperSlide key={item.title}>
-              <Card product={item} />
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+        <ArrowButtonCarousel prev={handlePrev} next={handleNext} />
+
+        {/* Multi Carousel FlashSale */}
+        <Swiper
+          breakpoints={{
+            0: {
+              slidesOffsetBefore: 16,
+            },
+            1170: {
+              slidesOffsetBefore: 16,
+            },
+            1440: {
+              slidesOffsetBefore: 135,
+            },
+          }}
+          ref={swiperFlashSale}
+          slidesPerView="auto"
+          spaceBetween={30}
+          // slidesOffsetBefore={120}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+          }}
+          loop
+          // loopedSlidesLimit={false}
+          // loopedSlides={1}
+          modules={[Autoplay]}
+          className="swiper_flash_sale"
+        >
+          {products.map((item) => {
+            return (
+              <SwiperSlide key={item.title}>
+                <Card product={item} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-center">
+      <span className="text-secondary-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem]">
+        Internal Server Error
+      </span>
     </div>
   );
 }

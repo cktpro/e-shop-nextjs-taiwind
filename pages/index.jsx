@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 
 import BestSelling from "@/components/bestSelling";
@@ -12,6 +11,7 @@ import Services from "@/components/services";
 import Slider from "@/components/slider";
 
 import { categories } from "@/data/categoriesItems.jsx";
+import { axiosUser } from "@/helper/axios";
 
 export default function Home({ products, bestSelling }) {
   return (
@@ -59,21 +59,25 @@ Home.propTypes = {
 export async function getServerSideProps() {
   try {
     const [response, bestSelling] = await Promise.all([
-      axios.get("https://fakestoreapi.com/products"),
-      axios.get("https://fakestoreapi.com/products?limit=4"),
+      axiosUser.get("https://fakestoreapi.com/products"),
+      axiosUser.get("https://fakestoreapi.com/products?limit=4"),
     ]);
 
     return {
       props: {
-        products: response.data,
-        bestSelling: bestSelling.data,
+        products: response.data || [],
+        bestSelling: bestSelling.data || [],
       },
 
       // revalidate: 24 * 60 * 60,
     };
   } catch (error) {
     return {
-      notFound: true,
+      // notFound: true,
+      props: {
+        products: [],
+        bestSelling: [],
+      },
     };
   }
 }

@@ -37,26 +37,34 @@ function SearchProductsPage(props) {
         </div>
       </div>
 
-      <div className="relative flex items-center justify-center">
-        {!filterSearch.length > 0 || keySearch.length < 1 ? (
-          <span className="whitespace-nowrap min-w-full flex items-center justify-center text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem]">
-            No products matched
+      {search.length > 0 ? (
+        <div className="relative flex items-center justify-center">
+          {!filterSearch.length > 0 || keySearch.length < 1 ? (
+            <span className="whitespace-nowrap min-w-full flex items-center justify-center text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem]">
+              No products matched
+            </span>
+          ) : (
+            <div className="grid grid-cols-12 sm:gap-[1.875rem]">
+              {filterSearch.map((item) => {
+                return (
+                  <div
+                    className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
+                    key={item.title}
+                  >
+                    <Card product={item} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="text-center">
+          <span className="text-secondary-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem]">
+            Internal Server Error
           </span>
-        ) : (
-          <div className="grid grid-cols-12 sm:gap-[1.875rem]">
-            {filterSearch.map((item) => {
-              return (
-                <div
-                  className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
-                  key={item.title}
-                >
-                  <Card product={item} />
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -73,14 +81,17 @@ export async function getServerSideProps() {
 
     return {
       props: {
-        search: search.data,
+        search: search.data || [],
       },
 
       // revalidate: 24 * 60 * 60,
     };
   } catch (error) {
     return {
-      notFound: true,
+      // notFound: true,
+      props: {
+        search: [],
+      },
     };
   }
 }

@@ -16,7 +16,7 @@ function ProductDetailPage(props) {
     }
   }, [product, router]);
 
-  if (Object.keys(product).length === 0) {
+  if (Object.keys(product).length === 0 || relatedItem.length === 0) {
     return null;
   }
 
@@ -42,12 +42,16 @@ export async function getServerSideProps(req) {
     return {
       props: {
         product: response.data || {},
-        relatedItem: relatedItem.data,
+        relatedItem: relatedItem.data || [],
       },
     };
   } catch (error) {
     return {
-      notFound: true,
+      // notFound: true,
+      props: {
+        product: {},
+        relatedItem: [],
+      },
     };
   }
 }
