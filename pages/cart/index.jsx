@@ -172,6 +172,9 @@ function CartPage() {
 
           <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 items-start xl:gap-[47.3125rem] sm:min-w-[43.8rem] min-w-[20rem] justify-between">
             <button
+              onClick={() => {
+                window.history.back();
+              }}
               type="button"
               className="flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
             >
