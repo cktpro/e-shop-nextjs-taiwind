@@ -35,9 +35,9 @@ WhishListPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    // const wishList = await axiosUser.get("https://fakestoreapi.com/products?limit=4");
+    const wishList = await axiosUser.get("https://fakestoreapi.com/products?limit=4");
 
-    const wishList = await axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4");
+    // const wishList = await axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4");
 
     return {
       props: {

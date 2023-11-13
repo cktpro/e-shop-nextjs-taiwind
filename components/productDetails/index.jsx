@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { getCookie } from "cookies-next";
 import { Heart, Minus, Plus } from "lucide-react";
@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import useCartStore from "@/store/cart/useCartStore";
+import useScaleCart from "@/store/isScaleCart";
 import useNotification from "@/store/showNotification";
 
 import Card from "../card";
@@ -20,9 +21,15 @@ function ProductDetails(props) {
 
   const router = useRouter();
 
+  const timeoutNotificationRef = useRef(null);
+  const timeoutScaleRef = useRef(null);
+
   const [inputQuantity, setInputQuantity] = useState(1);
 
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const openScaleCart = useScaleCart((state) => state.openScaleCart);
+  const closeScaleCart = useScaleCart((state) => state.closeScaleCart);
 
   const openNotification = useNotification((state) => state.openNotification);
   const closeNotification = useNotification((state) => state.closeNotification);
@@ -48,16 +55,38 @@ function ProductDetails(props) {
 
         addToCart(data);
 
+        openScaleCart();
+
+        if (timeoutScaleRef.current) {
+          clearTimeout(timeoutScaleRef.current);
+        }
+
+        timeoutScaleRef.current = setTimeout(() => {
+          closeScaleCart();
+
+          clearTimeout(timeoutScaleRef.current);
+
+          timeoutScaleRef.current = null;
+        }, 100);
+
         openNotification();
 
-        setTimeout(() => {
+        if (timeoutNotificationRef.current) {
+          clearTimeout(timeoutNotificationRef.current);
+        }
+
+        timeoutNotificationRef.current = setTimeout(() => {
           closeNotification();
+
+          clearTimeout(timeoutNotificationRef.current);
+
+          timeoutNotificationRef.current = null;
         }, 3000);
       } else {
         router.push("/log-in");
       }
     },
-    [addToCart, closeNotification, inputQuantity, openNotification, router, token],
+    [addToCart, closeNotification, closeScaleCart, inputQuantity, openNotification, openScaleCart, router, token],
   );
 
   const handleClickPlus = useCallback(() => {

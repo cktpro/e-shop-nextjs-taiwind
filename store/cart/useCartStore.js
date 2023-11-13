@@ -31,13 +31,17 @@ const useCartStore = create((set, get) => ({
 
         totalItem: parseInt(state.totalItem, 10) + product.quantity,
 
-        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price)).toFixed(2),
+        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
 
         shipping: parseFloat(shipping).toFixed(2),
 
         coupon: "",
 
-        total: (parseFloat(state.subtotal) + parseFloat(shipping) + parseFloat(product.price)).toFixed(2),
+        total: (
+          parseFloat(state.subtotal) +
+          parseFloat(shipping) +
+          parseFloat(product.price) * parseInt(product.quantity, 10)
+        ).toFixed(2),
       }));
     } else {
       const updatedCart = [...cart, { ...product, quantity: product.quantity }];
@@ -47,13 +51,17 @@ const useCartStore = create((set, get) => ({
 
         totalItem: parseInt(state.totalItem, 10) + product.quantity,
 
-        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price)).toFixed(2),
+        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
 
         shipping: parseFloat(shipping).toFixed(2),
 
         coupon: "",
 
-        total: (parseFloat(state.subtotal) + parseFloat(shipping) + parseFloat(product.price)).toFixed(2),
+        total: (
+          parseFloat(state.subtotal) +
+          parseFloat(shipping) +
+          parseFloat(product.price) * parseInt(product.quantity, 10)
+        ).toFixed(2),
       }));
     }
   },
