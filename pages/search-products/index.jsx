@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import PropTypes from "prop-types";
 
 import Card from "@/components/card";
 import Rectangle from "@/components/svg/rectangle";
 
+import { axiosUser } from "@/helper/axios";
 import { fuzzySearch } from "@/helper/fuzzySearch";
 
 function SearchProductsPage(props) {
@@ -77,7 +77,8 @@ SearchProductsPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    const search = await axios.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20");
+    // const search = await axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20");
+    const search = await axiosUser.get("https://fakestoreapi.com/products");
 
     return {
       props: {

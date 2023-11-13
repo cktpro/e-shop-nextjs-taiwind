@@ -15,7 +15,7 @@ import {
   XCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { useTrans } from "@/helper/chanLang";
@@ -28,7 +28,7 @@ import {
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useCartStore from "@/store/cart/useCartStore";
 import useScaleCart from "@/store/isScaleCart";
-import useKeySearch from "@/store/keySearch/useKeySearch";
+import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 import useNotification from "@/store/showNotification";
 import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
@@ -41,9 +41,13 @@ function Header() {
 
   const inputSearchRef = useRef(null);
 
+  const searchParams = useSearchParams();
+
+  const [keySearch, setKeySearch] = useState(searchParams.get("key") || "");
+
   const pathname = usePathname();
 
-  const keySearch = useKeySearch((state) => state.keySearch);
+  const keySuggest = useKeySuggest((state) => state.keySuggest);
 
   const isOpenNotification = useNotification((state) => state.isOpenNotification);
 
@@ -86,6 +90,16 @@ function Header() {
   const openUserSettingMenu = useCallback(() => setIsOpenUserSetting(true), []);
 
   const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
+
+  useEffect(() => {
+    if (searchParams.get("key")) {
+      setKeySearch(searchParams.get("key"));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    setInputSearch(keySearch);
+  }, [keySearch]);
 
   const handleClickOutsideSuggestOnDrawder = useCallback(() => {
     setIsOpenSuggestOnDrawder(false);
@@ -158,15 +172,11 @@ function Header() {
     (e) => {
       e.preventDefault();
 
-      const search = e.target.inputSearch.value;
-
-      router.push(`search-products?key=${search}`);
-
-      inputSearchRef.current.value = "";
-
-      setInputSearch("");
+      setIsOpenSuggest(false);
+      setIsOpenSuggestOnDrawder(false);
+      router.push(`search-products?key=${inputSearch}`);
     },
-    [router],
+    [inputSearch, router],
   );
 
   useEffect(() => {
@@ -175,24 +185,14 @@ function Header() {
     }
 
     if (inputSearch) {
-      const filterKey = keySearch.filter((item) => {
+      const filterKey = keySuggest.filter((item) => {
         const keySearchRegex = fuzzySearch(inputSearch);
         return keySearchRegex.test(item.title);
       });
 
       setFilterKeySearch(filterKey);
     }
-  }, [inputSearch, keySearch]);
-
-  useEffect(() => {
-    if (filterKeySearch.length > 0 && filterKeySearch.length <= 8) {
-      setIsOpenSuggest(true);
-      setIsOpenSuggestOnDrawder(true);
-    } else {
-      setIsOpenSuggest(false);
-      setIsOpenSuggestOnDrawder(false);
-    }
-  }, [filterKeySearch]);
+  }, [inputSearch, keySuggest]);
 
   return (
     <>
@@ -337,16 +337,18 @@ function Header() {
                 type="text"
                 autoComplete="off"
                 onFocus={() => {
-                  if (filterKeySearch.length > 0 && filterKeySearch.length <= 8) {
-                    setIsOpenSuggest(true);
-                  }
+                  setIsOpenSuggest(true);
                 }}
+                value={inputSearch}
                 placeholder={useTrans("navBar.inputSearch")}
-                onChange={(e) => setInputSearch(e.target.value)}
-                className="min-w-[15.1875rem] min-h-[2.375rem] bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
+                onChange={(e) => {
+                  setInputSearch(e.target.value);
+                  setIsOpenSuggest(true);
+                }}
+                className="min-w-[15.1875rem] min-h-[2.375rem] bg-secondary-1 py-[0.3475rem] pl-[0.75rem] pr-[2.5rem]"
               />
 
-              {isOpenSuggest && (
+              {isOpenSuggest && filterKeySearch.length > 0 && filterKeySearch.length <= 8 && (
                 <ul
                   className={classNames(
                     "absolute top-11 flex flex-col items-start justify-center gap-[1rem] max-w-[30rem] min-h-fit max-h-[40rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
@@ -361,8 +363,7 @@ function Header() {
                       >
                         <Link
                           onClick={() => {
-                            inputSearchRef.current.value = "";
-                            setInputSearch("");
+                            setIsOpenSuggest(false);
                           }}
                           href={`/search-products?key=${item.title}`}
                         >
@@ -595,16 +596,18 @@ function Header() {
                 type="text"
                 autoComplete="off"
                 onFocus={() => {
-                  if (filterKeySearch.length > 0) {
-                    setIsOpenSuggestOnDrawder(true);
-                  }
+                  setIsOpenSuggestOnDrawder(true);
                 }}
+                value={inputSearch}
                 placeholder="What are you looking for?"
-                onChange={(e) => setInputSearch(e.target.value)}
-                className="min-h-[2.5rem] w-full bg-secondary-1 py-[0.3475rem] px-[0.75rem] pr-[2rem]"
+                onChange={(e) => {
+                  setInputSearch(e.target.value);
+                  setIsOpenSuggestOnDrawder(true);
+                }}
+                className="min-h-[2.5rem] w-full bg-secondary-1 py-[0.3475rem] pl-[0.75rem] pr-[2.5rem]"
               />
 
-              {isOpenSuggestOnDrawder && (
+              {isOpenSuggestOnDrawder && filterKeySearch.length > 0 && filterKeySearch.length <= 8 && (
                 <ul
                   className={classNames(
                     "absolute z-[10000] top-11 right-0 flex flex-col items-start justify-center gap-[1rem] w-[20rem] max-h-[25rem] overflow-y-auto bg-white p-[1.5rem] rounded-lg shadow-lg",
@@ -619,8 +622,7 @@ function Header() {
                       >
                         <Link
                           onClick={() => {
-                            inputSearchRef.current.value = "";
-                            setInputSearch("");
+                            setIsOpenSuggestOnDrawder(false);
                           }}
                           href={`/search-products?key=${item.title}`}
                         >

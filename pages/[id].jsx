@@ -35,15 +35,15 @@ export async function getServerSideProps(req) {
   try {
     const { params } = req;
 
-    // const [response, relatedItem] = await Promise.all([
-    //   axios.get(`https://fakestoreapi.com/products/${params.id}`),
-    //   axios.get("https://fakestoreapi.com/products?limit=4"),
-    // ]);
-
     const [response, relatedItem] = await Promise.all([
-      axiosUser.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
-      axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+      axiosUser.get(`https://fakestoreapi.com/products/${params.id}`),
+      axiosUser.get("https://fakestoreapi.com/products?limit=4"),
     ]);
+
+    // const [response, relatedItem] = await Promise.all([
+    //   axiosUser.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
+    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+    // ]);
 
     return {
       props: {

@@ -12,16 +12,16 @@ import Slider from "@/components/slider";
 
 import { categories } from "@/data/categoriesItems.jsx";
 import { axiosUser } from "@/helper/axios";
-import useKeySearch from "@/store/keySearch/useKeySearch";
+import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 
 export default function Home({ products, bestSelling }) {
-  const addKeySearch = useKeySearch((state) => state.addKeySearch);
+  const addKeySuggest = useKeySuggest((state) => state.addKeySuggest);
 
   useEffect(() => {
     if (products?.length > 0) {
-      addKeySearch(products);
+      addKeySuggest(products);
     }
-  }, [addKeySearch, products]);
+  }, [addKeySuggest, products]);
 
   return (
     <main className="">
@@ -67,15 +67,15 @@ Home.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    // const [response, bestSelling] = await Promise.all([
-    //   axiosUser.get("https://fakestoreapi.com/products"),
-    //   axiosUser.get("https://fakestoreapi.com/products?limit=4"),
-    // ]);
-
     const [response, bestSelling] = await Promise.all([
-      axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20"),
-      axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+      axiosUser.get("https://fakestoreapi.com/products"),
+      axiosUser.get("https://fakestoreapi.com/products?limit=4"),
     ]);
+
+    // const [response, bestSelling] = await Promise.all([
+    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20"),
+    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+    // ]);
 
     return {
       props: {

@@ -110,7 +110,7 @@ function Card(props) {
 
         <Image
           className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
-          src={product?.images[0] || product?.image}
+          src={product?.image || product?.images[0]}
           alt="..."
           width={172}
           height={152}
