@@ -15,6 +15,7 @@ const nextConfig = {
       "api.escuelajs.co",
       "upload.wikimedia.org",
       "eduport.webestica.com",
+      "www.dhresource.com",
     ],
   },
   i18n: {

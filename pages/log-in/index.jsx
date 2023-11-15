@@ -1,85 +1,50 @@
+"use client";
+
 import React, { useCallback, useEffect, useState } from "react";
-import axios from "axios";
 import classNames from "classnames";
-import { getCookie, setCookie } from "cookies-next";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 import BtnOk from "@/components/buttons/btnOk";
 import Loading from "@/components/svg/loading";
 
+import withAuth from "@/helper/wraperLogged";
+
 import styles from "./logIn.module.scss";
 
 function Login() {
-  const { push } = useRouter();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [isHaveError, setIsHaveError] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const getToken = getCookie("TOKEN");
+  const handleSubmit = useCallback(async (e) => {
+    try {
+      e.preventDefault();
 
-  const [token, setToken] = useState("");
+      setIsLoading(true);
 
-  useEffect(() => {
-    setToken(getToken);
-  }, [getToken]);
+      const username = e.target.username.value;
+      const password = e.target.password.value;
 
-  useEffect(() => {
-    if (token) {
-      push("/");
-    }
-  }, [push, token]);
+      const res = await signIn("credentials", {
+        email: username,
+        password,
+        redirect: false,
+      });
 
-  const handleSubmit = useCallback(
-    async (e) => {
-      try {
-        e.preventDefault();
-
-        setIsLoading(true);
-
-        const username = e.target.username.value;
-        const password = e.target.password.value;
-
-        // const data = {
-        //   username,
-        //   password,
-        // };
-
-        const data = {
-          email: username,
-          password,
-        };
-
-        // const responsive = await axios.post("https://fakestoreapi.com/auth/login", data);
-
-        const responsive = await axios.post("https://api.escuelajs.co/api/v1/auth/login", data);
-
-        // if (responsive.data.token) {
-        //   setCookie("TOKEN", responsive.data.token);
-
-        //   push("/");
-        // }
-
-        if (responsive.data.access_token) {
-          setCookie("TOKEN", responsive.data.access_token);
-
-          push("/");
-        }
-      } catch (error) {
+      if (res.error) {
         setIsLoading(false);
-
+        setErrorMessage("Unauthorized");
         setIsHaveError(true);
-
-        // setErrorMessage(error?.response?.data || "Internal Server Error");
-
-        setErrorMessage(error?.response?.data?.message || "Internal Server Error");
       }
-    },
-    [push],
-  );
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage(error);
+      setIsHaveError(true);
+    }
+  }, []);
 
   const handleClickOk = useCallback(() => {
     setIsHaveError(false);
@@ -101,7 +66,7 @@ function Login() {
 
   return (
     <>
-      {(isLoading || token) && (
+      {isLoading && (
         <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
@@ -183,4 +148,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default withAuth(Login);
