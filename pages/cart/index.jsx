@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getCookie } from "cookies-next";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import CanCel from "@/components/svg/cancel";
 
+import withAuthNotLogged from "@/helper/wraperNotLogged";
 import useCartStore from "@/store/cart/useCartStore";
 import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
@@ -34,15 +35,11 @@ function CartPage() {
 
   const timeoutRef = useRef(null);
 
-  useEffect(() => {
-    const getToken = getCookie("TOKEN");
+  const { status } = useSession();
 
-    if (!getToken) {
-      router.push("/log-in");
-    } else {
-      setIsHaveToken(true);
-    }
-  }, [router]);
+  useEffect(() => {
+    if (status === "authenticated") setIsHaveToken(true);
+  }, [router, status]);
 
   const handleClickIncrease = useCallback(
     (product) => {
@@ -279,4 +276,4 @@ function CartPage() {
   ) : null;
 }
 
-export default CartPage;
+export default withAuthNotLogged(CartPage);

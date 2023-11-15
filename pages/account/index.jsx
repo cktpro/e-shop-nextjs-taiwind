@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import classNames from "classnames";
-import { getCookie } from "cookies-next";
 import { MenuSquare, XCircle } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
@@ -12,10 +10,6 @@ import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
 import styles from "./account.module.scss";
 
 function AccountPage() {
-  const router = useRouter();
-
-  const [isHaveToken, setIsHaveToken] = useState(false);
-
   const [isOpenDrawderLeft, setIsOpenDrawderLeft] = useState(false);
 
   const openDrawerLeft = useCallback(() => setIsOpenDrawderLeft(true), []);
@@ -24,17 +18,7 @@ function AccountPage() {
 
   const leftDrawderRef = useOutsideLeftDrawderClick(openDrawerLeft, closeDrawerLeft, isOpenDrawderLeft);
 
-  useEffect(() => {
-    const getToken = getCookie("TOKEN");
-
-    if (!getToken) {
-      router.push("/log-in");
-    } else {
-      setIsHaveToken(true);
-    }
-  }, [router]);
-
-  return isHaveToken ? (
+  return (
     <div className="container relative mt-[5rem] flex flex-col items-center justify-center">
       <div
         ref={isOpenDrawderLeft ? leftDrawderRef : null}
@@ -301,7 +285,7 @@ function AccountPage() {
         </form>
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export default AccountPage;

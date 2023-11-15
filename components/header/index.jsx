@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import { deleteCookie, getCookie } from "cookies-next";
 import {
   AlignJustify,
   ChevronDown,
@@ -17,6 +16,7 @@ import {
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
 
 import { useTrans } from "@/helper/chanLang";
 import {
@@ -139,23 +139,33 @@ function Header() {
 
   const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
-  const getToken = getCookie("TOKEN");
+  // const getToken = getCookie("TOKEN");
 
-  const [token, setToken] = useState("");
+  // const [token, setToken] = useState("");
+
+  // useEffect(() => {
+  //   setToken(getToken);
+  // }, [getToken]);
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  const { status } = useSession();
 
   useEffect(() => {
-    setToken(getToken);
-  }, [getToken]);
+    if (status === "authenticated") setIsLogin(true);
+  }, [status]);
 
-  const handleLogout = useCallback(() => {
+  // if (status === "authenticated") setIsLogin(true);
+
+  const handleLogout = useCallback(async () => {
     resetCartItem();
 
-    deleteCookie("TOKEN");
+    // deleteCookie("TOKEN");
 
     setIsOpenUserSetting(false);
 
-    router.push("/log-in");
-  }, [resetCartItem, router]);
+    signOut({ callbackUrl: "/log-in" });
+  }, [resetCartItem]);
 
   const changeLang = useCallback(
     (lang) => {
@@ -385,7 +395,7 @@ function Header() {
 
             <Link
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
-              href={token ? "/wish-list" : "/log-in"}
+              href={isLogin ? "/wish-list" : "/log-in"}
             >
               <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
             </Link>
@@ -395,7 +405,8 @@ function Header() {
                 "group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center",
                 isScaleCart && "scale-[1.6]",
               )}
-              href={token ? "/cart" : "/log-in"}
+              // href={isLogin ? "/cart" : "/log-in"}
+              href="/cart"
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
@@ -429,7 +440,7 @@ function Header() {
                 !isOpenUserSetting && "hidden",
               )}
             >
-              {token ? (
+              {isLogin ? (
                 <div className="flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/account"
@@ -477,7 +488,7 @@ function Header() {
 
                   <button
                     type="button"
-                    onClick={handleLogout}
+                    onClick={() => handleLogout()}
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <LogOut className="w-[2rem] h-[2rem] text-text-1" />
@@ -647,7 +658,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-                href={token ? "/wish-list" : "/log-in"}
+                href={isLogin ? "/wish-list" : "/log-in"}
               >
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link>
@@ -655,7 +666,7 @@ function Header() {
               <Link
                 onClick={closeDrawerRight}
                 className="group relative rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
-                href={token ? "/cart" : "/log-in"}
+                href={isLogin ? "/cart" : "/log-in"}
               >
                 <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
@@ -689,7 +700,7 @@ function Header() {
                   !isOpenUserSettingOnDrawder && "hidden",
                 )}
               >
-                {token ? (
+                {isLogin ? (
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
                       onClick={closeDrawerRight}
