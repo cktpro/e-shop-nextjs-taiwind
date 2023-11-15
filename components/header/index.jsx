@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import { deleteCookie, getCookie } from "cookies-next";
 import {
   AlignJustify,
   ChevronDown,
