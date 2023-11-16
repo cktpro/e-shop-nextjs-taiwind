@@ -1,22 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import CanCel from "@/components/svg/cancel";
 
-import withAuthNotLogged from "@/helper/wraperNotLogged";
 import useCartStore from "@/store/cart/useCartStore";
 import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 function CartPage() {
-  const router = useRouter();
-
-  const [isHaveToken, setIsHaveToken] = useState(false);
-
   const [inputCoupon, setInputCoupon] = useState("");
 
   const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
@@ -34,12 +27,6 @@ function CartPage() {
   const applyCoupon = useCartStore((state) => state.applyCoupon);
 
   const timeoutRef = useRef(null);
-
-  const { status } = useSession();
-
-  useEffect(() => {
-    if (status === "authenticated") setIsHaveToken(true);
-  }, [router, status]);
 
   const handleClickIncrease = useCallback(
     (product) => {
@@ -90,7 +77,7 @@ function CartPage() {
     }, 3000);
   }, [CloseNotificationUpdateCart, OpenNotificationUpdateCart]);
 
-  return isHaveToken ? (
+  return (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
         <Link
@@ -273,7 +260,7 @@ function CartPage() {
         </div>
       </div>
     </div>
-  ) : null;
+  );
 }
 
-export default withAuthNotLogged(CartPage);
+export default CartPage;

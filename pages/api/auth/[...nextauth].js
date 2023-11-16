@@ -51,69 +51,25 @@ export default NextAuth({
       },
     }),
   ],
+
   secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update") {
+        token = { ...token, ...session };
+      }
+      return { ...token, ...user };
+    },
+    async session({ session, token }) {
+      session.user = token;
+      return session;
+    },
+  },
+
+  pages: {
+    signIn: "/log-in",
+    signOut: "/log-in",
+    error: "/log-in",
+  },
 });
-
-// export const authOptions = {
-//   providers: [
-//     CredentialsProvider({
-//       name: "credentials",
-//       credentials: {},
-
-//       async authorize(credentials) {
-//         const { email, password } = credentials;
-
-//         const data = {
-//           email,
-//           password,
-//         };
-
-//         try {
-//           const responsive = await axiosUser.post("http://localhost:9000/authEmployee/login", data);
-
-//           if (responsive.data.token) {
-//             axiosUser.defaults.headers.Authorization = `Bearer ${responsive.data.token}`;
-//           }
-
-//           const getProfile = await axiosUser.get("http://localhost:9000/authEmployee/profile");
-
-//           if (getProfile.data.payload) {
-//             const user = await getProfile.data.payload;
-//             return user;
-//           }
-
-//           return null;
-//         } catch (error) {
-//           return null;
-//         }
-//       },
-//     }),
-//   ],
-
-//   secret: process.env.NEXT_PUBLIC_NEXTAUTH_SECRET,
-
-//   // callbacks: {
-//   //   async jwt({ token, user, trigger, session }) {
-//   //     if (trigger === "update") {
-//   //       token = { ...token, ...session };
-//   //     }
-//   //     return { ...token, ...user };
-//   //   },
-//   //   async session({ session, token }) {
-//   //     session.user = token;
-//   //     return session;
-//   //   },
-//   // },
-
-//   session: {
-//     strategy: "jwt",
-//   },
-
-//   pages: {
-//     signIn: "/log-in",
-//     signOut: "/log-in",
-//     error: "/log-in",
-//   },
-// };
-
-// export default NextAuth(authOptions);

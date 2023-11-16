@@ -7,8 +7,6 @@ import { signIn } from "next-auth/react";
 
 import LogoGoogle from "@/components/svg/logoGoogle";
 
-import withAuth from "@/helper/wraperLogged";
-
 import styles from "./signUp.module.scss";
 
 function SignUp() {
@@ -107,4 +105,4 @@ function SignUp() {
   );
 }
 
-export default withAuth(SignUp);
+export default SignUp;

@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { getCookie } from "cookies-next";
+import React, { useCallback, useRef } from "react";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { renderStars } from "@/helper/renderStar";
@@ -13,6 +13,8 @@ import useNotification from "@/store/showNotification";
 
 function Card(props) {
   const { product } = props;
+
+  const { status } = useSession();
 
   const timeoutNotificationRef = useRef(null);
 
@@ -30,17 +32,9 @@ function Card(props) {
 
   const closeScaleCart = useScaleCart((state) => state.closeScaleCart);
 
-  const getToken = getCookie("TOKEN");
-
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    setToken(getToken);
-  }, [getToken]);
-
   const handleClickAddToCart = useCallback(
     (item) => {
-      if (token) {
+      if (status === "authenticated") {
         const data = {
           id: item.id,
           name: item.title,
@@ -82,7 +76,7 @@ function Card(props) {
         router.push("/log-in");
       }
     },
-    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router, token],
+    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router, status],
   );
 
   return (

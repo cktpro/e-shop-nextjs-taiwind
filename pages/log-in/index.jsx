@@ -3,48 +3,55 @@
 import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 
 import BtnOk from "@/components/buttons/btnOk";
 import Loading from "@/components/svg/loading";
 
-import withAuth from "@/helper/wraperLogged";
-
 import styles from "./logIn.module.scss";
 
 function Login() {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [isHaveError, setIsHaveError] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = useCallback(async (e) => {
-    try {
-      e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      try {
+        e.preventDefault();
 
-      setIsLoading(true);
+        setIsLoading(true);
 
-      const username = e.target.username.value;
-      const password = e.target.password.value;
+        const username = e.target.username.value;
+        const password = e.target.password.value;
 
-      const res = await signIn("credentials", {
-        email: username,
-        password,
-        redirect: false,
-      });
+        const res = await signIn("credentials", {
+          email: username,
+          password,
+          redirect: false,
+        });
 
-      if (res.error) {
+        if (res.error) {
+          setIsLoading(false);
+          setErrorMessage("Unauthorized");
+          setIsHaveError(true);
+          return;
+        }
+
+        router.push("/");
+      } catch (error) {
         setIsLoading(false);
-        setErrorMessage("Unauthorized");
+        setErrorMessage(error);
         setIsHaveError(true);
       }
-    } catch (error) {
-      setIsLoading(false);
-      setErrorMessage(error);
-      setIsHaveError(true);
-    }
-  }, []);
+    },
+    [router],
+  );
 
   const handleClickOk = useCallback(() => {
     setIsHaveError(false);
@@ -148,4 +155,4 @@ function Login() {
   );
 }
 
-export default withAuth(Login);
+export default Login;

@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { getCookie } from "cookies-next";
-import { useRouter } from "next/router";
+import React from "react";
 import PropTypes from "prop-types";
 
 import WishList from "@/components/wishList";
@@ -10,21 +8,7 @@ import { axiosUser } from "@/helper/axios";
 function WhishListPage(props) {
   const { wishList } = props;
 
-  const router = useRouter();
-
-  const [isHaveToken, setIsHaveToken] = useState(false);
-
-  useEffect(() => {
-    const getToken = getCookie("TOKEN");
-
-    if (!getToken) {
-      router.push("/log-in");
-    } else {
-      setIsHaveToken(true);
-    }
-  }, [router]);
-
-  return isHaveToken ? <WishList wishList={wishList} /> : null;
+  return <WishList wishList={wishList} />;
 }
 
 export default WhishListPage;

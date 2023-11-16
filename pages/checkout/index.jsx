@@ -1,10 +1,43 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
+import useCartStore from "@/store/cart/useCartStore";
+import useFetchCheckout from "@/store/checkout";
+
 function Checkout() {
+  const router = useRouter();
+
+  const cartData = useCartStore((state) => state);
+
+  const fetchCheckout = useFetchCheckout((state) => state.fetch);
+
+  const urlVnpay = useFetchCheckout((state) => state.payload.url);
+
+  useEffect(() => {
+    if (urlVnpay) {
+      router.push(urlVnpay);
+    }
+  }, [router, urlVnpay]);
+
+  const handlePlaceOrder = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const data = {
+        amount: parseFloat(cartData.total) * 24000,
+        bankCode: "NCB",
+        language: "en",
+      };
+
+      fetchCheckout(data);
+    },
+    [cartData.total, fetchCheckout],
+  );
+
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -201,7 +234,9 @@ function Checkout() {
             <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal:</span>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">$1750</span>
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                ${cartData.subtotal}
+              </span>
             </div>
 
             <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
@@ -209,7 +244,9 @@ function Checkout() {
             <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Free</span>
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                ${cartData.shipping}
+              </span>
             </div>
 
             <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
@@ -217,7 +254,9 @@ function Checkout() {
             <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">$1750</span>
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                ${cartData.total}
+              </span>
             </div>
           </div>
 
@@ -294,7 +333,7 @@ function Checkout() {
             <ViewAllProducts text="Apply Coupon" type="button" onClick={() => {}} />
           </div>
 
-          <ViewAllProducts text="Place Order" type="submit" onClick={() => {}} />
+          <ViewAllProducts text="Place Order" type="submit" onClick={(e) => handlePlaceOrder(e)} />
         </div>
       </form>
     </div>
