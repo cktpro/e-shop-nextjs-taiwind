@@ -11,7 +11,7 @@ import Services from "@/components/services";
 import Slider from "@/components/slider";
 
 import { categories } from "@/data/categoriesItems.jsx";
-import { axiosUser } from "@/helper/axios";
+import { axiosServer } from "@/helper/axios/axiosServer";
 import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 
 export default function Home({ products, bestSelling }) {
@@ -68,13 +68,13 @@ Home.propTypes = {
 export async function getServerSideProps() {
   try {
     const [response, bestSelling] = await Promise.all([
-      axiosUser.get("https://fakestoreapi.com/products"),
-      axiosUser.get("https://fakestoreapi.com/products?limit=4"),
+      axiosServer.get("https://fakestoreapi.com/products"),
+      axiosServer.get("https://fakestoreapi.com/products?limit=4"),
     ]);
 
     // const [response, bestSelling] = await Promise.all([
-    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20"),
-    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?limit=20"),
+    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?limit=4"),
     // ]);
 
     return {

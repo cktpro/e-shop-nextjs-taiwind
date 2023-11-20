@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import classNames from "classnames";
 import { MenuSquare, XCircle } from "lucide-react";
 import Link from "next/link";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
 
 import styles from "./account.module.scss";
@@ -17,6 +18,22 @@ function AccountPage() {
   const closeDrawerLeft = useCallback(() => setIsOpenDrawderLeft(false), []);
 
   const leftDrawderRef = useOutsideLeftDrawderClick(openDrawerLeft, closeDrawerLeft, isOpenDrawderLeft);
+
+  const [profile, setProfile] = useState({});
+
+  const getProfile = useCallback(async () => {
+    try {
+      const res = await axiosClient.get("/authEmployee/profile");
+      setProfile(res?.data?.payload);
+    } catch (error) {
+      setProfile(error?.response?.data || {});
+    }
+  }, []);
+
+  useEffect(() => {
+    getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container relative mt-[5rem] flex flex-col items-center justify-center">
@@ -123,7 +140,9 @@ function AccountPage() {
 
         <span className="min-w-[8.6875rem] whitespace-nowrap text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
           Welcome!{" "}
-          <span className="text-secondary-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Md Rimel</span>
+          <span className="text-secondary-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+            {profile?.fullName}
+          </span>
         </span>
       </div>
 
@@ -198,6 +217,8 @@ function AccountPage() {
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">First Name</span>
 
               <input
+                defaultValue={profile?.firstName}
+                autoComplete="off"
                 type="text"
                 id="firtsName"
                 name="firtsName"
@@ -209,6 +230,8 @@ function AccountPage() {
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Last Name</span>
 
               <input
+                defaultValue={profile?.lastName}
+                autoComplete="off"
                 type="text"
                 id="lastName"
                 name="lastName"
@@ -222,6 +245,8 @@ function AccountPage() {
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Email</span>
 
               <input
+                defaultValue={profile?.email}
+                autoComplete="off"
                 type="text"
                 id="email"
                 name="email"
@@ -233,6 +258,8 @@ function AccountPage() {
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Address</span>
 
               <input
+                defaultValue={profile?.address}
+                autoComplete="off"
                 type="text"
                 id="address"
                 name="address"
@@ -247,6 +274,8 @@ function AccountPage() {
 
               <div className="min-w-full flex flex-col items-start gap-[1rem]">
                 <input
+                  defaultValue={profile?.password}
+                  autoComplete="new-password"
                   id="currentPassword"
                   name="currentPassword"
                   type="password"

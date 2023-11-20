@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import ProductDetails from "@/components/productDetails";
 
-import { axiosUser } from "@/helper/axios";
+import { axiosServer } from "@/helper/axios/axiosServer";
 
 function ProductDetailPage(props) {
   const { product, relatedItem } = props;
@@ -36,13 +36,13 @@ export async function getServerSideProps(req) {
     const { params } = req;
 
     const [response, relatedItem] = await Promise.all([
-      axiosUser.get(`https://fakestoreapi.com/products/${params.id}`),
-      axiosUser.get("https://fakestoreapi.com/products?limit=4"),
+      axiosServer.get(`https://fakestoreapi.com/products/${params.id}`),
+      axiosServer.get("https://fakestoreapi.com/products?limit=4"),
     ]);
 
     // const [response, relatedItem] = await Promise.all([
-    //   axiosUser.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
-    //   axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
+    //   axiosServer.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
+    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
     // ]);
 
     return {

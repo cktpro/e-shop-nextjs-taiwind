@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { axiosUser } from "@/helper/axios";
+import { axiosClient } from "@/helper/axios/axiosClient";
 
 const initialState = {
   isLoading: false,
@@ -14,9 +14,9 @@ const useCheckIpnVnpay = create((set) => ({
     try {
       const queryArray = Object.keys(data).map((key) => `${key}=${encodeURIComponent(data[key])}`);
 
-      const url = `http://localhost:9000/vnPay/check_ipn?${queryArray.join("&")}`;
+      const url = `/vnPay/check_ipn?${queryArray.join("&")}`;
 
-      const response = await axiosUser.get(url, data);
+      const response = await axiosClient.get(url, data);
 
       set({ payload: response.data });
     } catch (error) {

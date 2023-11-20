@@ -16,6 +16,11 @@ const nextConfig = {
       "upload.wikimedia.org",
       "eduport.webestica.com",
       "www.dhresource.com",
+      "grecoshoes.mx",
+      "cdn.computerhoy.com",
+      "p.turbosquid.com",
+      "m.media-amazon.com",
+      "media.vogue.mx",
     ],
   },
   i18n: {
