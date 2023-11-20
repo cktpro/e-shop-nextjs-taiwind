@@ -72,6 +72,7 @@ function SignUp() {
               <div className="flex flex-col items-center gap-[2rem]">
                 <button
                   onClick={() => signIn("google")}
+                  // onClick={() => signIn("facebook")}
                   type="button"
                   className="h-[3.5rem] w-[23.1875rem] flex flex-col px-[5.375rem] py[1rem] items-center justify-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-black whitespace-nowrap"
                 >

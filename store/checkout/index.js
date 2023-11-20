@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { axiosUser } from "@/helper/axios";
+import { axiosClient } from "@/helper/axios/axiosClient";
 
 const initialState = {
   isLoading: false,
@@ -11,11 +11,15 @@ const useFetchCheckout = create((set) => ({
   ...initialState,
 
   fetch: async (data) => {
-    const url = "http://localhost:9000/vnPay/create_payment_url";
+    try {
+      const url = "/vnPay/create_payment_url";
 
-    const response = await axiosUser.post(url, data);
+      const response = await axiosClient.post(url, data);
 
-    set({ payload: await response.data });
+      set({ payload: response.data });
+    } catch (error) {
+      set({ payload: error.response.data });
+    }
   },
 }));
 

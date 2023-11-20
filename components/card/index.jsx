@@ -3,9 +3,9 @@ import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import PropTypes from "prop-types";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
 import useScaleCart from "@/store/isScaleCart";
@@ -13,8 +13,6 @@ import useNotification from "@/store/showNotification";
 
 function Card(props) {
   const { product } = props;
-
-  const { status } = useSession();
 
   const timeoutNotificationRef = useRef(null);
 
@@ -33,50 +31,56 @@ function Card(props) {
   const closeScaleCart = useScaleCart((state) => state.closeScaleCart);
 
   const handleClickAddToCart = useCallback(
-    (item) => {
-      if (status === "authenticated") {
-        const data = {
-          id: item.id,
-          name: item.title,
-          image: item?.image || item?.images[0],
-          price: item.price,
-          quantity: 1,
-        };
+    async (item) => {
+      try {
+        const url = "/authEmployee/profile";
 
-        addToCart(data);
+        const response = await axiosClient.get(url);
 
-        openScaleCart();
+        if (response.data.payload) {
+          const data = {
+            id: item.id,
+            name: item.title,
+            image: item?.image || item?.images[0],
+            price: item.price,
+            quantity: 1,
+          };
 
-        if (timeoutScaleRef.current) {
-          clearTimeout(timeoutScaleRef.current);
+          addToCart(data);
+
+          openScaleCart();
+
+          if (timeoutScaleRef.current) {
+            clearTimeout(timeoutScaleRef.current);
+          }
+
+          timeoutScaleRef.current = setTimeout(() => {
+            closeScaleCart();
+
+            clearTimeout(timeoutScaleRef.current);
+
+            timeoutScaleRef.current = null;
+          }, 100);
+
+          openNotification();
+
+          if (timeoutNotificationRef.current) {
+            clearTimeout(timeoutNotificationRef.current);
+          }
+
+          timeoutNotificationRef.current = setTimeout(() => {
+            closeNotification();
+
+            clearTimeout(timeoutNotificationRef.current);
+
+            timeoutNotificationRef.current = null;
+          }, 3000);
         }
-
-        timeoutScaleRef.current = setTimeout(() => {
-          closeScaleCart();
-
-          clearTimeout(timeoutScaleRef.current);
-
-          timeoutScaleRef.current = null;
-        }, 100);
-
-        openNotification();
-
-        if (timeoutNotificationRef.current) {
-          clearTimeout(timeoutNotificationRef.current);
-        }
-
-        timeoutNotificationRef.current = setTimeout(() => {
-          closeNotification();
-
-          clearTimeout(timeoutNotificationRef.current);
-
-          timeoutNotificationRef.current = null;
-        }, 3000);
-      } else {
+      } catch (error) {
         router.push("/log-in");
       }
     },
-    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router, status],
+    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router],
   );
 
   return (

@@ -253,7 +253,7 @@ function CartPage() {
               </div>
 
               <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
-                <ViewAllProducts text="Procees to checkout" type="button" onClick={() => {}} />
+                <ViewAllProducts text="Process to checkout" type="button" onClick={() => {}} />
               </Link>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
+import { deleteCookie, getCookie } from "cookies-next";
 import {
   AlignJustify,
   ChevronDown,
@@ -16,7 +17,7 @@ import {
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 import { useTrans } from "@/helper/chanLang";
 import {
@@ -139,24 +140,32 @@ function Header() {
 
   const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
-  // const getToken = getCookie("TOKEN");
-
-  // const [token, setToken] = useState("");
-
-  // useEffect(() => {
-  //   setToken(getToken);
-  // }, [getToken]);
-
   const [isLogin, setIsLogin] = useState(false);
 
-  const { status } = useSession();
+  const token = getCookie("TOKEN");
 
   useEffect(() => {
-    if (status === "authenticated") setIsLogin(true);
-  }, [status]);
+    if (token) {
+      setIsLogin(true);
+    }
+  }, [pathname, token]);
+
+  useEffect(() => {
+    if ((pathname === "/log-in" || pathname === "/sign-up") && token) {
+      resetCartItem();
+
+      deleteCookie("TOKEN");
+      deleteCookie("REFRESH_TOKEN");
+
+      setIsLogin(false);
+    }
+  }, [pathname, resetCartItem, token]);
 
   const handleLogout = useCallback(async () => {
     resetCartItem();
+
+    deleteCookie("TOKEN");
+    deleteCookie("REFRESH_TOKEN");
 
     setIsOpenUserSetting(false);
 

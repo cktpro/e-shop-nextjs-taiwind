@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import WishList from "@/components/wishList";
 
-import { axiosUser } from "@/helper/axios";
+import { axiosServer } from "@/helper/axios/axiosServer";
 
 function WhishListPage(props) {
   const { wishList } = props;
@@ -19,9 +19,9 @@ WhishListPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    const wishList = await axiosUser.get("https://fakestoreapi.com/products?limit=4");
+    const wishList = await axiosServer.get("https://fakestoreapi.com/products?limit=4");
 
-    // const wishList = await axiosUser.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4");
+    // const wishList = await axiosServer.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4");
 
     return {
       props: {
