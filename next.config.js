@@ -21,6 +21,7 @@ const nextConfig = {
       "p.turbosquid.com",
       "m.media-amazon.com",
       "media.vogue.mx",
+      "pub-2c55e2ff64f541759b0b060c0c90e9bb.r2.dev",
     ],
   },
   i18n: {

@@ -1,4 +1,5 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { message } from "antd";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,40 +7,71 @@ import Link from "next/link";
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import CanCel from "@/components/svg/cancel";
 
+import { formattedMoney } from "@/helper/formatDocument";
 import useCartStore from "@/store/cart/useCartStore";
-import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
+// import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 function CartPage() {
+  const [cartItem, setCartItem] = useState([]);
   const [inputCoupon, setInputCoupon] = useState("");
 
-  const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
+  // const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
 
-  const CloseNotificationUpdateCart = useNotificationUpdateCart((state) => state.closeNotification);
+  // const CloseNotificationUpdateCart = useNotificationUpdateCart((state) => state.closeNotification);
 
   const cartData = useCartStore((state) => state);
 
-  const increase = useCartStore((state) => state.increase);
+  // const increase = useCartStore((state) => state.increase);
 
-  const reduce = useCartStore((state) => state.reduce);
+  // const reduce = useCartStore((state) => state.reduce);
 
   const removeFromCart = useCartStore((state) => state.removeFromCart);
 
   const applyCoupon = useCartStore((state) => state.applyCoupon);
 
-  const timeoutRef = useRef(null);
+  // const timeoutRef = useRef(null);
 
   const handleClickIncrease = useCallback(
-    (product) => {
-      increase(product);
+    (index) => {
+      const newItem = cartItem;
+      const valueQuantity = parseInt(document.getElementById("quantity").value, 10);
+      if (valueQuantity >= newItem[index].productDetail.stock) {
+        document.getElementById("quantity").value = newItem[index].productDetail.stock;
+        newItem[index].product.quantity = newItem[index].productDetail.stock;
+        setCartItem(newItem);
+        message.error("Không đủ sản phẩm");
+      } else {
+        document.getElementById("quantity").value = parseInt(valueQuantity, 10) + 1;
+        newItem[index].product.quantity += 1;
+        setCartItem(newItem);
+      }
     },
-    [increase],
+    [cartItem],
   );
 
   const handleClickReduce = useCallback(
-    (product) => {
-      reduce(product);
+    (index) => {
+      const newItem = cartItem;
+      const valueQuantity = parseInt(document.getElementById("quantity").value, 10);
+      if (valueQuantity <= 1) {
+        let text = "Press a button!\nEither OK or Cancel.";
+        if (window.confirm(text) === true) {
+          text = "You pressed OK!";
+        } else {
+          return;
+        }
+        document.getElementById("quantity").value = 1;
+        newItem[index].product.quantity = 1;
+        setCartItem(newItem);
+        message.error("Số lượng phải lớn hơn 1");
+      } else {
+        document.getElementById("quantity").value = parseInt(valueQuantity, 10) - 1;
+        newItem[index].product.quantity -= 1;
+        setCartItem(newItem);
+        console.log("◀◀◀ cartItem ▶▶▶", cartItem);
+      }
     },
-    [reduce],
+    [cartItem],
   );
 
   const handleClickRemoveFromCart = useCallback(
@@ -62,21 +94,29 @@ function CartPage() {
   );
 
   const handleClickUpdateCart = useCallback(() => {
-    OpenNotificationUpdateCart();
+    cartData.updateCart(cartItem);
+    // OpenNotificationUpdateCart();
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    // if (timeoutRef.current) {
+    //   clearTimeout(timeoutRef.current);
+    // }
+
+    // timeoutRef.current = setTimeout(() => {
+    //   CloseNotificationUpdateCart();
+
+    //   clearTimeout(timeoutRef.current);
+
+    //   timeoutRef.current = null;
+    // }, 3000);
+  }, [cartItem, cartData]);
+  useEffect(() => {
+    if (cartData.cart.length > 0) {
+      setCartItem(cartData.cart);
     }
-
-    timeoutRef.current = setTimeout(() => {
-      CloseNotificationUpdateCart();
-
-      clearTimeout(timeoutRef.current);
-
-      timeoutRef.current = null;
-    }, 3000);
-  }, [CloseNotificationUpdateCart, OpenNotificationUpdateCart]);
-
+  }, [cartData]);
+  useEffect(() => {
+    cartData.getListCart();
+  }, []);
   return (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -113,22 +153,22 @@ function CartPage() {
               </div>
             </div>
 
-            {cartData.cart.map((item) => {
+            {cartData.cart.map((item, idx) => {
               return (
                 <div
-                  key={item.id || 1}
+                  key={item.product._id}
                   className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
                 >
                   <Image
                     className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
-                    src={item.image}
+                    src={item.image.location}
                     alt="..."
                     width={1000}
                     height={1000}
                   />
 
                   <button
-                    onClick={() => handleClickRemoveFromCart(item)}
+                    onClick={() => handleClickRemoveFromCart(item.product)}
                     type="button"
                     className="absolute top-[1rem] left-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   >
@@ -136,22 +176,28 @@ function CartPage() {
                   </button>
 
                   <span className="sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]">
-                    {item.name}
+                    {item.productDetail.name}
                   </span>
 
                   <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[11.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
-                    ${item.price}
+                    {formattedMoney(item.productDetail.price)}
                   </span>
 
                   <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
                     <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
                       <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        {item.quantity}
+                        <input
+                          type="number"
+                          name="quantity"
+                          id="quantity"
+                          className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          defaultValue={item.product.quantity}
+                        />
                       </span>
 
                       <div className="flex flex-col items-center justify-center">
                         <button
-                          onClick={() => handleClickIncrease(item)}
+                          onClick={() => handleClickIncrease(idx)}
                           type="button"
                           className="max-w-[1rem] max-h-[1rem]"
                         >
@@ -159,7 +205,7 @@ function CartPage() {
                         </button>
 
                         <button
-                          onClick={() => handleClickReduce(item)}
+                          onClick={() => handleClickReduce(idx)}
                           type="button"
                           className="max-w-[1rem] max-h-[1rem]"
                         >
@@ -170,7 +216,9 @@ function CartPage() {
                   </div>
 
                   <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
-                    ${(parseInt(item.quantity, 10) * parseFloat(item.price)).toFixed(2)}
+                    {formattedMoney(
+                      (parseInt(item.product.quantity, 10) * parseFloat(item.productDetail.price)).toFixed(2),
+                    )}
                   </span>
                 </div>
               );

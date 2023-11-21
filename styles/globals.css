@@ -166,3 +166,11 @@ body {
 /* .swiper_our_products .swiper-grid-column>.swiper-wrapper {
   flex-direction: unset !important;
 } */
+/* Nprogress styles */
+#nprogress .bar {
+  background: red;
+  height: 0.3rem;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px red, 0 0 5px red;
+}

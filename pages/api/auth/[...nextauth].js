@@ -43,17 +43,14 @@ const nextAuthOptions = (req, res) => {
           };
 
           try {
-            const responsive = await axiosServer.post("/authEmployee/login", data);
-
-            if (responsive.data.token && responsive.data.refreshToken) {
-              setCookie("TOKEN", responsive.data.token, { req, res });
-              setCookie("REFRESH_TOKEN", responsive.data.refreshToken, { req, res });
-
-              axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.token}`;
+            const responsive = await axiosServer.post("/user/login", data);
+            if (responsive.data.payload.token && responsive.data.payload.refreshToken) {
+              setCookie("TOKEN", responsive.data.payload.token, { req, res });
+              setCookie("REFRESH_TOKEN", responsive.data.payload.refreshToken, { req, res });
+              axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.payload.token}`;
             }
 
-            const getProfile = await axiosServer.get("/authEmployee/profile");
-
+            const getProfile = await axiosServer.get("/user/get_profile");
             if (getProfile.data.payload) {
               const user = await getProfile.data.payload;
               return user;
