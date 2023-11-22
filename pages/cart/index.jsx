@@ -3,6 +3,7 @@ import { message } from "antd";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import ProcessLoader from "@/components/loader/processLoader";
@@ -13,7 +14,9 @@ import useCartStore from "@/store/cart/useCartStore";
 // import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 function CartPage() {
+  const router = useRouter();
   let totalPrice = 0;
+  const [isChanged, setIsChanged] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [inputCoupon, setInputCoupon] = useState("");
 
@@ -35,7 +38,7 @@ function CartPage() {
 
   const handleClickIncrease = useCallback(
     (index) => {
-      console.log("◀◀◀ index ▶▶▶", index);
+      setIsChanged(true);
       const newItem = cartItem;
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity >= newItem[index].productDetail.stock) {
@@ -53,6 +56,7 @@ function CartPage() {
   );
   const handleChangeQuantity = useCallback(
     (value, index) => {
+      setIsChanged(true);
       const newItem = cartItem;
       if (value > newItem[index].productDetail.stock) {
         document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
@@ -73,32 +77,29 @@ function CartPage() {
   );
   const handleClickReduce = useCallback(
     (index) => {
+      setIsChanged(true);
       const newItem = cartItem;
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity <= 1) {
-        let text = "Press a button!\nEither OK or Cancel.";
+        const text = "Bạn có muốn xóa sản phẩm này?";
         if (window.confirm(text) === true) {
-          text = "You pressed OK!";
-        } else {
+          cartData.removeFromCart(newItem[index].product);
           return;
         }
-        document.getElementById(`quantity${index}`).value = 1;
-        newItem[index].product.quantity = 1;
-        setCartItem(newItem);
-        message.error("Số lượng phải lớn hơn 1");
-      } else {
-        document.getElementById(`quantity${index}`).value = parseInt(valueQuantity, 10) - 1;
-        newItem[index].product.quantity -= 1;
-        setCartItem(newItem);
-        console.log("◀◀◀ cartItem ▶▶▶", cartItem);
+        return;
       }
+      document.getElementById(`quantity${index}`).value = parseInt(valueQuantity, 10) - 1;
+      newItem[index].product.quantity -= 1;
+      setCartItem(newItem);
     },
     [cartItem],
   );
 
   const handleClickRemoveFromCart = useCallback(
     (product) => {
-      removeFromCart(product);
+      if (window.confirm("Bạn có muốn xóa sản phẩm này?") === true) {
+        removeFromCart(product);
+      }
     },
     [removeFromCart],
   );
@@ -116,7 +117,12 @@ function CartPage() {
   );
 
   const handleClickUpdateCart = useCallback(() => {
+    if (isChanged === false) {
+      message.warning("Không có gì để cập nhật");
+      return;
+    }
     cartData.updateCart(cartItem);
+    setIsChanged(false);
     // OpenNotificationUpdateCart();
 
     // if (timeoutRef.current) {
@@ -130,7 +136,15 @@ function CartPage() {
 
     //   timeoutRef.current = null;
     // }, 3000);
-  }, [cartItem, cartData]);
+  }, [cartItem, cartData, isChanged]);
+  const handleClickCheckoutCart = useCallback(() => {
+    setIsChanged(true);
+    if (isChanged === true) {
+      message.warning("Vui lòng cập nhật trước khi checkout");
+    } else {
+      router.push("/checkout");
+    }
+  }, [isChanged, router]);
   useEffect(() => {
     if (cartData.cart.length > 0) {
       setCartItem(cartData.cart);
@@ -213,14 +227,17 @@ function CartPage() {
                     <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
                       <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
                         <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                          <input
-                            type="number"
-                            name="quantity"
-                            id={`quantity${idx}`}
-                            className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            defaultValue={item.product.quantity}
-                            onChangeCapture={(e) => (e.target.value ? handleChangeQuantity(e.target.value, idx) : null)}
-                          />
+                          <form name="quantity_form">
+                            <input
+                              type="number"
+                              name="quantity"
+                              id={`quantity${idx}`}
+                              className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              defaultValue={item.product.quantity}
+                              onChange={(e) => (e.target.value ? handleChangeQuantity(e.target.value, idx) : null)}
+                              required
+                            />
+                          </form>
                         </span>
 
                         <div className="flex flex-col items-center justify-center">
@@ -268,10 +285,12 @@ function CartPage() {
 
               <button
                 onClick={() => handleClickUpdateCart()}
-                type="button"
-                className="min-w-[13.7rem] sm:min-w-fit flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
+                type="submit"
+                form="quantity_form"
+                className="disabled:opacity-50 min-w-[13.7rem] sm:min-w-fit flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
+                disabled={!isChanged}
               >
-                <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
+                <span className=" text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
                   Update Cart
                 </span>
               </button>
@@ -330,9 +349,16 @@ function CartPage() {
                   </span>
                 </div>
 
-                <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
-                  <ViewAllProducts text="Process to checkout" type="button" onClick={() => {}} />
-                </Link>
+                {/* <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]"> */}
+                <ViewAllProducts
+                  text="Process to checkout"
+                  type="button"
+                  onClick={() => {
+                    handleClickCheckoutCart();
+                  }}
+                  disabled={isChanged || false}
+                />
+                {/* </Link> */}
               </div>
             </div>
           </div>

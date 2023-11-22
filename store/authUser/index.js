@@ -11,7 +11,7 @@ const useAuthUser = create((set) => ({
 
   fetchAuthUser: async () => {
     try {
-      const url = "/authCustomers/profile";
+      const url = "/user/get_profile";
 
       const response = await axiosClient.get(url);
 
