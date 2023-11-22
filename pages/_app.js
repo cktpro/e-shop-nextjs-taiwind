@@ -15,7 +15,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
 
-      <SessionProvider session={session}>
+      <SessionProvider session={session} refetchOnWindowFocus={false} refetchWhenOffline={false}>
         <Layout>
           <Component {...pageProps} />
         </Layout>

@@ -1,8 +1,9 @@
 import React, { useCallback, useRef } from "react";
+import { deleteCookie, getCookie } from "cookies-next";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
@@ -18,8 +19,6 @@ function Card(props) {
 
   const timeoutScaleRef = useRef(null);
 
-  const router = useRouter();
-
   const addToCart = useCartStore((state) => state.addToCart);
 
   const openNotification = useNotification((state) => state.openNotification);
@@ -32,12 +31,15 @@ function Card(props) {
 
   const handleClickAddToCart = useCallback(
     async (item) => {
+      const getToken = getCookie("TOKEN");
+      const getRefreshToken = getCookie("REFRESH_TOKEN");
+
       try {
-        const url = "/authEmployee/profile";
+        const url = "/authCustomers/profile";
 
         const response = await axiosClient.get(url);
 
-        if (response.data.payload) {
+        if (getToken && getRefreshToken && response.data.payload) {
           const data = {
             id: item.id,
             name: item.title,
@@ -75,12 +77,20 @@ function Card(props) {
 
             timeoutNotificationRef.current = null;
           }, 3000);
+        } else {
+          deleteCookie("TOKEN");
+          deleteCookie("REFRESH_TOKEN");
+          deleteCookie("email");
+          signOut({ callbackUrl: "/log-in" });
         }
       } catch (error) {
-        router.push("/log-in");
+        deleteCookie("TOKEN");
+        deleteCookie("REFRESH_TOKEN");
+        deleteCookie("email");
+        signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart, router],
+    [addToCart, closeNotification, closeScaleCart, openNotification, openScaleCart],
   );
 
   return (

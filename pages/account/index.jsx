@@ -23,7 +23,7 @@ function AccountPage() {
 
   const getProfile = useCallback(async () => {
     try {
-      const res = await axiosClient.get("/authEmployee/profile");
+      const res = await axiosClient.get("/authCustomers/profile");
       setProfile(res?.data?.payload);
     } catch (error) {
       setProfile(error?.response?.data || {});
