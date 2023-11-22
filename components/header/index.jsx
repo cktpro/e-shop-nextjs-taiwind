@@ -39,6 +39,7 @@ import DropDown from "../svg/dropDown";
 import styles from "./header.module.scss";
 
 function Header() {
+  const getListCart = useCartStore((state) => state.getListCart);
   const router = useRouter();
 
   const inputSearchRef = useRef(null);
@@ -213,6 +214,9 @@ function Header() {
       setFilterKeySearch(filterKey);
     }
   }, [inputSearch, keySuggest]);
+  useEffect(() => {
+    getListCart();
+  }, []);
 
   return (
     <>
