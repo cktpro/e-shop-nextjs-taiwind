@@ -46,10 +46,7 @@ const renderStars = (numOfStar) => {
     stars.push(renderStar("halfStar"));
   } else if (remainingStars - Math.floor(remainingStars) > 0.5) {
     stars.push(renderStar("grayStar"));
-  } else if (
-    remainingStars - Math.floor(remainingStars) < 0.5 &&
-    remainingStars - Math.floor(remainingStars) > 0
-  ) {
+  } else if (remainingStars - Math.floor(remainingStars) < 0.5 && remainingStars - Math.floor(remainingStars) > 0) {
     stars.push(renderStar("orangeStar"));
   }
 

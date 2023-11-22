@@ -9,6 +9,8 @@ import { signIn } from "next-auth/react";
 import BtnOk from "@/components/buttons/btnOk";
 import Loading from "@/components/svg/loading";
 
+import useCartStore from "@/store/cart/useCartStore";
+
 import styles from "./logIn.module.scss";
 
 function Login() {
@@ -19,6 +21,12 @@ function Login() {
   const [isHaveError, setIsHaveError] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const resetCartItem = useCartStore((state) => state.resetCart);
+
+  useEffect(() => {
+    resetCartItem();
+  }, [resetCartItem]);
 
   const handleSubmit = useCallback(
     async (e) => {

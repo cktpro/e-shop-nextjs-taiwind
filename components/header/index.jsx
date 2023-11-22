@@ -27,6 +27,7 @@ import {
   useOutsideSuggestDrawderClick,
 } from "@/helper/clickOutsideElement";
 import { fuzzySearch } from "@/helper/fuzzySearch";
+import useAuthUser from "@/store/authUser";
 import useCartStore from "@/store/cart/useCartStore";
 import useScaleCart from "@/store/isScaleCart";
 import useKeySuggest from "@/store/keySuggest/useKeySuggest";
@@ -49,18 +50,6 @@ function Header() {
 
   const pathname = usePathname();
 
-  const keySuggest = useKeySuggest((state) => state.keySuggest);
-
-  const isOpenNotification = useNotification((state) => state.isOpenNotification);
-
-  const isOpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.isOpenNotification);
-
-  const isScaleCart = useScaleCart((state) => state.isScaleCart);
-
-  const totalCartItem = useCartStore((state) => state.totalItem);
-
-  const resetCartItem = useCartStore((state) => state.resetCart);
-
   const [inputSearch, setInputSearch] = useState("");
 
   const [filterKeySearch, setFilterKeySearch] = useState([]);
@@ -81,6 +70,18 @@ function Header() {
 
   const [isOpenUserSettingOnDrawder, setIsOpenUserSettingOnDrawder] = useState(false);
 
+  const keySuggest = useKeySuggest((state) => state.keySuggest);
+
+  const isOpenNotification = useNotification((state) => state.isOpenNotification);
+
+  const isOpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.isOpenNotification);
+
+  const isScaleCart = useScaleCart((state) => state.isScaleCart);
+
+  const totalCartItem = useCartStore((state) => state.totalItem);
+
+  const resetCartItem = useCartStore((state) => state.resetCart);
+
   const openDrawerRight = useCallback(() => setIsOpenDrawderRight(true), []);
 
   const closeDrawerRight = useCallback(() => setIsOpenDrawderRight(false), []);
@@ -92,16 +93,6 @@ function Header() {
   const openUserSettingMenu = useCallback(() => setIsOpenUserSetting(true), []);
 
   const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
-
-  useEffect(() => {
-    if (searchParams.get("key")) {
-      setKeySearch(searchParams.get("key"));
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
-    setInputSearch(keySearch);
-  }, [keySearch]);
 
   const handleClickOutsideSuggestOnDrawder = useCallback(() => {
     setIsOpenSuggestOnDrawder(false);
@@ -141,32 +132,46 @@ function Header() {
 
   const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
-  const [isLogin, setIsLogin] = useState(false);
+  const doAuthUser = useAuthUser((state) => state.fetchAuthUser);
 
-  const token = getCookie("TOKEN");
-
-  useEffect(() => {
-    if (token) {
-      setIsLogin(true);
-    }
-  }, [pathname, token]);
+  const isLogin = useAuthUser((state) => state.isAuthenticated);
 
   useEffect(() => {
-    if ((pathname === "/log-in" || pathname === "/sign-up") && token) {
-      resetCartItem();
+    doAuthUser();
 
-      deleteCookie("TOKEN");
-      deleteCookie("REFRESH_TOKEN");
+    if (pathname === "/log-in" || pathname === "/sign-up") {
+      const getToken = getCookie("TOKEN");
+      const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      setIsLogin(false);
+      if (getToken && !getRefreshToken) {
+        resetCartItem();
+
+        deleteCookie("TOKEN");
+        deleteCookie("REFRESH_TOKEN");
+        deleteCookie("email");
+
+        signOut({ callbackUrl: "/log-in" });
+      }
     }
-  }, [pathname, resetCartItem, token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    if (searchParams.get("key")) {
+      setKeySearch(searchParams.get("key"));
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    setInputSearch(keySearch);
+  }, [keySearch]);
 
   const handleLogout = useCallback(async () => {
     resetCartItem();
 
     deleteCookie("TOKEN");
     deleteCookie("REFRESH_TOKEN");
+    deleteCookie("email");
 
     setIsOpenUserSetting(false);
 
