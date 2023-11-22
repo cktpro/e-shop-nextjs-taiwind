@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Form, Input } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +14,13 @@ import useFetchCheckout from "@/store/checkout";
 import { useShippingStore } from "@/store/checkout/shipping";
 
 function Checkout() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
   const [districtId, setDistrictId] = useState("");
   let totalPrice = 0;
   const shipping = useShippingStore((state) => state);
@@ -48,7 +56,8 @@ function Checkout() {
   }, [cartData.cart, status]);
   const handlePlaceOrder = useCallback(
     (values) => {
-      values.preventDefault();
+      // values.preventDefault();
+      console.log("◀◀◀ values ▶▶▶", values);
       // const data = {
       //   amount: parseFloat(cartData.total) * 24000,
       //   bankCode: "NCB",
@@ -58,6 +67,18 @@ function Checkout() {
     },
     [cartData.total, fetchCheckout],
   );
+  const onSubmit = (data) => {
+    const orderDetails = cartData.cart.map((item) => {
+      return {
+        productId: item.product.productId,
+        quantity: item.product.quantity,
+        discount: item.productDetail.discount,
+        price: item.productDetail.price,
+      };
+    });
+    console.log("◀◀◀ orderDtails ▶▶▶", orderDetails);
+    console.log(data);
+  };
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -87,10 +108,8 @@ function Checkout() {
       </h2>
 
       {status === "authenticated" ? (
-        <Form
-          name="form"
-          onFinish={handlePlaceOrder}
-          autoComplete="off"
+        <form
+          onSubmit={handleSubmit(onSubmit)}
           className="min-w-full grid grid-cols-12 lg:flex items-start justify-between"
         >
           <div className="mt-[3rem] col-span-12 inline-flex flex-col items-center gap-[1.5rem]">
@@ -103,16 +122,17 @@ function Checkout() {
 
                   <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
                 </div>
-                <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
+                {/* <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
                   <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
-                </Form.Item>
-                {/* <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                defaultValue={session?.user?.firstName || null}
-              /> */}
+                </Form.Item> */}
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.firstName || null}
+                  {...register("firstName")}
+                />
               </label>
 
               <label htmlFor="companyName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
@@ -126,6 +146,7 @@ function Checkout() {
                   name="companyName"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.lastName || null}
+                  {...register("lastName")}
                 />
               </label>
 
@@ -144,6 +165,7 @@ function Checkout() {
                   name="streetAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.address[0].address}
+                  {...register("streetAddress")}
                 />
               </label>
 
@@ -155,6 +177,8 @@ function Checkout() {
                   className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   onChange={(e) => shipping.getDistrict(e.target.value)}
                   name="province"
+                  defaultValue={session?.user?.address[0].provinceId}
+                  {...register("province")}
                 >
                   {shipping.isProvince === true &&
                     shipping.provinceList.map((item, idx) => {
@@ -194,7 +218,9 @@ function Checkout() {
                     setDistrictId(e.target.value);
                     shipping.getWard(e.target.value);
                   }}
+                  defaultValue={session?.user?.address[0].districtId}
                   name="distric"
+                  {...register("district")}
                 >
                   {shipping.districtList.length > 0 ? (
                     shipping.districtList.map((item, idx) => {
@@ -244,6 +270,8 @@ function Checkout() {
                   onChange={async (e) => {
                     handleChangeFee(e);
                   }}
+                  defaultValue={session?.user?.address[0].wardId}
+                  {...register("ward")}
                 >
                   {shipping.wardList.length > 0 ? (
                     shipping.wardList.map((item, idx) => {
@@ -287,6 +315,7 @@ function Checkout() {
                   name="phoneNumber"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.phoneNumber}
+                  {...register("phoneNumber")}
                 />
               </label>
 
@@ -305,6 +334,7 @@ function Checkout() {
                   name="emailAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.email}
+                  {...register("email")}
                 />
               </label>
             </div>
@@ -413,7 +443,10 @@ function Checkout() {
                   className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
                   type="radio"
                   id="bank"
-                  name="bank"
+                  name="bank-cash"
+                  value="CREDIT_CARD"
+                  checked
+                  {...register("paymentType")}
                 />
 
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
@@ -470,7 +503,14 @@ function Checkout() {
               htmlFor="cash"
               className="min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]"
             >
-              <input className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2" type="radio" id="cash" name="cash" />
+              <input
+                className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                type="radio"
+                id="cash"
+                name="bank-cash"
+                value="CASH"
+                {...register("paymentType")}
+              />
 
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
             </label>
@@ -488,7 +528,7 @@ function Checkout() {
             <ViewAllProducts text="Place Order" type="submit" />
             {/* onClick={(e) => handlePlaceOrder(e)} */}
           </div>
-        </Form>
+        </form>
       ) : (
         ""
       )}

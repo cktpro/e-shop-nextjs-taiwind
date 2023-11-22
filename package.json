@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.48.2",
     "sass": "^1.69.4",
     "swiper": "^11.0.3",
     "yarn": "^1.22.19",

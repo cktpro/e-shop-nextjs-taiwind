@@ -16,7 +16,10 @@ import useCartStore from "@/store/cart/useCartStore";
 function CartPage() {
   const router = useRouter();
   let totalPrice = 0;
-  const [isChanged, setIsChanged] = useState(false);
+  const [isChanged, setIsChanged] = useState({
+    update: false,
+    checkout: false,
+  });
   const [cartItem, setCartItem] = useState([]);
   const [inputCoupon, setInputCoupon] = useState("");
 
@@ -37,9 +40,13 @@ function CartPage() {
   // const timeoutRef = useRef(null);
 
   const handleClickIncrease = useCallback(
-    (index) => {
-      setIsChanged(true);
+    async (index) => {
       const newItem = cartItem;
+      setIsChanged((prev) => ({
+        ...prev,
+        update: true,
+        checkout: true,
+      }));
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity >= newItem[index].productDetail.stock) {
         document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
@@ -56,7 +63,11 @@ function CartPage() {
   );
   const handleChangeQuantity = useCallback(
     (value, index) => {
-      setIsChanged(true);
+      setIsChanged((prev) => ({
+        ...prev,
+        update: true,
+        checkout: true,
+      }));
       const newItem = cartItem;
       if (value > newItem[index].productDetail.stock) {
         document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
@@ -77,7 +88,11 @@ function CartPage() {
   );
   const handleClickReduce = useCallback(
     (index) => {
-      setIsChanged(true);
+      setIsChanged((prev) => ({
+        ...prev,
+        update: true,
+        checkout: true,
+      }));
       const newItem = cartItem;
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity <= 1) {
@@ -122,7 +137,11 @@ function CartPage() {
       return;
     }
     cartData.updateCart(cartItem);
-    setIsChanged(false);
+    setIsChanged((prev) => ({
+      ...prev,
+      update: false,
+      checkout: false,
+    }));
     // OpenNotificationUpdateCart();
 
     // if (timeoutRef.current) {
@@ -138,7 +157,11 @@ function CartPage() {
     // }, 3000);
   }, [cartItem, cartData, isChanged]);
   const handleClickCheckoutCart = useCallback(() => {
-    setIsChanged(true);
+    setIsChanged((prev) => ({
+      ...prev,
+      update: false,
+      checkout: true,
+    }));
     if (isChanged === true) {
       message.warning("Vui lòng cập nhật trước khi checkout");
     } else {
@@ -192,82 +215,89 @@ function CartPage() {
                   </span>
                 </div>
               </div>
-
-              {cartData.cart.map((item, idx) => {
-                totalPrice += item.productDetail.price * item.product.quantity;
-                return (
-                  <div
-                    key={item.product._id}
-                    className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
-                  >
-                    <Image
-                      className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
-                      src={item.image.location}
-                      alt="..."
-                      width={1000}
-                      height={1000}
-                    />
-
-                    <button
-                      onClick={() => handleClickRemoveFromCart(item.product)}
-                      type="button"
-                      className="absolute top-[1rem] left-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              <form
+                id="quantity_form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleClickUpdateCart();
+                }}
+              >
+                {cartData.cart.map((item, idx) => {
+                  totalPrice += item.productDetail.price * item.product.quantity;
+                  return (
+                    <div
+                      key={item.product._id}
+                      className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
                     >
-                      <CanCel />
-                    </button>
+                      <Image
+                        className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
+                        src={item.image.location}
+                        alt="..."
+                        width={1000}
+                        height={1000}
+                      />
 
-                    <span className="sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]">
-                      {item.productDetail.name}
-                    </span>
+                      <button
+                        onClick={() => handleClickRemoveFromCart(item.product)}
+                        type="button"
+                        className="absolute top-[1rem] left-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      >
+                        <CanCel />
+                      </button>
 
-                    <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[11.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
-                      {formattedMoney(item.productDetail.price)}
-                    </span>
+                      <span className="sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]">
+                        {item.productDetail.name}
+                      </span>
 
-                    <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
-                      <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
-                        <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                          <form name="quantity_form">
+                      <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[11.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
+                        {formattedMoney(item.productDetail.price)}
+                      </span>
+
+                      <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
+                        <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
+                          <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                             <input
                               type="number"
                               name="quantity"
                               id={`quantity${idx}`}
                               className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               defaultValue={item.product.quantity}
-                              onChange={(e) => (e.target.value ? handleChangeQuantity(e.target.value, idx) : null)}
+                              onChange={(e) =>
+                                e.target.value ? handleChangeQuantity(e.target.value, idx) : setIsChanged(true)
+                              }
                               required
                             />
-                          </form>
-                        </span>
+                          </span>
 
-                        <div className="flex flex-col items-center justify-center">
-                          <button
-                            onClick={() => handleClickIncrease(idx)}
-                            type="button"
-                            className="max-w-[1rem] max-h-[1rem]"
-                          >
-                            <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
-                          </button>
+                          <div className="flex flex-col items-center justify-center">
+                            <button
+                              onClick={() => handleClickIncrease(idx)}
+                              type="button"
+                              className="max-w-[1rem] max-h-[1rem]"
+                            >
+                              <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
+                            </button>
 
-                          <button
-                            onClick={() => handleClickReduce(idx)}
-                            type="button"
-                            className="max-w-[1rem] max-h-[1rem]"
-                          >
-                            <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
-                          </button>
+                            <button
+                              onClick={() => handleClickReduce(idx)}
+                              type="button"
+                              className="max-w-[1rem] max-h-[1rem]"
+                            >
+                              <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
-                      {formattedMoney(
-                        (parseInt(item.product.quantity, 10) * parseFloat(item.productDetail.price)).toFixed(2),
-                      )}
-                    </span>
-                  </div>
-                );
-              })}
+                      <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
+                        {formattedMoney(
+                          (parseInt(item.product.quantity, 10) * parseFloat(item.productDetail.price)).toFixed(2),
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+              </form>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 items-start xl:gap-[47.3125rem] sm:min-w-[43.8rem] min-w-[20rem] justify-between">
@@ -284,11 +314,12 @@ function CartPage() {
               </button>
 
               <button
-                onClick={() => handleClickUpdateCart()}
+                // onClick={() => handleClickUpdateCart()}
+                // onClick={() => handleSubmit(onSubmit)}
                 type="submit"
                 form="quantity_form"
                 className="disabled:opacity-50 min-w-[13.7rem] sm:min-w-fit flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
-                disabled={!isChanged}
+                disabled={!isChanged.update}
               >
                 <span className=" text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
                   Update Cart
@@ -350,14 +381,16 @@ function CartPage() {
                 </div>
 
                 {/* <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]"> */}
-                <ViewAllProducts
-                  text="Process to checkout"
-                  type="button"
-                  onClick={() => {
-                    handleClickCheckoutCart();
-                  }}
-                  disabled={isChanged || false}
-                />
+                <div className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
+                  <ViewAllProducts
+                    text="Process to checkout"
+                    type="button"
+                    onClick={() => {
+                      handleClickCheckoutCart();
+                    }}
+                    disabled={isChanged?.update || false}
+                  />
+                </div>
                 {/* </Link> */}
               </div>
             </div>
