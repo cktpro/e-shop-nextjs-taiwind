@@ -46,14 +46,14 @@ const nextAuthOptions = (req, res) => {
           };
 
           try {
-            const responsive = await axiosServer.post("/authCustomers/login", data);
+            const responsive = await axiosServer.post("/user/login", data);
 
-            setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });
-            setCookie("REFRESH_TOKEN", responsive.data.refreshToken, { req, res, maxAge: maxAgeCookies });
+            setCookie("TOKEN", responsive.data.payload.token, { req, res, maxAge: maxAgeCookies });
+            setCookie("REFRESH_TOKEN", responsive.data.payload.refreshToken, { req, res, maxAge: maxAgeCookies });
 
-            axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.token}`;
+            axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.payload.token}`;
 
-            const getProfile = await axiosServer.get("/authCustomers/profile");
+            const getProfile = await axiosServer.get("/user/get_profile");
 
             const user = await getProfile.data.payload;
 
@@ -90,7 +90,7 @@ const nextAuthOptions = (req, res) => {
           };
 
           try {
-            const responsive = await axiosServer.post("/authCustomers/login", data);
+            const responsive = await axiosServer.post("/user/login", data);
 
             if (responsive.data.token && responsive.data.refreshToken) {
               setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });
@@ -106,7 +106,7 @@ const nextAuthOptions = (req, res) => {
                 delete data.lastName;
                 delete data.phoneNumber;
 
-                const responsive = await axiosServer.post("/authCustomers/login", data);
+                const responsive = await axiosServer.post("/user/login", data);
 
                 if (responsive.data.token && responsive.data.refreshToken) {
                   setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });

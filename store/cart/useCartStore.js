@@ -225,7 +225,6 @@ const useCartStore = create((set, get) => ({
   },
 
   removeFromCart: async (product) => {
-    console.log("◀◀◀ product ▶▶▶", product);
     set({ isLoading: true });
     try {
       await axiosClient.delete(`/cart/${product.productId}`);
@@ -233,6 +232,7 @@ const useCartStore = create((set, get) => ({
       const data = result.data.payload;
       set(() => ({
         cart: data,
+        totalItem: data.length,
         isLoading: false,
       }));
       message.success("Xóa thành công");
