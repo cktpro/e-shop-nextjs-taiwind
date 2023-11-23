@@ -54,5 +54,6 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "default-param-last": ["error"],
     "import/prefer-default-export": 0,
+    // endOfLine: "auto",
   },
 };
