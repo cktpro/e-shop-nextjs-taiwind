@@ -1,8 +1,7 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback } from "react";
 import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 // import { axiosClient } from "@/helper/axios/axiosClient";
@@ -42,7 +41,7 @@ function ProductItemComponent(props) {
     },
     [addCart],
   );
-
+  console.log("◀◀◀ product ▶▶▶", product);
   return (
     <div className="flex flex-col items-start gap-[1rem] border">
       <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
@@ -70,7 +69,7 @@ function ProductItemComponent(props) {
 
         <Image
           className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
-          src={product?.image.location || product?.images[0]}
+          src={product?.image?.location || product?.imageList[0]?.location}
           alt="..."
           width={1000}
           height={1000}

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 import { formattedMoney } from "@/helper/formatDocument";
 import useCartStore from "@/store/cart/useCartStore";
 import useFetchCheckout from "@/store/checkout";
@@ -68,8 +69,11 @@ function Checkout() {
     },
     [cartData.total, fetchCheckout],
   );
-  const onSubmit = (data) => {
-    console.log("◀◀◀ address ▶▶▶", address);
+  const onSubmit = async (data) => {
+    const dayShip = new Date();
+    dayShip.setDate(dayShip.getDate() + 3);
+    const shipFee = (shipping.feeShip / 24000).toFixed(2);
+    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
     const orderDetails = cartData.cart.map((item) => {
       return {
         productId: item.product.productId,
@@ -78,9 +82,27 @@ function Checkout() {
         price: item.productDetail.price,
       };
     });
-    console.log("◀◀◀ orderDtails ▶▶▶", orderDetails);
-    data.feeShip = (shipping.feeShip / 24000).toFixed(2);
-    console.log(data);
+    const order = {
+      customerId: session.user.id,
+      shippedDate: dayShip,
+      status: "WAITING",
+      shippingFee: shipFee,
+      totalPrice,
+      shippingAddress: shipAddress,
+      paymentType: data.paymentType,
+      orderDetails,
+    };
+    try {
+      const result = await axiosClient.post("orders", order);
+      if (result) {
+        cartData.resetCart();
+      }
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
+
+    // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
+    console.log("order", totalPrice);
   };
   return (
     <div className="container mt-[5rem]">
@@ -250,7 +272,6 @@ function Checkout() {
                     { required: true },
                   )}
                 >
-                  <option value="">Please choose province</option>
                   {shipping.districtList.length > 0 ? (
                     shipping.districtList.map((item, idx) => {
                       if (item.DistrictID == session?.user?.address[0].districtName) {

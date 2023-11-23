@@ -275,18 +275,16 @@ const useCartStore = create((set, get) => ({
     }
   },
 
-  resetCart: () => {
-    set(() => ({
-      cart: initialState.cart,
-
-      totalItem: initialState.totalItem,
-
-      subtotal: initialState.subtotal,
-
-      coupon: initialState.coupon,
-
-      total: initialState.total,
-    }));
+  resetCart: async () => {
+    set({ isLoading: true });
+    try {
+      await axiosClient.delete("cart");
+      const result = await axiosClient.get("cart");
+      set({ isLoading: false, cart: result.data.payload, totalItem: result.data.payload.length });
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+    }
   },
 }));
 

@@ -16,6 +16,7 @@ function Product(props) {
   const [loading, setLoading] = useState(false);
   const [productList, setProductList] = useState(product);
   // Checkbox
+  const [filter, setFilter] = useState({ isChanged: false });
   const [checkedList, setCheckedList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [supplierList, setsupplierList] = useState([]);
@@ -23,36 +24,77 @@ function Product(props) {
     console.log("◀◀◀ list ▶▶▶", list);
     setCheckedList(list);
   };
-  const handleChangeCategory = useCallback(async (id) => {
+  const handleFilter = useCallback(async () => {
+    // const test = `products?${filter?.categoryId ? `categoryId=${filter.categoryId}` : ""}${
+    //   filter?.supplierId ? `&supplierId=${filter.supplierId}` : ""
+    // }`;
+    // console.log("◀◀◀ test ▶▶▶", test);
     try {
       setLoading(true);
-      const result = await axiosClient.get(`products?categoryId=${id}`);
+
+      const result = await axiosClient.get(
+        `products?${filter?.categoryId ? `categoryId=${filter.categoryId}` : ""}${
+          filter?.supplierId ? `&supplierId=${filter.supplierId}` : ""
+        }`,
+      );
       setProductList(result.data.payload);
       console.log("◀◀◀ result ▶▶▶", result);
       setLoading(false);
+      setFilter((prev) => ({
+        ...prev,
+        isChanged: false,
+      }));
     } catch (error) {
-      console.log("◀◀◀ error ▶▶▶", error);
-    }
-  }, []);
-  const handleChangeSupplier = useCallback(async (e) => {
-    console.log("◀◀◀ id ▶▶▶", e);
-    try {
-      setLoading(true);
-      const result = await axiosClient.get(`products?supplierId=${e}`);
-      setProductList(result.data.payload);
-      console.log("◀◀◀ result ▶▶▶", result);
       setLoading(false);
-    } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);
     }
-  }, []);
+  }, [filter]);
+  const handleChangeCategory = useCallback(
+    async (id) => {
+      setFilter((prev) => ({
+        ...prev,
+        categoryId: id,
+        isChanged: true,
+      }));
+      console.log("◀◀◀ filter ▶▶▶", filter);
+      // try {
+      //   setLoading(true);
+      //   const result = await axiosClient.get(`products?categoryId=${id}`);
+      //   setProductList(result.data.payload);
+      //   console.log("◀◀◀ result ▶▶▶", result);
+      //   setLoading(false);
+      // } catch (error) {
+      //   console.log("◀◀◀ error ▶▶▶", error);
+      // }
+    },
+    [filter],
+  );
+  const handleChangeSupplier = useCallback(
+    async (id) => {
+      setFilter((prev) => ({
+        ...prev,
+        supplierId: id,
+        isChanged: true,
+      }));
+      // try {
+      //   setLoading(true);
+      //   const result = await axiosClient.get(`products?supplierId=${e}`);
+      //   setProductList(result.data.payload);
+      //   console.log("◀◀◀ result ▶▶▶", result);
+      //   setLoading(false);
+      // } catch (error) {
+      //   console.log("◀◀◀ error ▶▶▶", error);
+      // }
+    },
+    [filter],
+  );
   useEffect(() => {
     const newList = category.map((item) => ({
       value: item.id,
       label: item.name,
     }));
     const newListSuplier = supplier.map((item) => ({
-      value: item.id,
+      value: item._id,
       label: item.name,
     }));
     setCategoryList(newList);
@@ -63,6 +105,7 @@ function Product(props) {
       <HeadMeta title="Trang sản phẩm" />
       <div className="container my-3">
         <Space wrap>
+          <span>Bộ lọc</span>
           <Select
             defaultValue="Loại sản phẩm"
             style={{
@@ -72,6 +115,7 @@ function Product(props) {
             options={categoryList}
             onChange={(e) => handleChangeCategory(e)}
           />
+
           <Select
             defaultValue="Giá"
             style={{
@@ -91,11 +135,32 @@ function Product(props) {
           <Select
             defaultValue="Nhà cung cấp"
             style={{
-              width: "auto",
+              width: "12rem",
             }}
+            // onChange={handleChange}
             options={supplierList}
             onChange={(e) => handleChangeSupplier(e)}
           />
+          {filter?.isChanged === true ? (
+            <Button type="primary" onClick={() => handleFilter()} danger>
+              Apply
+            </Button>
+          ) : (
+            ""
+          )}
+          {filter?.isChanged === true && (filter?.categoryId || filter.supplierId) ? (
+            <Button
+              type="text"
+              onClick={() => {
+                setFilter({ isChanged: true });
+              }}
+              danger
+            >
+              Clear
+            </Button>
+          ) : (
+            ""
+          )}
         </Space>
         <div className="d-flex justify-content-start align-items-center mt-3 gap-3">
           <span>{productList.length} Kết quả</span>

@@ -9,6 +9,7 @@ import RouterLoader from "@/components/loader/routerLoader";
 import "@/styles/globals.css";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <>
       <Head>
@@ -19,8 +20,10 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
       <SessionProvider session={session} refetchOnWindowFocus={false} refetchWhenOffline={false}>
         <RouterLoader />
         <Layout>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
+          {/* <Component {...pageProps} /> */}
         </Layout>
+        {/* {getLayout(<Component {...pageProps} />)} */}
       </SessionProvider>
     </>
   );
