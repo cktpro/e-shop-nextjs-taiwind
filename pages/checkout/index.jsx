@@ -20,7 +20,7 @@ function Checkout() {
     watch,
     formState: { errors },
   } = useForm();
-
+  const [address, setAddress] = useState([]);
   const [districtId, setDistrictId] = useState("");
   let totalPrice = 0;
   const shipping = useShippingStore((state) => state);
@@ -33,12 +33,12 @@ function Checkout() {
 
   const urlVnpay = useFetchCheckout((state) => state.payload.url);
   const handleChangeFee = async (e) => {
-    const address = {
+    const addressShip = {
       districtId,
       wardId: e.target.value.toString(),
     };
     // setTimeout(() => console.log("◀◀◀ address ▶▶▶", address), 2000);
-    shipping.getFee(address, cartData.cart);
+    shipping.getFee(addressShip, cartData.cart);
   };
   useEffect(() => {
     if (urlVnpay) {
@@ -52,6 +52,7 @@ function Checkout() {
   useEffect(() => {
     if (status === "authenticated" && cartData.cart.length > 0) {
       shipping.getFee(session.user.address[0], cartData.cart);
+      setAddress(session.user.address[0]);
     }
   }, [cartData.cart, status]);
   const handlePlaceOrder = useCallback(
@@ -68,6 +69,7 @@ function Checkout() {
     [cartData.total, fetchCheckout],
   );
   const onSubmit = (data) => {
+    console.log("◀◀◀ address ▶▶▶", address);
     const orderDetails = cartData.cart.map((item) => {
       return {
         productId: item.product.productId,
@@ -77,6 +79,7 @@ function Checkout() {
       };
     });
     console.log("◀◀◀ orderDtails ▶▶▶", orderDetails);
+    data.feeShip = (shipping.feeShip / 24000).toFixed(2);
     console.log(data);
   };
   return (
@@ -165,7 +168,7 @@ function Checkout() {
                   name="streetAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.address[0].address}
-                  {...register("streetAddress")}
+                  {...register("streetAddress", { required: true })}
                 />
               </label>
 
@@ -175,10 +178,20 @@ function Checkout() {
                 </span>
                 <select
                   className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  onChange={(e) => shipping.getDistrict(e.target.value)}
+                  // onChange={(e) => shipping.getDistrict(e.target.value)}
                   name="province"
                   defaultValue={session?.user?.address[0].provinceId}
-                  {...register("province")}
+                  {...register("province", {
+                    onChange: (e) => {
+                      document.getElementById("streetAddress").value = null;
+                      setAddress((prev) => ({
+                        ...prev,
+                        provinceId: e.target.value,
+                        provinceName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      shipping.getDistrict(e.target.value);
+                    },
+                  })}
                 >
                   {shipping.isProvince === true &&
                     shipping.provinceList.map((item, idx) => {
@@ -214,14 +227,30 @@ function Checkout() {
                 </div>
                 <select
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  onChange={(e) => {
-                    setDistrictId(e.target.value);
-                    shipping.getWard(e.target.value);
-                  }}
-                  defaultValue={session?.user?.address[0].districtId}
-                  name="distric"
-                  {...register("district")}
+                  // onChange={(e) => {
+                  //   setDistrictId(e.target.value);
+                  //   shipping.getWard(e.target.value);
+                  // }}
+                  // defaultValue={session?.user?.address[0].districtId}
+                  id="district"
+                  name="district"
+                  {...register(
+                    "district",
+                    {
+                      onChange: (e) => {
+                        setAddress((prev) => ({
+                          ...prev,
+                          districtId: e.target.value,
+                          districtName: e.target.options[e.target.options.selectedIndex].text,
+                        }));
+                        setDistrictId(e.target.value);
+                        shipping.getWard(e.target.value);
+                      },
+                    },
+                    { required: true },
+                  )}
                 >
+                  <option value="">Please choose province</option>
                   {shipping.districtList.length > 0 ? (
                     shipping.districtList.map((item, idx) => {
                       if (item.DistrictID == session?.user?.address[0].districtName) {
@@ -267,11 +296,25 @@ function Checkout() {
                 <select
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   name="distric"
-                  onChange={async (e) => {
-                    handleChangeFee(e);
-                  }}
+                  // onChange={async (e) => {
+                  //   setAddress((prev) => ({
+                  //     ...prev,
+                  //     wardIdId: e.target.value,
+                  //     wardName: e.target.options[e.target.options.selectedIndex].text,
+                  //   }));
+                  //   handleChangeFee(e);
+                  // }}
                   defaultValue={session?.user?.address[0].wardId}
-                  {...register("ward")}
+                  {...register("ward", {
+                    onChange: (e) => {
+                      setAddress((prev) => ({
+                        ...prev,
+                        wardId: e.target.value,
+                        wardName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      handleChangeFee(e);
+                    },
+                  })}
                 >
                   {shipping.wardList.length > 0 ? (
                     shipping.wardList.map((item, idx) => {

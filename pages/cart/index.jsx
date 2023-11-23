@@ -263,7 +263,13 @@ function CartPage() {
                               className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               defaultValue={item.product.quantity}
                               onChange={(e) =>
-                                e.target.value ? handleChangeQuantity(e.target.value, idx) : setIsChanged(true)
+                                e.target.value
+                                  ? handleChangeQuantity(e.target.value, idx)
+                                  : setIsChanged((prev) => ({
+                                      ...prev,
+                                      update: true,
+                                      checkout: true,
+                                    }))
                               }
                               required
                             />
