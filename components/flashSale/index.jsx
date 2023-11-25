@@ -14,25 +14,25 @@ import TimeFlashSale from "../timeFlashSale";
 function FlashSale(props) {
   const { flashSales } = props;
 
-  const convertFlashSales = flashSales.reduce((prev, item) => {
-    prev.push({
-      id: item.product._id,
-      name: item.product.name,
-      price: item.product.price,
-      discount: item.discount,
-      stock: item.product.stock,
-      categoryId: item.product.categoryId,
-      supplierId: item.product.supplierId,
-      description: item.product.description,
-      isDeleted: item.product.isDeleted,
-      image: item.product.image,
-      rate: item.product.rate,
-      rateCount: item.product.rateCount,
-      discountedPrice: (+item.product.price * (100 - +item.discount)) / 100,
-    });
+  // const convertFlashSales = flashSales.reduce((prev, item) => {
+  //   prev.push({
+  //     id: item.product._id,
+  //     name: item.product.name,
+  //     price: item.product.price,
+  //     discount: item.discount,
+  //     stock: item.product.stock,
+  //     categoryId: item.product.categoryId,
+  //     supplierId: item.product.supplierId,
+  //     description: item.product.description,
+  //     isDeleted: item.product.isDeleted,
+  //     image: item.product.image,
+  //     rate: item.product.rate,
+  //     rateCount: item.product.rateCount,
+  //     discountedPrice: (+item.product.price * (100 - +item.discount)) / 100,
+  //   });
 
-    return prev;
-  }, []);
+  //   return prev;
+  // }, []);
 
   const [timeToEndSale, setTimeToEndSale] = useState(getTime(endOfSale));
 
@@ -62,7 +62,7 @@ function FlashSale(props) {
         <TimeFlashSale second={timeToEndSale} />
       </div>
 
-      <FlashSaleCarousel flashSales={convertFlashSales} />
+      <FlashSaleCarousel flashSales={flashSales} />
 
       <div className="text-center mt-[3.75rem]">
         <Link href="/">

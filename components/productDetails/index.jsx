@@ -18,7 +18,7 @@ import styles from "./productDetails.module.scss";
 
 function ProductDetails(props) {
   const { product, relatedItem } = props;
-
+  const [coverImg, setCoverImg] = useState(product?.image?.location);
   const router = useRouter();
 
   const timeoutNotificationRef = useRef(null);
@@ -114,7 +114,7 @@ function ProductDetails(props) {
       setInputQuantity(1);
     }
   }, []);
-
+  console.log("««««« product »»»»»", product);
   return (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -132,10 +132,36 @@ function ProductDetails(props) {
 
       <div className="min-w-full mt-[5rem] grid grid-cols-12">
         <div className="hidden col-span-12 xl:col-span-2 xl:flex flex-col items-start justify-start gap-[1rem]">
-          <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+          {product.imageList?.map((item) => {
+            return (
+              <div key={item.id} className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+                <Image
+                  className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+                  src={item?.location}
+                  alt="..."
+                  width={1000}
+                  height={1000}
+                  onClick={() => {
+                    setCoverImg(item.location);
+                  }}
+                />
+              </div>
+            );
+          })}
+          {/* <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={coverImg}
+              alt="..."
+              width={1000}
+              height={1000}
+            />
+          </div> */}
+
+          {/* <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+            <Image
+              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+              src={product?.image?.location || product?.imageList[0]}
               alt="..."
               width={1000}
               height={1000}
@@ -145,7 +171,7 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image || product?.images[1]}
+              src={product?.image?.location}
               alt="..."
               width={1000}
               height={1000}
@@ -155,29 +181,19 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image}
+              src={product?.image?.location || product?.images[1]}
               alt="..."
               width={1000}
               height={1000}
             />
-          </div>
-
-          <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
-            <Image
-              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image || product?.images[1]}
-              alt="..."
-              width={1000}
-              height={1000}
-            />
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 xl:col-span-5 pl-[1.4rem] flex justify-center">
           <div className="flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
               className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
-              src={product?.image}
+              src={coverImg}
               alt="..."
               width={1000}
               height={1000}

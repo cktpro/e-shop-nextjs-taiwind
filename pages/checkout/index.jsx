@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Input, message } from "antd";
+import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -49,19 +50,20 @@ function Checkout() {
   useEffect(() => {
     cartData.getListCart();
     shipping.getProvince();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (status === "authenticated" && cartData.cart.length > 0) {
       shipping.getFee(session.user.address[0], cartData.cart);
       setAddress(session.user.address[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartData.cart, status]);
-  const handlePlaceOrder = useCallback(
-    (e) => {
-      e.preventDefault();
 
+  const handlePlaceOrder = useCallback(
+    (finalTotal) => {
       const data = {
-        amount: parseFloat(cartData.total) * 24000,
+        amount: finalTotal * 24000,
         bankCode: "NCB",
         language: "en",
         returnUrl: process.env.NEXT_PUBLIC_VNPAY_RETURN_URL,
@@ -69,12 +71,14 @@ function Checkout() {
 
       fetchCheckout(data);
     },
-    [cartData.total, fetchCheckout],
+    [fetchCheckout],
   );
+
   const onSubmit = async (data) => {
     const dayShip = new Date();
     dayShip.setDate(dayShip.getDate() + 3);
     const shipFee = (shipping.feeShip / 24000).toFixed(2);
+    const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
     const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
     const orderDetails = cartData.cart.map((item) => {
       return {
@@ -97,14 +101,16 @@ function Checkout() {
     try {
       const result = await axiosClient.post("orders", order);
       if (result) {
+        setCookie("orderId", result?.data?.payload?._id);
+
         cartData.resetCart();
+        handlePlaceOrder(finalTotal);
       }
     } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);
     }
 
     // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
-    console.log("order", totalPrice);
   };
   return (
     <div className="container mt-[5rem]">
@@ -191,7 +197,7 @@ function Checkout() {
                   id="streetAddress"
                   name="streetAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.address[0].address}
+                  defaultValue={session?.user?.address[0]?.address}
                   {...register("streetAddress", { required: true })}
                 />
               </label>
@@ -204,7 +210,7 @@ function Checkout() {
                   className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   // onChange={(e) => shipping.getDistrict(e.target.value)}
                   name="province"
-                  defaultValue={session?.user?.address[0].provinceId}
+                  defaultValue={session?.user?.address[0]?.provinceId}
                   {...register("province", {
                     onChange: (e) => {
                       document.getElementById("streetAddress").value = null;
@@ -217,17 +223,17 @@ function Checkout() {
                     },
                   })}
                 >
-                  {shipping.isProvince === true &&
-                    shipping.provinceList.map((item, idx) => {
-                      if (item.ProvinceID == session?.user?.address[0].provinceId) {
+                  {shipping?.isProvince === true &&
+                    shipping?.provinceList?.map((item) => {
+                      if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
                         return (
-                          <option value={item.ProvinceID} key={idx} selected>
+                          <option value={item.ProvinceID} key={item.ProvinceID} selected>
                             {item.ProvinceName}{" "}
                           </option>
                         );
                       }
                       return (
-                        <option value={item.ProvinceID} key={idx}>
+                        <option value={item.ProvinceID} key={item.ProvinceID}>
                           {item.ProvinceName}{" "}
                         </option>
                       );
@@ -255,7 +261,7 @@ function Checkout() {
                   //   setDistrictId(e.target.value);
                   //   shipping.getWard(e.target.value);
                   // }}
-                  // defaultValue={session?.user?.address[0].districtId}
+                  // defaultValue={session?.user?.address[0]?.districtId}
                   id="district"
                   name="district"
                   {...register(
@@ -274,25 +280,25 @@ function Checkout() {
                     { required: true },
                   )}
                 >
-                  {shipping.districtList.length > 0 ? (
-                    shipping.districtList.map((item, idx) => {
-                      if (item.DistrictID == session?.user?.address[0].districtName) {
+                  {shipping?.districtList?.length > 0 ? (
+                    shipping.districtList.map((item) => {
+                      if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
                         return (
-                          <option value={item.ProvinceID} key={idx}>
-                            {item.ProvinceName}{" "}
+                          <option value={item.DistrictID} key={item.DistrictID}>
+                            {item.item.DistrictName}{" "}
                           </option>
                         );
                       }
                       return (
-                        <option value={item.DistrictID} key={idx}>
+                        <option value={item.DistrictID} key={item.DistrictID}>
                           {item.DistrictName}{" "}
                         </option>
                       );
                     })
                   ) : (
                     <>
-                      <option value={session?.user?.address[0].districtId} hidden>
-                        {session?.user?.address[0].districtName}{" "}
+                      <option value={session?.user?.address[0]?.districtId} hidden>
+                        {session?.user?.address[0]?.districtName}{" "}
                       </option>
                       <option value="" disabled>
                         Please choose province
@@ -327,7 +333,7 @@ function Checkout() {
                   //   }));
                   //   handleChangeFee(e);
                   // }}
-                  defaultValue={session?.user?.address[0].wardId}
+                  defaultValue={session?.user?.address[0]?.wardId}
                   {...register("ward", {
                     onChange: (e) => {
                       setAddress((prev) => ({
@@ -339,18 +345,18 @@ function Checkout() {
                     },
                   })}
                 >
-                  {shipping.wardList.length > 0 ? (
-                    shipping.wardList.map((item, idx) => {
+                  {shipping?.wardList?.length > 0 ? (
+                    shipping.wardList.map((item) => {
                       return (
-                        <option value={item.WardCode} key={idx}>
+                        <option value={item.WardCode} key={item.WardCode}>
                           {item.WardName}{" "}
                         </option>
                       );
                     })
                   ) : (
                     <>
-                      <option value={session?.user?.address[0].wardId} hidden>
-                        {session?.user?.address[0].wardName}
+                      <option value={session?.user?.address[0]?.wardId} hidden>
+                        {session?.user?.address[0]?.wardName}
                       </option>
                       <option value="" disabled>
                         Please choose distict

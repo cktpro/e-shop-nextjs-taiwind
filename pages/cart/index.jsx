@@ -28,7 +28,7 @@ function CartPage() {
   // const CloseNotificationUpdateCart = useNotificationUpdateCart((state) => state.closeNotification);
 
   const cartData = useCartStore((state) => state);
-  
+
   // const increase = useCartStore((state) => state.increase);
 
   // const reduce = useCartStore((state) => state.reduce);
@@ -38,11 +38,6 @@ function CartPage() {
   const applyCoupon = useCartStore((state) => state.applyCoupon);
 
   // const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    getCart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleClickIncrease = useCallback(
     async (index) => {
@@ -312,7 +307,6 @@ function CartPage() {
                 </form>
               </div>
 
-
               <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 items-start xl:gap-[47.3125rem] sm:min-w-[43.8rem] min-w-[20rem] justify-between">
                 <button
                   onClick={() => {
@@ -323,7 +317,6 @@ function CartPage() {
                 >
                   <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
                     Return To Shop
-
                   </span>
                 </button>
 

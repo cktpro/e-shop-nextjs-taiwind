@@ -226,10 +226,12 @@ const useCartStore = create((set, get) => ({
 
   removeFromCart: async (product) => {
     set({ isLoading: true });
+    console.log("««««« product »»»»»", product);
     try {
       await axiosClient.delete(`/cart/${product.productId}`);
       const result = await axiosClient.get("/cart");
       const data = result.data.payload;
+      console.log("««««« data »»»»»", data);
       set(() => ({
         cart: data,
         totalItem: data.length,
@@ -278,8 +280,7 @@ const useCartStore = create((set, get) => ({
   resetCart: async () => {
     set({ isLoading: true });
     try {
-      await axiosClient.delete("cart");
-      const result = await axiosClient.get("cart");
+      const result = await axiosClient.delete("cart");
       set({ isLoading: false, cart: result.data.payload, totalItem: result.data.payload.length });
     } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);

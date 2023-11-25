@@ -46,19 +46,20 @@ const nextAuthOptions = (req, res) => {
           };
 
           try {
-            const responsive = await axiosServer.post("/user/login", data);
+            const responsive = await axiosServer.post("/authCustomers/login", data);
 
-            setCookie("TOKEN", responsive.data.payload.token, { req, res, maxAge: maxAgeCookies });
-            setCookie("REFRESH_TOKEN", responsive.data.payload.refreshToken, { req, res, maxAge: maxAgeCookies });
+            setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });
+            setCookie("REFRESH_TOKEN", responsive.data.refreshToken, { req, res, maxAge: maxAgeCookies });
 
-            axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.payload.token}`;
+            axiosServer.defaults.headers.Authorization = `Bearer ${responsive.data.token}`;
 
-            const getProfile = await axiosServer.get("/user/get_profile");
+            const getProfile = await axiosServer.get("/auth/profile");
 
             const user = await getProfile.data.payload;
 
             return user;
           } catch (error) {
+            console.log("««««« error »»»»»", error);
             return null;
           }
         },
@@ -90,7 +91,7 @@ const nextAuthOptions = (req, res) => {
           };
 
           try {
-            const responsive = await axiosServer.post("/user/login", data);
+            const responsive = await axiosServer.post("/authCustomers/login", data);
 
             if (responsive.data.token && responsive.data.refreshToken) {
               setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });
@@ -98,15 +99,16 @@ const nextAuthOptions = (req, res) => {
             }
           } catch (error) {
             try {
-              data = { ...data, firstName, lastName, phoneNumber };
-              const createUser = await axiosServer.post("/customers", data);
+              data = { ...data, firstName, lastName, phoneNumber, isGoogle: true };
+              const createUser = await axiosServer.post("/customers/create-google", data);
 
               if (createUser.data.statusCode === 200 && createUser.data.message === "success") {
                 delete data.firstName;
                 delete data.lastName;
                 delete data.phoneNumber;
+                delete data.isGoogle;
 
-                const responsive = await axiosServer.post("/user/login", data);
+                const responsive = await axiosServer.post("/authCustomers/login", data);
 
                 if (responsive.data.token && responsive.data.refreshToken) {
                   setCookie("TOKEN", responsive.data.token, { req, res, maxAge: maxAgeCookies });
@@ -114,6 +116,7 @@ const nextAuthOptions = (req, res) => {
                 }
               }
             } catch (err) {
+              console.log("««««« err »»»»»", err);
               return false;
             }
           }
@@ -139,7 +142,6 @@ const nextAuthOptions = (req, res) => {
 
       async session({ session, token }) {
         session.user = token;
-
         return session;
       },
     },
