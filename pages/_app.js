@@ -13,7 +13,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   return (
     <>
       <Head>
-        <title>Exclusive</title>
+        <title>E-Shop | specializes in technology sales</title>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
 

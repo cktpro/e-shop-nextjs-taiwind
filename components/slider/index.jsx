@@ -46,17 +46,17 @@ function Slider() {
           {categories?.map((item, index) => {
             if (item?.child) {
               return (
-                <div
+                <li
                   onMouseEnter={(event) => toggleFrameCategories(event, index)}
                   onMouseLeave={(event) => toggleFrameCategories(event, index)}
                   className="relative"
                   key={item.name}
                 >
-                  <li className="hover:opacity-50 transition-opacity ease-in-out duration-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
+                  <div className="hover:opacity-50 transition-opacity ease-in-out duration-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
                     <span className="mr-[3.19rem] !whitespace-nowrap">{item.name}</span>
 
                     <ChevronRight className="mr-[1rem]" />
-                  </li>
+                  </div>
 
                   <ul
                     className={classNames(
@@ -77,7 +77,7 @@ function Slider() {
                       );
                     })}
                   </ul>
-                </div>
+                </li>
               );
             }
 

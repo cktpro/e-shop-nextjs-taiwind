@@ -7,7 +7,7 @@ import Rectangle from "../svg/rectangle";
 function CategoriesBrowse(props) {
   const { categories } = props;
   return (
-    <div className="container">
+    <div className="container bg-[#F3F3F3] pt-[1rem] pb-[4.25rem] mb-[4.38rem] rounded-[0.25rem]">
       <div className="sm:flex items-end mb-[8rem] sm:mb-[4rem]">
         <div className="sm:flex max-h-[6.4375rem] flex-col items-start gap-[1.25rem]">
           <div className="flex items-center gap-[1rem]">
@@ -24,11 +24,7 @@ function CategoriesBrowse(props) {
         </div>
       </div>
 
-      <div className="">
-        <CategoriesCarousel categories={categories} />
-      </div>
-
-      <hr className="border-1 border-solid border-black border-opacity-30 mt-[4.25rem] mb-[4.38rem]" />
+      <CategoriesCarousel categories={categories} />
     </div>
   );
 }

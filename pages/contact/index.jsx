@@ -29,8 +29,8 @@ function Contact() {
                   className="object-contain max-w-[2.5rem] max-h-[2.5rem]"
                   src="/assets/images/contact/phone.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
 
                 <h3 className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Call To Us</h3>
@@ -55,8 +55,8 @@ function Contact() {
                   className="object-contain max-w-[2.5rem] max-h-[2.5rem]"
                   src="/assets/images/contact/mail.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
 
                 <h3 className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Write To US</h3>

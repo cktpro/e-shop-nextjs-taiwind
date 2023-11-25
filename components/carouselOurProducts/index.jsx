@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css/grid";
 import "swiper/css/pagination";
 
-import ArrowCategoriesCarousel from "../buttons/arrowCategoriesCarousel";
+import ArrowButtonCarousel from "../buttons/arrowCarousel";
 import Card from "../card";
 
 import "swiper/css";
@@ -39,7 +39,7 @@ export default function OurProductsCarousel(props) {
         onMouseLeave={handleMouseLeave}
         className="relative cover_carousel_flash_sale"
       >
-        <ArrowCategoriesCarousel prev={handlePrev} next={handleNext} />
+        <ArrowButtonCarousel prev={handlePrev} next={handleNext} />
 
         <Swiper
           ref={swiperOurProducts}
@@ -58,7 +58,7 @@ export default function OurProductsCarousel(props) {
         >
           {products.map((item) => {
             return (
-              <SwiperSlide key={item.title}>
+              <SwiperSlide key={item.name}>
                 <Card product={item} />
               </SwiperSlide>
             );

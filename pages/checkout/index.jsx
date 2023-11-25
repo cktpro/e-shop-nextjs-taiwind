@@ -57,15 +57,17 @@ function Checkout() {
     }
   }, [cartData.cart, status]);
   const handlePlaceOrder = useCallback(
-    (values) => {
-      // values.preventDefault();
-      console.log("◀◀◀ values ▶▶▶", values);
-      // const data = {
-      //   amount: parseFloat(cartData.total) * 24000,
-      //   bankCode: "NCB",
-      //   language: "en",
-      // };
-      // fetchCheckout(data);
+    (e) => {
+      e.preventDefault();
+
+      const data = {
+        amount: parseFloat(cartData.total) * 24000,
+        bankCode: "NCB",
+        language: "en",
+        returnUrl: process.env.NEXT_PUBLIC_VNPAY_RETURN_URL,
+      };
+
+      fetchCheckout(data);
     },
     [cartData.total, fetchCheckout],
   );

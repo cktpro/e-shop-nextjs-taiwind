@@ -48,7 +48,7 @@ function Banner() {
           return (
             <SwiperSlide key={item.name}>
               <Link href="/cart" className="max-w-[892px] max-h-[344px]">
-                <Image width={892} height={344} src="/assets/images/banner/banner1.jpg" alt="..." priority />
+                <Image width={1000} height={1000} src="/assets/images/banner/banner1.jpg" alt="..." priority />
               </Link>
             </SwiperSlide>
           );

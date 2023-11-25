@@ -44,12 +44,12 @@ function TimeFlashSale(props) {
   return (
     <div className="flex lg:flex mb-[4rem] sm:mb-0 col-span-12 max-w-[18.875rem] min-h-[3.125rem]">
       <div className="inline-flex min-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[1.9375rem] max-h-[1.125rem] text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[1.9375rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.days")}
         </span>
 
         <span
-          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.875rem] max-h-[1.75rem] flex-shrink-0 text-white font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.day)}
@@ -61,12 +61,12 @@ function TimeFlashSale(props) {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[2.1875rem] max-h-[1.125rem] text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[2.1875rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.hours")}
         </span>
 
         <span
-          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.6875rem] max-h-[1.875rem] flex-shrink-0 text-white font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.hour)}
@@ -78,12 +78,12 @@ function TimeFlashSale(props) {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[3.0625rem] max-h-[1.125rem] text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[3.0625rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.minutes")}
         </span>
 
         <span
-          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="max-w-[2.4375rem] max-h-[1.75rem] flex-shrink-0 text-white font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.minute)}
@@ -95,12 +95,12 @@ function TimeFlashSale(props) {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[3.25rem] max-h-[1.125rem] text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[3.25rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.seconds")}
         </span>
 
         <span
-          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-text-2 font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
+          className="min-w-[2.75rem] max-h-[1.875rem] flex-shrink-0 text-white font-inter text-[2rem] font-[700] leading-[1.875rem] tracking-[0.08rem]"
           suppressHydrationWarning
         >
           {formatNumberToString(dateTime.second)}

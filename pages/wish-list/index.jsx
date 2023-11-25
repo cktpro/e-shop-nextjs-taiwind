@@ -19,13 +19,11 @@ WhishListPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    const wishList = await axiosServer.get("https://fakestoreapi.com/products?limit=4");
-
-    // const wishList = await axiosServer.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4");
+    const wishList = await axiosServer.get("/products?page=3&pageSize=4");
 
     return {
       props: {
-        wishList: wishList?.data || [],
+        wishList: wishList?.data?.payload || [],
       },
 
       // revalidate: 24 * 60 * 60,

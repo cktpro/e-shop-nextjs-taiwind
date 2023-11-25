@@ -45,8 +45,8 @@ function About() {
             className="object-contain"
             src="/assets/images/about/about_img.png"
             alt="..."
-            width={800}
-            height={700}
+            width={1000}
+            height={1000}
           />
         </div>
       </div>
@@ -58,8 +58,8 @@ function About() {
               className="object-contain max-w-[5rem] max-h-[5rem]"
               src="/assets/images/services/home.png"
               alt="..."
-              width={100}
-              height={100}
+              width={1000}
+              height={1000}
             />
 
             <div className="flex flex-col items-center gap-[0.75rem]">
@@ -80,8 +80,8 @@ function About() {
               className="object-contain max-w-[5rem] max-h-[5rem]"
               src="/assets/images/services/money.png"
               alt="..."
-              width={100}
-              height={100}
+              width={1000}
+              height={1000}
             />
 
             <div className="flex flex-col items-center gap-[0.75rem]">
@@ -102,8 +102,8 @@ function About() {
               className="object-contain max-w-[5rem] max-h-[5rem]"
               src="/assets/images/services/bag.png"
               alt="..."
-              width={100}
-              height={100}
+              width={1000}
+              height={1000}
             />
 
             <div className="flex flex-col items-center gap-[0.75rem]">
@@ -124,8 +124,8 @@ function About() {
               className="object-contain max-w-[5rem] max-h-[5rem]"
               src="/assets/images/services/money.png"
               alt="..."
-              width={100}
-              height={100}
+              width={1000}
+              height={1000}
             />
 
             <div className="flex flex-col items-center gap-[0.75rem]">
@@ -148,8 +148,8 @@ function About() {
               className="object-contain max-w-[14.75rem] max-h-[24.4375rem]"
               src="/assets/images/about/ceo1.png"
               alt="..."
-              width={500}
-              height={800}
+              width={1000}
+              height={1000}
             />
           </div>
 
@@ -170,8 +170,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/tw.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -180,8 +180,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/intr.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -190,8 +190,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/likein.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
             </div>
@@ -204,8 +204,8 @@ function About() {
               className="object-contain max-w-[18.375rem] max-h-[24.8125rem]"
               src="/assets/images/about/ceo2.png"
               alt="..."
-              width={500}
-              height={800}
+              width={1000}
+              height={1000}
             />
           </div>
 
@@ -226,8 +226,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/tw.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -236,8 +236,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/intr.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -246,8 +246,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/likein.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
             </div>
@@ -260,8 +260,8 @@ function About() {
               className="object-contain max-w-[20.375rem] max-h-[24.5rem]"
               src="/assets/images/about/ceo3.png"
               alt="..."
-              width={500}
-              height={800}
+              width={1000}
+              height={1000}
             />
           </div>
 
@@ -280,8 +280,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/tw.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -290,8 +290,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/intr.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
 
@@ -300,8 +300,8 @@ function About() {
                   className="object-contain max-w-[1.5rem] max-h-[1.5rem]"
                   src="/assets/images/about/likein.png"
                   alt="..."
-                  width={100}
-                  height={100}
+                  width={1000}
+                  height={1000}
                 />
               </Link>
             </div>
@@ -314,8 +314,8 @@ function About() {
           className="object-contain max-w-[7rem] max-h-[1rem]"
           src="/assets/images/about/hr.png"
           alt="..."
-          width={300}
-          height={100}
+          width={1000}
+          height={1000}
         />
       </div>
 

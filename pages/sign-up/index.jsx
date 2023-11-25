@@ -1,6 +1,5 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import classNames from "classnames";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -10,10 +9,44 @@ import LogoGoogle from "@/components/svg/logoGoogle";
 import styles from "./signUp.module.scss";
 
 function SignUp() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const validation = {
+    name: {
+      ...register("name", { required: { value: true, message: "Name is required" } }),
+    },
+
+    email: {
+      ...register("email", {
+        required: { value: true, message: "Email is required" },
+        // eslint-disable-next-line no-useless-escape
+        pattern: { value: /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, message: "Invalid email format" },
+      }),
+    },
+
+    password: {
+      ...register("password", {
+        required: { value: true, message: "Password is required" },
+        validate: (fieldValue) => {
+          return (fieldValue.length >= 6 && fieldValue.length <= 16) || "Password must be between 6 and 16 characters";
+        },
+      }),
+    },
+  };
+
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  const onSubmit = useCallback((data) => {
+    // eslint-disable-next-line no-console
+    console.log("««««« data »»»»»", data);
   }, []);
 
   return (
@@ -23,7 +56,7 @@ function SignUp() {
           <div className={classNames("w-[57.4375rem] h-[44.125rem]", styles.left_banner)} />
         </div>
 
-        <form className="flex flex-col items-center 2xl:items-start gap-[3rem]">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center 2xl:items-start gap-[3rem]">
           <div className="flex flex-col items-start gap-[1.5rem]">
             <span className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[1.875rem] tracking-[0.09rem]">
               Create an account
@@ -38,26 +71,59 @@ function SignUp() {
             <div className="flex flex-col items-start gap-[2.5rem]">
               <div className="flex flex-col items-start gap-[0.5rem] text-text-2 border-solid border-b-black border-b-[1px] border-opacity-50">
                 <input
-                  className="w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                  {...validation.name}
+                  className={classNames(
+                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                    errors.name && "border-solid border-secondary-2 border-[2px]",
+                  )}
                   type="text"
+                  name="name"
                   placeholder="Name"
                 />
+
+                {errors.name && (
+                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col items-start gap-[0.5rem] text-text-2 border-solid border-b-black border-b-[1px] border-opacity-50">
                 <input
-                  className="w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                  {...validation.email}
+                  className={classNames(
+                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                    errors.email && "border-solid border-secondary-2 border-[2px]",
+                  )}
                   type="text"
+                  name="email"
                   placeholder="Email or Phone Number"
                 />
+
+                {errors.email && (
+                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col items-start gap-[0.5rem] text-text-2 border-solid border-b-black border-b-[1px] border-opacity-50">
                 <input
-                  className="w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-                  type="text"
+                  {...validation.password}
+                  className={classNames(
+                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                    errors.password && "border-solid border-secondary-2 border-[2px]",
+                  )}
+                  type="password"
+                  name="password"
                   placeholder="Password"
                 />
+
+                {errors.password && (
+                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
             </div>
 

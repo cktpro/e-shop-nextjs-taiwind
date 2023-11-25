@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { deleteCookie, getCookie } from "cookies-next";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
@@ -40,8 +41,8 @@ function CardWishList(props) {
         if (getToken && getRefreshToken && response.data.payload) {
           const data = {
             id: item.id,
-            name: item.title,
-            image: item?.image || item?.images[0],
+            name: item.name,
+            image: item.image,
             price: item.price,
             quantity: 1,
           };
@@ -107,20 +108,22 @@ function CardWishList(props) {
           </button>
         </div>
 
-        <Image
-          className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
-          src={product?.image || product?.images[0]}
-          alt="..."
-          width={172}
-          height={152}
-          priority
-          style={{ width: "100%", height: "auto" }}
-        />
+        <Link href={`/${product.id}`}>
+          <Image
+            className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
+            src={product?.image}
+            alt="..."
+            width={1000}
+            height={1000}
+            priority
+            style={{ width: "100%", height: "auto" }}
+          />
+        </Link>
 
         <button
           onClick={() => handleClickAddToCart(product)}
           type="button"
-          className="absolute bottom-0 flex w-[16.875rem] h-[2.5625rem] items-center justify-center transition-all duration-300 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
+          className="absolute bottom-0 flex w-[16.875rem] h-[2.5625rem] items-center justify-center transition-all duration-300 flex-shrink-0 bg-text-2"
         >
           <div className="inline-flex items-center gap-[0.5rem]">
             <ShoppingCart className="w-[1.5rem] h-[1.5rem] text-text-1" />
@@ -130,16 +133,16 @@ function CardWishList(props) {
         </button>
       </div>
 
-      <div className="flex flex-col items-start gap-[0.5rem]">
-        <div className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
-          {product?.title}
-        </div>
+      <div className="pl-[0.5rem] pb-[0.5rem] flex flex-col items-start gap-[0.5rem]">
+        <h4 className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
+          <Link href={`/${product.id}`}>{product?.name}</Link>
+        </h4>
 
         <div className="flex items-start gap-[0.57rem]">
-          <div className="text-secondary-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">{product?.price}</div>
+          <div className="text-secondary-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">${product?.price}</div>
 
           <div className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] line-through opacity-[0.5]">
-            {product?.price}
+            ${product?.price}
           </div>
         </div>
       </div>
