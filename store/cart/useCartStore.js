@@ -1,9 +1,11 @@
+import { message } from "antd";
 import { create } from "zustand";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 
 const initialState = {
   cart: [],
+  isLoading: false,
   totalItem: 0,
   subtotal: 0,
   shipping: 0,
@@ -13,40 +15,155 @@ const initialState = {
 
 const useCartStore = create((set, get) => ({
   ...initialState,
-
-  getDetail: async () => {
+  getFee: async (address, product) => {
+    set({ isLoading: true, isFeeShip: false });
     try {
-      const res = await axiosClient.get("/cart");
-
-      set(() => ({
-        cart: res.data.payload.products,
-        totalItem: res.data.payload.totalItem,
-        subtotal: res.data.payload.subtotal,
-        shipping: res.data.payload.shipping,
-        coupon: "",
-        total: res.data.payload.total.toFixed(2),
-      }));
+      let width = 0;
+      let height = 0;
+      let length = 0;
+      let weight = 0;
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < product.length; i++) {
+        width += product[i].productDetail.width * product[i].product.quantity;
+        height += product[i].productDetail.height * product[i].product.quantity;
+        weight += product[i].productDetail.weight * product[i].product.quantity;
+        length += product[i].productDetail.length * product[i].product.quantity;
+      }
+      // console.log('◀◀◀  ▶▶▶',width,
+      // height,
+      // length,
+      // weight);
+      const dataShip = {
+        from_district_id: 1526,
+        from_ward_code: "40103",
+        // service_id: 53320,
+        service_type_id: 2,
+        // "to_district_id":1526,
+        // "to_ward_code":"40103",
+        height,
+        length,
+        weight,
+        width,
+        to_district_id: parseInt(address.districtId, 10),
+        to_ward_code: address.wardId.toString(),
+        // height: 50,
+        // length: 20,
+        // weight: 200,
+        // width: 20,
+        insurance_value: 0,
+        cod_failed_amount: 2000,
+        coupon: null,
+      };
+      axiosClient.defaults.headers.common.token = "b100dde3-66b8-11ee-96dc-de6f804954c9";
+      const res = await axiosClient.post(
+        "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee",
+        dataShip,
+      );
+      set({ isFeeShip: true, feeShip: res.data.data.total, isLoading: false });
     } catch (error) {
-      console.log("««««« error »»»»»", error);
+      set({ isError: true, isLoading: false });
     }
   },
-
-  addToCart: async (product) => {
+  updateCart: async (data) => {
+    set({ isLoading: true });
     try {
-      const data = { ...product, shipping: 5 };
-      const res = await axiosClient.post("/cart", data);
-
-      set(() => ({
-        cart: res.data.payload.products,
-        totalItem: res.data.payload.totalItem,
-        subtotal: res.data.payload.subtotal,
-        shipping: res.data.payload.shipping,
-        coupon: "",
-        total: res.data.payload.total.toFixed(2),
-      }));
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < data.length; i++) {
+        // console.log('◀◀◀ data[i] ▶▶▶',data[i].product);
+        // eslint-disable-next-line no-await-in-loop
+        await axiosClient.put("/cart", data[i].product);
+      }
+      const result = await axiosClient.get("/cart");
+      set({ cart: result.data.payload, isLoading: false });
+      message.success("Cập nhật thành công");
     } catch (error) {
-      console.log("««««« error »»»»»", error);
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+      message.error("Cập nhật thất bại");
     }
+  },
+  getListCart: async () => {
+    set({ isLoading: true });
+    try {
+      const result = await axiosClient.get("/cart");
+      const data = result.data.payload;
+      set({ cart: data, totalItem: data.length, isLoading: false });
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+    }
+  },
+  addToCart: async (product) => {
+    set({
+      isLoading: true,
+    });
+    try {
+      await axiosClient.post("cart", product);
+      const newCart = await axiosClient.get("/cart");
+      set({
+        isLoading: false,
+        cart: newCart.data.payload,
+        totalItem: newCart.data.payload.length,
+      });
+      message.success("Add cart success");
+    } catch (error) {
+      set({
+        isLoading: false,
+      });
+      console.log("◀◀◀ error ▶▶▶", error);
+      message.error("Add cart failed");
+    }
+    // const { cart } = get();
+
+    // const shipping = 5;
+
+    // const cartItem = cart.find((item) => item.id === product.id);
+
+    // if (cartItem) {
+    //   const updatedCart = cart.map((item) => {
+    //     return item.id === product.id
+    //       ? { ...item, quantity: parseInt(item.quantity, 10) + parseInt(product.quantity, 10) }
+    //       : item;
+    //   });
+
+    //   set((state) => ({
+    //     cart: updatedCart,
+
+    //     totalItem: parseInt(state.totalItem, 10) + product.quantity,
+
+    //     subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
+
+    //     shipping: parseFloat(shipping).toFixed(2),
+
+    //     coupon: "",
+
+    //     total: (
+    //       parseFloat(state.subtotal) +
+    //       parseFloat(shipping) +
+    //       parseFloat(product.price) * parseInt(product.quantity, 10)
+    //     ).toFixed(2),
+    //   }));
+    // } else {
+    //   const updatedCart = [...cart, { ...product, quantity: product.quantity }];
+
+    //   set((state) => ({
+    //     cart: updatedCart,
+
+    //     totalItem: parseInt(state.totalItem, 10) + product.quantity,
+
+    //     subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
+
+    //     shipping: parseFloat(shipping).toFixed(2),
+
+    //     coupon: "",
+
+    //     total: (
+    //       parseFloat(state.subtotal) +
+    //       parseFloat(shipping) +
+    //       parseFloat(product.price) * parseInt(product.quantity, 10)
+    //     ).toFixed(2),
+    //   }));
+    // }
   },
 
   increase: (product) => {
@@ -55,7 +172,9 @@ const useCartStore = create((set, get) => ({
     const shipping = 5;
 
     const updatedCart = cart.map((item) => {
-      return item.id === product.id ? { ...item, quantity: parseInt(item.quantity, 10) + 1 } : item;
+      return item.id === product.id
+        ? { ...item, product: { ...item.product, quantity: parseInt(item.product.quantity, 10) + 1 } }
+        : item;
     });
 
     set((state) => ({
@@ -106,20 +225,21 @@ const useCartStore = create((set, get) => ({
   },
 
   removeFromCart: async (product) => {
-    console.log("««««« product »»»»»", product);
+    set({ isLoading: true });
     try {
-      const res = await axiosClient.post("/cart/remove", product);
-
+      await axiosClient.delete(`/cart/${product.productId}`);
+      const result = await axiosClient.get("/cart");
+      const data = result.data.payload;
       set(() => ({
-        cart: res.data.payload.products,
-        totalItem: res.data.payload.totalItem,
-        subtotal: res.data.payload.subtotal,
-        shipping: res.data.payload.shipping,
-        coupon: "",
-        total: res.data.payload.total.toFixed(2),
+        cart: data,
+        totalItem: data.length,
+        isLoading: false,
       }));
+      message.success("Xóa thành công");
     } catch (error) {
-      console.log("««««« error »»»»»", error);
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+      message.error("Xóa thất bại");
     }
   },
 
@@ -155,18 +275,16 @@ const useCartStore = create((set, get) => ({
     }
   },
 
-  resetCart: () => {
-    set(() => ({
-      cart: initialState.cart,
-
-      totalItem: initialState.totalItem,
-
-      subtotal: initialState.subtotal,
-
-      coupon: initialState.coupon,
-
-      total: initialState.total,
-    }));
+  resetCart: async () => {
+    set({ isLoading: true });
+    try {
+      await axiosClient.delete("cart");
+      const result = await axiosClient.get("cart");
+      set({ isLoading: false, cart: result.data.payload, totalItem: result.data.payload.length });
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+    }
   },
 }));
 
