@@ -80,7 +80,8 @@ export async function getServerSideProps() {
     const [response, bestSelling, flashSales] = await Promise.all([
       axiosServer.get("/products"),
       axiosServer.get("/products?page=1&pageSize=4"),
-      axiosServer.get("/flashSale"),
+      // axiosServer.get("/flashSale"),
+      axiosServer.get("/products"),
     ]);
 
     return {

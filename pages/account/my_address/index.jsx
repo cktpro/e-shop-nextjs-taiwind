@@ -11,7 +11,7 @@ function MyAccount() {
 
   const getProfile = useCallback(async () => {
     try {
-      const res = await axiosClient.get("/user/get_profile");
+      const res = await axiosClient.get("/authCustomers/profile");
       setAddress(res?.data?.payload.address[0]);
     } catch (error) {
       setAddress(error?.response?.data || {});

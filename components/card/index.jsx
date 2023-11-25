@@ -43,7 +43,7 @@ function Card(props) {
           const data = {
             productId: item.id,
             name: item.name,
-            image: item.image,
+            image: item.image.location,
             price: item.discountedPrice,
             quantity: 1,
           };
@@ -123,7 +123,7 @@ function Card(props) {
         <Link href={`/${product.id}`}>
           <Image
             className="min-w-[16.875rem] min-h-[15.625rem] object-contain rounded-[0.25rem]"
-            src={product?.image}
+            src={product?.image.location}
             alt="..."
             width={1000}
             height={1000}

@@ -16,6 +16,8 @@ const useFetchCheckout = create((set) => ({
 
       const response = await axiosClient.post(url, data);
 
+      console.log("««««« response.data »»»»»", response.data);
+
       set({ payload: response.data });
     } catch (error) {
       set({ payload: error.response.data });

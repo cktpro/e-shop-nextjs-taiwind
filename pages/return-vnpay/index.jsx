@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { deleteCookie, getCookie } from "cookies-next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -32,6 +33,7 @@ function NotFoundPage() {
       vnp_TransactionStatus: searchParams.get("vnp_TransactionStatus"),
       vnp_TxnRef: searchParams.get("vnp_TxnRef"),
       vnp_SecureHash: searchParams.get("vnp_SecureHash"),
+      orderIdLocal: getCookie("orderId") || "",
     };
 
     if (data.vnp_BankTranNo === null) {
@@ -42,6 +44,8 @@ function NotFoundPage() {
       fetchCheckReturn(data);
 
       fetchCheckIpn(data);
+
+      deleteCookie("orderId");
     }
   }, [fetchCheckIpn, fetchCheckReturn, searchParams]);
 
