@@ -10,8 +10,8 @@ function Services() {
             <Image
               src="/assets/images/services/services.png"
               className="max-w-[5rem] max-h-[5rem]"
-              width={80}
-              height={80}
+              width={1000}
+              height={1000}
               alt="..."
               priority
               style={{ height: "auto" }}
@@ -35,8 +35,8 @@ function Services() {
             <Image
               src="/assets/images/services/custom.png"
               className="max-w-[5rem] max-h-[5rem]"
-              width={80}
-              height={80}
+              width={1000}
+              height={1000}
               alt="..."
               priority
               // style={{ width: "100%", height: "auto" }}
@@ -59,8 +59,8 @@ function Services() {
             <Image
               src="/assets/images/services/security.png"
               className="max-w-[5rem] max-h-[5rem]"
-              width={80}
-              height={80}
+              width={1000}
+              height={1000}
               alt="..."
               priority
               // style={{ width: "100%", height: "auto" }}

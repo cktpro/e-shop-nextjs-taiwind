@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import PropTypes from "prop-types";
 
@@ -7,16 +7,25 @@ import Rectangle from "@/components/svg/rectangle";
 
 import { axiosServer } from "@/helper/axios/axiosServer";
 import { fuzzySearch } from "@/helper/fuzzySearch";
+import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 
 function SearchProductsPage(props) {
   const { search } = props;
+
+  const addKeySuggest = useKeySuggest((state) => state.addKeySuggest);
+
+  useEffect(() => {
+    if (search?.length > 0) {
+      addKeySuggest(search);
+    }
+  }, [addKeySuggest, search]);
 
   const searchParams = useSearchParams();
   const keySearch = searchParams.get("key");
 
   const filterSearch = search.filter((item) => {
     const searchRegex = fuzzySearch(keySearch);
-    return searchRegex.test(item.title);
+    return searchRegex.test(item.name);
   });
 
   return (
@@ -49,7 +58,7 @@ function SearchProductsPage(props) {
                 return (
                   <div
                     className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
-                    key={item.title}
+                    key={item.name}
                   >
                     <Card product={item} />
                   </div>
@@ -77,12 +86,11 @@ SearchProductsPage.propTypes = {
 
 export async function getServerSideProps() {
   try {
-    // const search = await axiosServer.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=20");
-    const search = await axiosServer.get("https://fakestoreapi.com/products");
+    const search = await axiosServer.get("/products");
 
     return {
       props: {
-        search: search.data || [],
+        search: search.data.payload || [],
       },
 
       // revalidate: 24 * 60 * 60,

@@ -10,7 +10,7 @@ function BestSelling(props) {
   const { bestSelling } = props;
 
   return (
-    <div className="container">
+    <div className="pt-[1rem] pb-[1rem] container bg-[url('/assets/images/background/3.png')] rounded-[0.25rem]">
       <div className="sm:flex items-end mb-[7.5rem] sm:mb-[3.75rem]">
         <div className="sm:flex min-h-[6.4375rem] flex-col items-start gap-[1.25rem]">
           <div className="flex items-center gap-[1rem]">
@@ -18,10 +18,10 @@ function BestSelling(props) {
               <Rectangle />
             </div>
 
-            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">This Month</h3>
+            <h3 className="text-white font-poppins text-[1rem] font-[600] leading-[1.25rem]">This Month</h3>
           </div>
 
-          <h2 className="mt-[0.5rem] sm:mt-0 text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
+          <h2 className="mt-[0.5rem] sm:mt-0 text-white font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] sm:whitespace-nowrap">
             Best Selling Products
           </h2>
         </div>
@@ -37,8 +37,8 @@ function BestSelling(props) {
             bestSelling.map((item) => {
               return (
                 <div
-                  className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
-                  key={item.title}
+                  className="max-w-[16.875rem] min-h-[15.625rem] bg-white rounded-[0.25rem] col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
+                  key={item.name}
                 >
                   <Card product={item} />
                 </div>

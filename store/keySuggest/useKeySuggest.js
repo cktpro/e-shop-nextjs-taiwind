@@ -10,8 +10,8 @@ const useKeySuggest = create((set) => ({
   addKeySuggest: (products) => {
     const updateKeySuggest = products.map((item) => {
       return {
-        id: item.id,
-        title: item.title,
+        id: item._id,
+        name: item.name,
       };
     });
 

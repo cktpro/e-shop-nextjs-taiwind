@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +18,8 @@ function CartPage() {
 
   const cartData = useCartStore((state) => state);
 
+  const getCart = useCartStore((state) => state.getDetail);
+
   const increase = useCartStore((state) => state.increase);
 
   const reduce = useCartStore((state) => state.reduce);
@@ -27,6 +29,11 @@ function CartPage() {
   const applyCoupon = useCartStore((state) => state.applyCoupon);
 
   const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    getCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClickIncrease = useCallback(
     (product) => {
@@ -121,7 +128,7 @@ function CartPage() {
                 >
                   <Image
                     className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
-                    src={item.image}
+                    src={item?.product?.image}
                     alt="..."
                     width={1000}
                     height={1000}
@@ -136,17 +143,17 @@ function CartPage() {
                   </button>
 
                   <span className="sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]">
-                    {item.name}
+                    {item?.product?.name}
                   </span>
 
                   <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[11.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
-                    ${item.price}
+                    ${item?.price}
                   </span>
 
                   <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
                     <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
                       <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        {item.quantity}
+                        {item?.quantity}
                       </span>
 
                       <div className="flex flex-col items-center justify-center">
@@ -170,7 +177,7 @@ function CartPage() {
                   </div>
 
                   <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
-                    ${(parseInt(item.quantity, 10) * parseFloat(item.price)).toFixed(2)}
+                    ${(parseInt(item?.quantity, 10) * parseFloat(item?.price)).toFixed(2)}
                   </span>
                 </div>
               );

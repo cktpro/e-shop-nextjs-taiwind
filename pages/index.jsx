@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import PropTypes from "prop-types";
 
 import BestSelling from "@/components/bestSelling";
@@ -14,7 +15,7 @@ import { categories } from "@/data/categoriesItems.jsx";
 import { axiosServer } from "@/helper/axios/axiosServer";
 import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 
-export default function Home({ products, bestSelling }) {
+export default function Home({ products, bestSelling, flashSales }) {
   const addKeySuggest = useKeySuggest((state) => state.addKeySuggest);
 
   useEffect(() => {
@@ -24,13 +25,21 @@ export default function Home({ products, bestSelling }) {
   }, [addKeySuggest, products]);
 
   return (
-    <main className="">
+    <>
+      <Head>
+        <title>E-Shop | specializes in technology sales</title>
+        <meta content="provides technological equipment and electronic equipment" name="description" key="desc" />
+        <meta content="E-Shop | specializes in technology sales" property="og:title" />
+        <meta content="provides technological equipment and electronic equipment" property="og:description" />
+        <meta content="https://pub-50cd0051de0b47509baf9c4fc482606a.r2.dev/demobackend/meta.jpg" property="og:image" />
+      </Head>
+
       <section>
         <Slider />
       </section>
 
       <section>
-        <FlashSale products={products} />
+        <FlashSale flashSales={flashSales} />
       </section>
 
       <section>
@@ -56,31 +65,29 @@ export default function Home({ products, bestSelling }) {
       <section>
         <Services />
       </section>
-    </main>
+    </>
   );
 }
 
 Home.propTypes = {
   products: PropTypes.instanceOf(Array).isRequired,
   bestSelling: PropTypes.instanceOf(Array).isRequired,
+  flashSales: PropTypes.instanceOf(Array).isRequired,
 };
 
 export async function getServerSideProps() {
   try {
-    const [response, bestSelling] = await Promise.all([
-      axiosServer.get("https://fakestoreapi.com/products"),
-      axiosServer.get("https://fakestoreapi.com/products?limit=4"),
+    const [response, bestSelling, flashSales] = await Promise.all([
+      axiosServer.get("/products"),
+      axiosServer.get("/products?page=1&pageSize=4"),
+      axiosServer.get("/flashSale"),
     ]);
-
-    // const [response, bestSelling] = await Promise.all([
-    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?limit=20"),
-    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?limit=4"),
-    // ]);
 
     return {
       props: {
-        products: response.data || [],
-        bestSelling: bestSelling.data || [],
+        products: response.data.payload || [],
+        bestSelling: bestSelling.data.payload || [],
+        flashSales: flashSales.data.payload || [],
       },
 
       // revalidate: 24 * 60 * 60,
@@ -91,6 +98,7 @@ export async function getServerSideProps() {
       props: {
         products: [],
         bestSelling: [],
+        flashSales: [],
       },
     };
   }

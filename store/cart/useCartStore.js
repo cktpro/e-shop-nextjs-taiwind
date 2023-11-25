@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
+
 const initialState = {
   cart: [],
   totalItem: 0,
@@ -12,57 +14,38 @@ const initialState = {
 const useCartStore = create((set, get) => ({
   ...initialState,
 
-  addToCart: (product) => {
-    const { cart } = get();
+  getDetail: async () => {
+    try {
+      const res = await axiosClient.get("/cart");
 
-    const shipping = 5;
-
-    const cartItem = cart.find((item) => item.id === product.id);
-
-    if (cartItem) {
-      const updatedCart = cart.map((item) => {
-        return item.id === product.id
-          ? { ...item, quantity: parseInt(item.quantity, 10) + parseInt(product.quantity, 10) }
-          : item;
-      });
-
-      set((state) => ({
-        cart: updatedCart,
-
-        totalItem: parseInt(state.totalItem, 10) + product.quantity,
-
-        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
-
-        shipping: parseFloat(shipping).toFixed(2),
-
+      set(() => ({
+        cart: res.data.payload.products,
+        totalItem: res.data.payload.totalItem,
+        subtotal: res.data.payload.subtotal,
+        shipping: res.data.payload.shipping,
         coupon: "",
-
-        total: (
-          parseFloat(state.subtotal) +
-          parseFloat(shipping) +
-          parseFloat(product.price) * parseInt(product.quantity, 10)
-        ).toFixed(2),
+        total: res.data.payload.total.toFixed(2),
       }));
-    } else {
-      const updatedCart = [...cart, { ...product, quantity: product.quantity }];
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
+    }
+  },
 
-      set((state) => ({
-        cart: updatedCart,
+  addToCart: async (product) => {
+    try {
+      const data = { ...product, shipping: 5 };
+      const res = await axiosClient.post("/cart", data);
 
-        totalItem: parseInt(state.totalItem, 10) + product.quantity,
-
-        subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
-
-        shipping: parseFloat(shipping).toFixed(2),
-
+      set(() => ({
+        cart: res.data.payload.products,
+        totalItem: res.data.payload.totalItem,
+        subtotal: res.data.payload.subtotal,
+        shipping: res.data.payload.shipping,
         coupon: "",
-
-        total: (
-          parseFloat(state.subtotal) +
-          parseFloat(shipping) +
-          parseFloat(product.price) * parseInt(product.quantity, 10)
-        ).toFixed(2),
+        total: res.data.payload.total.toFixed(2),
       }));
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
     }
   },
 
@@ -122,40 +105,22 @@ const useCartStore = create((set, get) => ({
     }));
   },
 
-  removeFromCart: (product) => {
-    const { cart } = get();
+  removeFromCart: async (product) => {
+    console.log("««««« product »»»»»", product);
+    try {
+      const res = await axiosClient.post("/cart/remove", product);
 
-    let shipping = 5;
-
-    const itemDeleted = cart.filter((item) => {
-      return item.id === product.id;
-    });
-
-    const updatedCart = cart.filter((item) => {
-      return item.id !== product.id;
-    });
-
-    if (updatedCart.length === 0) {
-      shipping = 0;
+      set(() => ({
+        cart: res.data.payload.products,
+        totalItem: res.data.payload.totalItem,
+        subtotal: res.data.payload.subtotal,
+        shipping: res.data.payload.shipping,
+        coupon: "",
+        total: res.data.payload.total.toFixed(2),
+      }));
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
     }
-
-    const quantityDeleted = parseInt(itemDeleted[0].quantity, 10);
-
-    set((state) => ({
-      cart: updatedCart,
-
-      totalItem: parseInt(state.totalItem, 10) - quantityDeleted,
-
-      subtotal: (parseFloat(state.subtotal) - parseFloat(product.price) * quantityDeleted).toFixed(2),
-
-      shipping: parseFloat(shipping).toFixed(2),
-
-      coupon: "",
-
-      total: (parseFloat(state.subtotal) + parseFloat(shipping) - parseFloat(product.price) * quantityDeleted).toFixed(
-        2,
-      ),
-    }));
   },
 
   applyCoupon: (coupon) => {

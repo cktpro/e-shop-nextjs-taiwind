@@ -47,8 +47,8 @@ function ProductDetails(props) {
       if (token) {
         const data = {
           id: item.id,
-          name: item.title,
-          image: item?.image || item?.images[0],
+          name: item.name,
+          image: item.image,
           price: item.price,
           quantity: parseInt(inputQuantity, 10),
         };
@@ -127,9 +127,7 @@ function ProductDetails(props) {
 
         <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-          {product?.title}
-        </span>
+        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">{product?.name}</span>
       </div>
 
       <div className="min-w-full mt-[5rem] grid grid-cols-12">
@@ -137,10 +135,10 @@ function ProductDetails(props) {
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image || product?.images[0]}
+              src={product?.image}
               alt="..."
-              width={270}
-              height={250}
+              width={1000}
+              height={1000}
             />
           </div>
 
@@ -149,18 +147,18 @@ function ProductDetails(props) {
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
               src={product?.image || product?.images[1]}
               alt="..."
-              width={270}
-              height={250}
+              width={1000}
+              height={1000}
             />
           </div>
 
           <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
-              src={product?.image || product?.images[0]}
+              src={product?.image}
               alt="..."
-              width={270}
-              height={250}
+              width={1000}
+              height={1000}
             />
           </div>
 
@@ -169,8 +167,8 @@ function ProductDetails(props) {
               className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
               src={product?.image || product?.images[1]}
               alt="..."
-              width={270}
-              height={250}
+              width={1000}
+              height={1000}
             />
           </div>
         </div>
@@ -179,17 +177,17 @@ function ProductDetails(props) {
           <div className="flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
             <Image
               className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
-              src={product?.image || product?.images[0]}
+              src={product?.image}
               alt="..."
-              width={500}
-              height={500}
+              width={1000}
+              height={1000}
             />
           </div>
         </div>
 
         <div className="col-span-12 xl:col-span-5 flex flex-col items-center xl:items-start justify-start mt-[2rem] xl:mt-0 xl:pl-[5.45rem]">
           <h2 className="max-w-[24rem] whitespace-nowrap overflow-hidden text-ellipsis text-text-2 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
-            {product?.title}
+            {product?.name}
           </h2>
 
           <div className="mt-[1rem] max-h-[1.3125rem] flex items-start justify-start">
@@ -197,12 +195,12 @@ function ProductDetails(props) {
               className="max-w-[6.25rem] max-h-[1.25rem]"
               src="/assets/images/star/FourStar.png"
               alt="..."
-              width={500}
-              height={200}
+              width={1000}
+              height={1000}
             />
 
             <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
-              ({product?.rating?.count} Reviews)
+              ({product?.rateCount} Reviews)
             </span>
 
             <div className="ml-[1rem] mt-[0.1rem] min-h-[1rem] min-w-[0.0625rem] bg-black opacity-[0.5]" />
@@ -232,16 +230,16 @@ function ProductDetails(props) {
                 className="max-w-[1.25rem] max-h-[1.25rem]"
                 src="/assets/images/color/color1.png"
                 alt="..."
-                width={20}
-                height={20}
+                width={1000}
+                height={1000}
               />
 
               <Image
                 className="max-w-[1.25rem] max-h-[1.25rem]"
                 src="/assets/images/color/color2.png"
                 alt="..."
-                width={20}
-                height={20}
+                width={1000}
+                height={1000}
               />
             </div>
           </div>
@@ -335,8 +333,8 @@ function ProductDetails(props) {
                 className="max-w-[2.5rem] max-h-[2.5rem] object-contain"
                 src="/assets/images/services/delivery.png"
                 alt="..."
-                width={40}
-                height={40}
+                width={1000}
+                height={1000}
               />
 
               <div className="flex flex-col items-start gap-[0.5rem]">
@@ -355,8 +353,8 @@ function ProductDetails(props) {
                 className="max-w-[2.5rem] max-h-[2.5rem] object-contain"
                 src="/assets/images/services/return.png"
                 alt="..."
-                width={40}
-                height={40}
+                width={1000}
+                height={1000}
               />
 
               <div className="flex flex-col items-start gap-[0.5rem]">
@@ -387,7 +385,7 @@ function ProductDetails(props) {
             return (
               <div
                 className="mb-[3rem] xl:mb-0 col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 flex items-center justify-center"
-                key={item.title}
+                key={item.name}
               >
                 <Card product={item} />
               </div>

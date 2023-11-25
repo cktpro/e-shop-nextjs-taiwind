@@ -134,8 +134,8 @@ function SaleHunter() {
             className="p-10 lg:p-0 lg:mr-[3.75rem] object-contain"
             src="/assets/images/products/sound.png"
             alt="..."
-            width={568}
-            height={330}
+            width={1000}
+            height={1000}
             priority
           />
         </div>

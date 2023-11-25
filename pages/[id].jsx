@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
@@ -21,7 +22,21 @@ function ProductDetailPage(props) {
     return null;
   }
 
-  return <ProductDetails product={product} relatedItem={relatedItem} />;
+  return (
+    <>
+      <Head>
+        <title>{product.name}</title>
+        <meta content={product.description} name="description" key="desc" />
+        <meta content={product.name} property="og:title" />
+        <meta content={product.description} property="og:description" />
+        <meta content={product.image} property="og:image" />
+      </Head>
+
+      <section>
+        <ProductDetails product={product} relatedItem={relatedItem} />;
+      </section>
+    </>
+  );
 }
 
 export default ProductDetailPage;
@@ -36,19 +51,14 @@ export async function getServerSideProps(req) {
     const { params } = req;
 
     const [response, relatedItem] = await Promise.all([
-      axiosServer.get(`https://fakestoreapi.com/products/${params.id}`),
-      axiosServer.get("https://fakestoreapi.com/products?limit=4"),
+      axiosServer.get(`/products/${params.id}`),
+      axiosServer.get("/products?page=2&pageSize=4"),
     ]);
-
-    // const [response, relatedItem] = await Promise.all([
-    //   axiosServer.get(`https://api.escuelajs.co/api/v1/products/${params.id}`),
-    //   axiosServer.get("https://api.escuelajs.co/api/v1/products/?offset=10&limit=4"),
-    // ]);
 
     return {
       props: {
-        product: response.data || {},
-        relatedItem: relatedItem.data || [],
+        product: response.data.payload || {},
+        relatedItem: relatedItem.data.payload || [],
       },
     };
   } catch (error) {

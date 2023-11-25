@@ -101,6 +101,7 @@ body {
 }
 
 .swiper_flash_sale .swiper-slide {
+  border-radius: 0.25rem;
   text-align: center;
   background: #fff;
   display: flex;
@@ -128,6 +129,7 @@ body {
 }
 
 .swiper_categories .swiper-slide {
+  border-radius: 0.25rem;
   text-align: center;
   background: #fff;
   display: flex;
@@ -152,6 +154,7 @@ body {
 }
 
 .swiper_our_products .swiper-slide {
+  border-radius: 0.25rem;
   text-align: center;
   background: #fff;
 

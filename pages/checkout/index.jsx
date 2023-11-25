@@ -31,6 +31,7 @@ function Checkout() {
         amount: parseFloat(cartData.total) * 24000,
         bankCode: "NCB",
         language: "en",
+        returnUrl: process.env.NEXT_PUBLIC_VNPAY_RETURN_URL,
       };
 
       fetchCheckout(data);

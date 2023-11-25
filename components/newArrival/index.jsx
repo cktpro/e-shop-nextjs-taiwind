@@ -6,7 +6,7 @@ import Rectangle from "../svg/rectangle";
 
 function NewArrival() {
   return (
-    <div className="container mt-[8.75rem]">
+    <div className="container mt-[8.75rem] bg-[#F3F3F3] rounded-[0.25rem] pt-[1rem] pb-[1rem]">
       <div className="w-full inline-flex flex-col items-start gap-[3.75rem]">
         <div className="min-w-[13.5rem] min-h-[6.75rem] flex flex-col items-start gap-[1.25rem]">
           <div className="flex items-center gap-[1rem]">
@@ -29,8 +29,8 @@ function NewArrival() {
                 className="object-contain"
                 src="/assets/images/arrival/ps5.png"
                 alt="..."
-                width={511}
-                height={511}
+                width={1000}
+                height={1000}
                 priority
               />
             </div>
@@ -62,8 +62,8 @@ function NewArrival() {
                   className="object-contain"
                   src="/assets/images/arrival/hat.png"
                   alt="..."
-                  width={432}
-                  height={284}
+                  width={1000}
+                  height={1000}
                   priority
                 />
               </div>
@@ -95,8 +95,8 @@ function NewArrival() {
                     className="object-contain"
                     src="/assets/images/arrival/speaker.png"
                     alt="..."
-                    width={190}
-                    height={221}
+                    width={1000}
+                    height={1000}
                     priority
                   />
                 </div>
@@ -128,8 +128,8 @@ function NewArrival() {
                     className="object-contain"
                     src="/assets/images/arrival/perfume.png"
                     alt="..."
-                    width={201}
-                    height={203}
+                    width={1000}
+                    height={1000}
                     priority
                   />
                 </div>
@@ -164,8 +164,8 @@ function NewArrival() {
                   className="object-contain"
                   src="/assets/images/arrival/ps5.png"
                   alt="..."
-                  width={511}
-                  height={511}
+                  width={1000}
+                  height={1000}
                   priority
                 />
               </div>
@@ -198,8 +198,8 @@ function NewArrival() {
                       className="object-contain"
                       src="/assets/images/arrival/hat.png"
                       alt="..."
-                      width={432}
-                      height={284}
+                      width={1000}
+                      height={1000}
                       priority
                     />
                   </div>
@@ -232,8 +232,8 @@ function NewArrival() {
                           className="object-contain"
                           src="/assets/images/arrival/speaker.png"
                           alt="..."
-                          width={190}
-                          height={221}
+                          width={1000}
+                          height={1000}
                           priority
                         />
                       </div>
@@ -265,8 +265,8 @@ function NewArrival() {
                           className="object-contain"
                           src="/assets/images/arrival/perfume.png"
                           alt="..."
-                          width={201}
-                          height={203}
+                          width={1000}
+                          height={1000}
                           priority
                         />
                       </div>
