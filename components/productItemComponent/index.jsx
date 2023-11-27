@@ -41,7 +41,6 @@ function ProductItemComponent(props) {
     },
     [addCart],
   );
-  console.log("◀◀◀ product ▶▶▶", product);
   return (
     <div className="flex flex-col items-start gap-[1rem] border">
       <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">

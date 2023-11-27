@@ -25,20 +25,19 @@ function Product(props) {
     setCheckedList(list);
   };
   const handleFilter = useCallback(async () => {
-    // const test = `products?${filter?.categoryId ? `categoryId=${filter.categoryId}` : ""}${
-    //   filter?.supplierId ? `&supplierId=${filter.supplierId}` : ""
-    // }`;
-    // console.log("◀◀◀ test ▶▶▶", test);
+    const test = `products?${filter?.categoryId ? `categoryId=${filter.categoryId}&` : ""}${
+      filter?.supplierId ? `supplierId=${filter.supplierId}` : ""
+    }`;
+    console.log("◀◀◀ test ▶▶▶", test);
     try {
       setLoading(true);
 
       const result = await axiosClient.get(
-        `products?${filter?.categoryId ? `categoryId=${filter.categoryId}` : ""}${
-          filter?.supplierId ? `&supplierId=${filter.supplierId}` : ""
+        `products?${filter?.categoryId ? `categoryId=${filter.categoryId}&` : ""}${
+          filter?.supplierId ? `supplierId=${filter.supplierId}` : ""
         }`,
       );
       setProductList(result.data.payload);
-      console.log("◀◀◀ result ▶▶▶", result);
       setLoading(false);
       setFilter((prev) => ({
         ...prev,

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, Input, message } from "antd";
+import { Form, Input, message, Select } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,12 +16,7 @@ import useFetchCheckout from "@/store/checkout";
 import { useShippingStore } from "@/store/checkout/shipping";
 
 function Checkout() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const [address, setAddress] = useState([]);
   const [districtId, setDistrictId] = useState("");
   let totalPrice = 0;
@@ -75,40 +70,41 @@ function Checkout() {
   );
 
   const onSubmit = async (data) => {
-    const dayShip = new Date();
-    dayShip.setDate(dayShip.getDate() + 3);
-    const shipFee = (shipping.feeShip / 24000).toFixed(2);
-    const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
-    const orderDetails = cartData.cart.map((item) => {
-      return {
-        productId: item.product.productId,
-        quantity: item.product.quantity,
-        discount: item.productDetail.discount,
-        price: item.productDetail.price,
-      };
-    });
-    const order = {
-      customerId: session.user.id,
-      shippedDate: dayShip,
-      status: "WAITING",
-      shippingFee: shipFee,
-      totalPrice,
-      shippingAddress: shipAddress,
-      paymentType: data.paymentType,
-      orderDetails,
-    };
-    try {
-      const result = await axiosClient.post("orders", order);
-      if (result) {
-        setCookie("orderId", result?.data?.payload?._id);
+    console.log("◀◀◀ data ▶▶▶", data);
+    // const dayShip = new Date();
+    // dayShip.setDate(dayShip.getDate() + 3);
+    // const shipFee = (shipping.feeShip / 24000).toFixed(2);
+    // const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
+    // const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
+    // const orderDetails = cartData.cart.map((item) => {
+    //   return {
+    //     productId: item.product.productId,
+    //     quantity: item.product.quantity,
+    //     discount: item.productDetail.discount,
+    //     price: item.productDetail.price,
+    //   };
+    // });
+    // const order = {
+    //   customerId: session.user.id,
+    //   shippedDate: dayShip,
+    //   status: "WAITING",
+    //   shippingFee: shipFee,
+    //   totalPrice,
+    //   shippingAddress: shipAddress,
+    //   paymentType: data.paymentType,
+    //   orderDetails,
+    // };
+    // try {
+    //   const result = await axiosClient.post("orders", order);
+    //   if (result) {
+    //     setCookie("orderId", result?.data?.payload?._id);
 
-        cartData.resetCart();
-        handlePlaceOrder(finalTotal);
-      }
-    } catch (error) {
-      console.log("◀◀◀ error ▶▶▶", error);
-    }
+    //     cartData.resetCart();
+    //     handlePlaceOrder(finalTotal);
+    //   }
+    // } catch (error) {
+    //   console.log("◀◀◀ error ▶▶▶", error);
+    // }
 
     // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
   };
@@ -141,8 +137,8 @@ function Checkout() {
       </h2>
 
       {status === "authenticated" ? (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
+        <Form
+          onFinish={handleSubmit(onSubmit)}
           className="min-w-full grid grid-cols-12 lg:flex items-start justify-between"
         >
           <div className="mt-[3rem] col-span-12 inline-flex flex-col items-center gap-[1.5rem]">
@@ -206,39 +202,41 @@ function Checkout() {
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                   Province
                 </span>
-                <select
-                  className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  // onChange={(e) => shipping.getDistrict(e.target.value)}
-                  name="province"
-                  defaultValue={session?.user?.address[0]?.provinceId}
-                  {...register("province", {
-                    onChange: (e) => {
-                      document.getElementById("streetAddress").value = null;
-                      setAddress((prev) => ({
-                        ...prev,
-                        provinceId: e.target.value,
-                        provinceName: e.target.options[e.target.options.selectedIndex].text,
-                      }));
-                      shipping.getDistrict(e.target.value);
-                    },
-                  })}
-                >
-                  {shipping?.isProvince === true &&
-                    shipping?.provinceList?.map((item) => {
-                      if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                <Form.Item name="province" rules={[{ required: true, message: "Please select your province!" }]}>
+                  <select
+                    className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                    // onChange={(e) => shipping.getDistrict(e.target.value)}
+                    name="province"
+                    defaultValue={session?.user?.address[0]?.provinceId}
+                    {...register("province", {
+                      onChange: (e) => {
+                        document.getElementById("streetAddress").value = null;
+                        setAddress((prev) => ({
+                          ...prev,
+                          provinceId: e.target.value,
+                          provinceName: e.target.options[e.target.options.selectedIndex].text,
+                        }));
+                        shipping.getDistrict(e.target.value);
+                      },
+                    })}
+                  >
+                    {shipping?.isProvince === true &&
+                      shipping?.provinceList?.map((item) => {
+                        if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                          return (
+                            <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                              {item.ProvinceName}{" "}
+                            </option>
+                          );
+                        }
                         return (
-                          <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                          <option value={item.ProvinceID} key={item.ProvinceID}>
                             {item.ProvinceName}{" "}
                           </option>
                         );
-                      }
-                      return (
-                        <option value={item.ProvinceID} key={item.ProvinceID}>
-                          {item.ProvinceName}{" "}
-                        </option>
-                      );
-                    })}
-                </select>
+                      })}
+                  </select>
+                </Form.Item>
                 {/* <input
                 type="text"
                 id="apartment"
@@ -600,7 +598,7 @@ function Checkout() {
             <ViewAllProducts text="Place Order" type="submit" />
             {/* onClick={(e) => handlePlaceOrder(e)} */}
           </div>
-        </form>
+        </Form>
       ) : (
         ""
       )}

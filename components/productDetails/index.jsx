@@ -44,13 +44,19 @@ function ProductDetails(props) {
 
   const handleClickAddToCart = useCallback(
     (item) => {
+      console.log("◀◀◀ item ▶▶▶", item);
+      console.log("◀◀◀ inputQuantity ▶▶▶", inputQuantity);
       if (token) {
+        // const data = {
+        //   id: item.id,
+        //   name: item.name,
+        //   image: item.image,
+        //   price: item.price,
+        //   quantity: parseInt(inputQuantity, 10),
+        // };
         const data = {
-          id: item.id,
-          name: item.name,
-          image: item.image,
-          price: item.price,
-          quantity: parseInt(inputQuantity, 10),
+          productId: item.id,
+          quantity: inputQuantity,
         };
 
         addToCart(data);
@@ -82,6 +88,7 @@ function ProductDetails(props) {
 
           timeoutNotificationRef.current = null;
         }, 3000);
+        setTimeout(() => router.push("/checkout"), 2000);
       } else {
         router.push("/log-in");
       }
@@ -114,7 +121,6 @@ function ProductDetails(props) {
       setInputQuantity(1);
     }
   }, []);
-  console.log("««««« product »»»»»", product);
   return (
     <div className="container mt-[5rem] flex flex-col items-center justify-center">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -134,7 +140,12 @@ function ProductDetails(props) {
         <div className="hidden col-span-12 xl:col-span-2 xl:flex flex-col items-start justify-start gap-[1rem]">
           {product.imageList?.map((item) => {
             return (
-              <div key={item.id} className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+              <div
+                key={item.id}
+                className={`flex w-[10.625rem]  hover:cursor-pointer h-[8.625rem] items-center justify-center border ${
+                  coverImg === item.location ? "border-red-500" : ""
+                }`}
+              >
                 <Image
                   className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
                   src={item?.location}
