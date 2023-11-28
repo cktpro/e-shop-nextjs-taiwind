@@ -25,7 +25,7 @@ function Banner() {
   }, []);
 
   return (
-    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div className="rounded-[0.25rem]" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {/* Multi Carousel FlashSale */}
       <Swiper
         ref={swiperBanner}
@@ -47,8 +47,15 @@ function Banner() {
         {data.map((item) => {
           return (
             <SwiperSlide key={item.name}>
-              <Link href="/cart" className="max-w-[892px] max-h-[344px]">
-                <Image width={1000} height={1000} src="/assets/images/banner/banner1.jpg" alt="..." priority />
+              <Link href="/cart" className="max-w-[892px] max-h-[344px] rounded-[0.25rem]">
+                <Image
+                  className="rounded-[0.25rem]"
+                  width={1000}
+                  height={1000}
+                  src="/assets/images/banner/banner1.jpg"
+                  alt="..."
+                  priority
+                />
               </Link>
             </SwiperSlide>
           );

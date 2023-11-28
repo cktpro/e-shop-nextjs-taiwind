@@ -9,7 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import ArrowButtonCarousel from "../buttons/arrowCarousel";
-import Card from "../card";
+import CardFlashsale from "../cardFlashsale";
 
 // Import Swiper styles
 import "swiper/css";
@@ -74,7 +74,7 @@ function FlashSaleCarousel(props) {
           {flashSales.map((item) => {
             return (
               <SwiperSlide key={item.name}>
-                <Card product={item} />
+                <CardFlashsale product={item} />
               </SwiperSlide>
             );
           })}

@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import UpdateCart from "@/components/buttons/updateCart";
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import ProcessLoader from "@/components/loader/processLoader";
 import CanCel from "@/components/svg/cancel";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 import { formattedMoney } from "@/helper/formatDocument";
 import useCartStore from "@/store/cart/useCartStore";
 // import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
@@ -22,6 +24,8 @@ function CartPage() {
   });
   const [cartItem, setCartItem] = useState([]);
   const [inputCoupon, setInputCoupon] = useState("");
+
+  const [isFlashsale, setIsFlashsale] = useState(false);
 
   // const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
 
@@ -38,6 +42,21 @@ function CartPage() {
   const applyCoupon = useCartStore((state) => state.applyCoupon);
 
   // const timeoutRef = useRef(null);
+
+  const checkFlashsale = useCallback(async () => {
+    const check = await axiosClient.get(`/flashsale/check-flashsale?productId=${cartData.cart[0]?.product?.productId}`);
+
+    if (check.data.message === "found") {
+      setIsFlashsale(true);
+    }
+  }, [cartData]);
+
+  useEffect(() => {
+    if (cartData.cart && cartData.cart.length > 0) {
+      checkFlashsale();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartData.cart]);
 
   const handleClickIncrease = useCallback(
     async (index) => {
@@ -73,12 +92,12 @@ function CartPage() {
         document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
         newItem[index].product.quantity = newItem[index].productDetail.stock;
         setCartItem(newItem);
-        message.error("Só lượng không đủ");
+        message.error("Số lượng không đủ");
       } else if (value < 1) {
         document.getElementById(`quantity${index}`).value = 1;
         newItem[index].product.quantity = 1;
         setCartItem(newItem);
-        message.error("Só lượng không hợp lệ");
+        message.error("Số lượng không hợp lệ");
       } else {
         newItem[index].product.quantity = parseInt(value, 10);
         setCartItem(newItem);
@@ -97,6 +116,7 @@ function CartPage() {
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity <= 1) {
         const text = "Bạn có muốn xóa sản phẩm này?";
+        // eslint-disable-next-line no-alert
         if (window.confirm(text) === true) {
           cartData.removeFromCart(newItem[index].product);
           return;
@@ -107,11 +127,13 @@ function CartPage() {
       newItem[index].product.quantity -= 1;
       setCartItem(newItem);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cartItem],
   );
 
   const handleClickRemoveFromCart = useCallback(
     (product) => {
+      // eslint-disable-next-line no-alert
       if (window.confirm("Bạn có muốn xóa sản phẩm này?") === true) {
         removeFromCart(product);
       }
@@ -164,10 +186,12 @@ function CartPage() {
     }));
     if (isChanged === true) {
       message.warning("Vui lòng cập nhật trước khi checkout");
+    } else if (isFlashsale) {
+      router.push("/checkout-flashsale");
     } else {
       router.push("/checkout");
     }
-  }, [isChanged, router]);
+  }, [isChanged, isFlashsale, router]);
   useEffect(() => {
     if (cartData.cart.length > 0) {
       setCartItem(cartData.cart);
@@ -175,6 +199,7 @@ function CartPage() {
   }, [cartData]);
   useEffect(() => {
     cartData.getListCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -231,6 +256,7 @@ function CartPage() {
                         className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
                       >
                         <Image
+                          title={item.productDetail.name}
                           className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
                           src={item.image.location}
                           alt="..."
@@ -246,54 +272,68 @@ function CartPage() {
                           <CanCel />
                         </button>
 
-                        <span className="sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]">
-                          {item.productDetail.name}
-                        </span>
+                        <Link
+                          className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
+                          href={`/${item.productDetail._id}`}
+                        >
+                          <span
+                            title={item.productDetail.name}
+                            className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
+                          >
+                            {item.productDetail.name}
+                          </span>
+                        </Link>
 
-                        <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[11.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
+                        <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[1.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
                           {formattedMoney(item.productDetail.price)}
                         </span>
 
                         <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
-                          <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
-                            <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                              <input
-                                type="number"
-                                name="quantity"
-                                id={`quantity${idx}`}
-                                className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                defaultValue={item.product.quantity}
-                                onChange={(e) =>
-                                  e.target.value
-                                    ? handleChangeQuantity(e.target.value, idx)
-                                    : setIsChanged((prev) => ({
-                                        ...prev,
-                                        update: true,
-                                        checkout: true,
-                                      }))
-                                }
-                                required
-                              />
+                          {isFlashsale ? (
+                            <span className="cursor-default min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                              {item.product.quantity}
                             </span>
+                          ) : (
+                            <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
+                              <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                                <input
+                                  type="number"
+                                  name="quantity"
+                                  id={`quantity${idx}`}
+                                  className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  defaultValue={item.product.quantity}
+                                  onChange={(e) =>
+                                    e.target.value
+                                      ? handleChangeQuantity(e.target.value, idx)
+                                      : setIsChanged((prev) => ({
+                                          ...prev,
+                                          update: true,
+                                          checkout: true,
+                                        }))
+                                  }
+                                  required
+                                />
+                              </span>
 
-                            <div className="flex flex-col items-center justify-center">
-                              <button
-                                onClick={() => handleClickIncrease(idx)}
-                                type="button"
-                                className="max-w-[1rem] max-h-[1rem]"
-                              >
-                                <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
-                              </button>
+                              <div className="flex flex-col items-center justify-center">
+                                <button
+                                  onClick={() => handleClickIncrease(idx)}
+                                  type="button"
+                                  className="max-w-[1rem] max-h-[1rem]"
+                                >
+                                  <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
+                                </button>
 
-                              <button
-                                onClick={() => handleClickReduce(idx)}
-                                type="button"
-                                className="max-w-[1rem] max-h-[1rem]"
-                              >
-                                <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
-                              </button>
+                                <button
+                                  onClick={() => handleClickReduce(idx)}
+                                  type="button"
+                                  className="max-w-[1rem] max-h-[1rem]"
+                                >
+                                  <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
+                                </button>
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
 
                         <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
@@ -389,7 +429,7 @@ function CartPage() {
 
                   {/* <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]"> */}
                   <div className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
-                    <ViewAllProducts
+                    <UpdateCart
                       text="Process to checkout"
                       type="button"
                       onClick={() => {

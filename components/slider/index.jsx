@@ -96,7 +96,7 @@ function Slider() {
       </div>
 
       <div className="relative pt-[2.5rem] lg:pl-[2.81rem]">
-        <div className="grid grid-cols-12 bg-black">
+        <div className="grid grid-cols-12 bg-text-2 rounded-[0.25rem] overflow-hidden">
           <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12">
             <Banner />
           </div>

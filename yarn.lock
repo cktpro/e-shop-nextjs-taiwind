@@ -19,10 +19,10 @@
   dependencies:
     "@ctrl/tinycolor" "^3.4.0"
 
-"@ant-design/cssinjs@^1.17.2":
-  version "1.17.2"
-  resolved "https://registry.yarnpkg.com/@ant-design/cssinjs/-/cssinjs-1.17.2.tgz#08e939cbe60e9e0e0f3f03cd53a52e4a7623ed1f"
-  integrity sha512-vu7lnfEx4Mf8MPzZxn506Zen3Nt4fRr2uutwvdCuTCN5IiU0lDdQ0tiJ24/rmB8+pefwjluYsbyzbQSbgfJy+A==
+"@ant-design/cssinjs@^1.17.5":
+  version "1.17.5"
+  resolved "https://registry.yarnpkg.com/@ant-design/cssinjs/-/cssinjs-1.17.5.tgz#be5bbfbf4c857e7df6e3650c9bccf7e527da7ef2"
+  integrity sha512-Ed2rruHMxZTVYGPec6QBZkrh00Df5K1FAufmBpONai5iGYxoxIkg1sRD8YdCw0NvPRAa4r1nJP5LbwICGHzGiQ==
   dependencies:
     "@babel/runtime" "^7.11.1"
     "@emotion/hash" "^0.8.0"
@@ -446,13 +446,13 @@ ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd@^5.11.2:
-  version "5.11.2"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-5.11.2.tgz#5db25aab6658715de36ea36ab840891a974a71de"
-  integrity sha512-7/yqmfXpShHH0MJQOgv3vX9PUFwctyBm/G5L0i/S4AQy20ON6ZZ2UkjmWxgwg3vq2CEHKyVGTHozpH9WwDizgw==
+antd@^5.11.5:
+  version "5.11.5"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-5.11.5.tgz#e1528aa9a10c035ce2921d487b96da2d07b4feaa"
+  integrity sha512-qB1YmvO4Zm4r48M0Ptxn7orpaXeMPSeTrrw6dAgtTYN+ysnWD/D/zlxFc5g73GywIzZ10XGqvNC+74A+HD0yeQ==
   dependencies:
     "@ant-design/colors" "^7.0.0"
-    "@ant-design/cssinjs" "^1.17.2"
+    "@ant-design/cssinjs" "^1.17.5"
     "@ant-design/icons" "^5.2.6"
     "@ant-design/react-slick" "~1.0.2"
     "@babel/runtime" "^7.18.3"
@@ -472,7 +472,7 @@ antd@^5.11.2:
     rc-drawer "~6.5.2"
     rc-dropdown "~4.1.0"
     rc-field-form "~1.40.0"
-    rc-image "~7.3.2"
+    rc-image "~7.5.1"
     rc-input "~1.3.6"
     rc-input-number "~8.4.0"
     rc-mentions "~2.9.1"
@@ -2652,10 +2652,10 @@ rc-field-form@~1.40.0:
     async-validator "^4.1.0"
     rc-util "^5.32.2"
 
-rc-image@~7.3.2:
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/rc-image/-/rc-image-7.3.2.tgz#fd92ab9994552d4f42638af0810039d34ad32dba"
-  integrity sha512-ICEF6SWv9YKhDXxy1vrXcmf0TVvEcQWIww5Yg+f+mn7e4oGX7FNP4+FExwMjNO5UHBEuWrigbGhlCgI6yZZ1jg==
+rc-image@~7.5.1:
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/rc-image/-/rc-image-7.5.1.tgz#39a93354e14fe3e5eaafd9c9464e8fe3c6c171a0"
+  integrity sha512-Z9loECh92SQp0nSipc0MBuf5+yVC05H/pzC+Nf8xw1BKDFUJzUeehYBjaWlxly8VGBZJcTHYri61Fz9ng1G3Ag==
   dependencies:
     "@babel/runtime" "^7.11.2"
     "@rc-component/portal" "^1.0.2"
@@ -3348,12 +3348,15 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-
 throttle-debounce@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-5.0.0.tgz#a17a4039e82a2ed38a5e7268e4132d6960d41933"
   integrity sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==
 
+tiny-case@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-case/-/tiny-case-1.0.3.tgz#d980d66bc72b5d5a9ca86fb7c9ffdb9c898ddd03"
+  integrity sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==
 
 titleize@^3.0.0:
   version "3.0.0"
@@ -3371,6 +3374,11 @@ toggle-selection@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
   integrity sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==
+
+toposort@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
+  integrity sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==
 
 ts-api-utils@^1.0.1:
   version "1.0.3"

@@ -8,10 +8,11 @@ import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { checkTime } from "@/helper/checkTimeFlashSale";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
 
-function Card(props) {
+function CardFlashsale(props) {
   let { product } = props;
 
   product = {
@@ -54,49 +55,62 @@ function Card(props) {
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      if (cart.length > 0) {
-        const checkFlashsale = await axiosClient.get(
-          `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
-        );
+      const [getMe, checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+        axiosClient.get("/authCustomers/profile"),
+        axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+        axiosClient.get("/time-flashsale"),
+      ]);
 
-        if (checkFlashsale.data.message === "found") {
-          openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+      if (getTimeFlashsale.data.payload.expirationTime) {
+        let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+
+        endOfSale += " 23:59:59";
+
+        const checkTimeF = checkTime(endOfSale);
+
+        if (checkTimeF <= 0) {
+          openNotificationWithIcon("error", "The flash sale period has ended");
+
+          return;
+        }
+
+        if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+          openNotificationWithIcon("error", "Flash sale has not opened yet");
 
           return;
         }
       }
 
-      try {
-        const url = "/authCustomers/profile";
+      if (checkStockFlashsale.data.stock <= 0) {
+        openNotificationWithIcon("error", "The product has been sold out");
+        return;
+      }
 
-        const response = await axiosClient.get(url);
+      if (cart.length > 0) {
+        openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+        return;
+      }
 
-        if (getToken && getRefreshToken && response.data.payload) {
-          const data = {
-            productId: item.id,
-            name: item.name,
-            image: item.image.location,
-            price: item.discountedPrice,
-            quantity: 1,
-          };
+      if (getToken && getRefreshToken && getMe.data.payload) {
+        const data = {
+          productId: item.id,
+          name: item.name,
+          image: item.image.location,
+          price: item.discountedPrice,
+          quantity: 1,
+        };
 
-          addToCart(data);
+        addToCart(data);
 
-          openNotificationWithIcon("success", "product added to cart!!!");
-        } else {
-          deleteCookie("TOKEN");
-          deleteCookie("REFRESH_TOKEN");
-          deleteCookie("email");
-          signOut({ callbackUrl: "/log-in" });
-        }
-      } catch (error) {
+        openNotificationWithIcon("success", "product added to cart!!!");
+      } else {
         deleteCookie("TOKEN");
         deleteCookie("REFRESH_TOKEN");
         deleteCookie("email");
         signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart, openNotificationWithIcon],
+    [addToCart, cart.length, openNotificationWithIcon],
   );
 
   return (
@@ -108,6 +122,12 @@ function Card(props) {
           <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
             <span className="text-text-1 font-poppins text-[0.75rem] font-[400] leading-[1.125rem]">
               -{product.discount}%
+            </span>
+          </div>
+
+          <div className="absolute top-[10rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
+            <span className="text-text-1 font-poppins text-[1.25rem] font-[600] leading-[1.125rem]">
+              Stock: {product.stock}
             </span>
           </div>
 
@@ -178,8 +198,8 @@ function Card(props) {
   );
 }
 
-export default Card;
+export default CardFlashsale;
 
-Card.propTypes = {
+CardFlashsale.propTypes = {
   product: PropTypes.instanceOf(Object).isRequired,
 };

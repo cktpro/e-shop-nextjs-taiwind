@@ -77,6 +77,7 @@ const useCartStore = create((set, get) => ({
       set({ cart: result.data.payload, isLoading: false });
       message.success("Cập nhật thành công");
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
       message.error("Cập nhật thất bại");
@@ -89,10 +90,25 @@ const useCartStore = create((set, get) => ({
       const data = result.data.payload;
       set({ cart: data, totalItem: data.length, isLoading: false });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
     }
   },
+
+  getListCartFlashSale: async () => {
+    set({ isLoading: true });
+    try {
+      const result = await axiosClient.get("/cart/get-cart-flashsale");
+      const data = result.data.payload;
+      set({ cart: data, totalItem: data.length, isLoading: false });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log("◀◀◀ error ▶▶▶", error);
+      set({ isLoading: false });
+    }
+  },
+
   addToCart: async (product) => {
     set({
       isLoading: true,
@@ -110,6 +126,7 @@ const useCartStore = create((set, get) => ({
       set({
         isLoading: false,
       });
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       message.error("Add cart failed");
     }
@@ -226,7 +243,6 @@ const useCartStore = create((set, get) => ({
 
   removeFromCart: async (product) => {
     set({ isLoading: true });
-    console.log("««««« product »»»»»", product);
     try {
       await axiosClient.delete(`/cart/${product.productId}`);
       const result = await axiosClient.get("/cart");
@@ -239,6 +255,7 @@ const useCartStore = create((set, get) => ({
       }));
       message.success("Xóa thành công");
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
       message.error("Xóa thất bại");
@@ -283,6 +300,7 @@ const useCartStore = create((set, get) => ({
       const result = await axiosClient.delete("cart");
       set({ isLoading: false, cart: result.data.payload, totalItem: result.data.payload.length });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
     }
