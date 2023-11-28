@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 
 import { useTrans } from "@/helper/chanLang";
 import { formatNumberToString, formatTime } from "@/helper/timeFlashSale";
+import useGetTimeFlashsale from "@/store/timeFlashSale";
 
 import Dot from "../svg/dot";
 
-function TimeFlashSale(props) {
-  const { second } = props;
-
+function TimeFlashSale() {
   let interval;
 
-  const [numOfSecond, setNumOfSecond] = useState(second);
-  const [dateTime, setDateTime] = useState(formatTime(second));
+  const endOfSale = useGetTimeFlashsale((state) => state.timeFlashsale);
+
+  const getFlashsaleTime = useGetTimeFlashsale((state) => state.fetch);
+
+  const [numOfSecond, setNumOfSecond] = useState(endOfSale);
+  const [dateTime, setDateTime] = useState(formatTime(endOfSale));
+
+  useEffect(() => {
+    getFlashsaleTime();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setNumOfSecond(endOfSale);
+    setDateTime(formatTime(endOfSale));
+  }, [endOfSale]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,7 +32,7 @@ function TimeFlashSale(props) {
       setNumOfSecond((s) => s - 1);
     }, 1000);
 
-    if (numOfSecond === 0) {
+    if (numOfSecond <= 0) {
       clearInterval(interval);
     }
 
@@ -30,7 +42,7 @@ function TimeFlashSale(props) {
   }, [numOfSecond]);
 
   useEffect(() => {
-    if (numOfSecond === 0) {
+    if (numOfSecond <= 0) {
       clearInterval(interval);
     }
 
@@ -111,7 +123,3 @@ function TimeFlashSale(props) {
 }
 
 export default TimeFlashSale;
-
-TimeFlashSale.propTypes = {
-  second: PropTypes.number.isRequired,
-};

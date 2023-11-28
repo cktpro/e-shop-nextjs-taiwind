@@ -29,9 +29,7 @@ import {
 import { fuzzySearch } from "@/helper/fuzzySearch";
 import useAuthUser from "@/store/authUser";
 import useCartStore from "@/store/cart/useCartStore";
-import useScaleCart from "@/store/isScaleCart";
 import useKeySuggest from "@/store/keySuggest/useKeySuggest";
-import useNotification from "@/store/showNotification";
 import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
 
 import DropDown from "../svg/dropDown";
@@ -72,11 +70,7 @@ function Header() {
 
   const keySuggest = useKeySuggest((state) => state.keySuggest);
 
-  const isOpenNotification = useNotification((state) => state.isOpenNotification);
-
   const isOpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.isOpenNotification);
-
-  const isScaleCart = useScaleCart((state) => state.isScaleCart);
 
   const totalCartItem = useCartStore((state) => state.totalItem);
 
@@ -214,8 +208,10 @@ function Header() {
       setFilterKeySearch(filterKey);
     }
   }, [inputSearch, keySuggest]);
+
   useEffect(() => {
     getListCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -270,18 +266,6 @@ function Header() {
       </section>
 
       <header className="sticky top-0 z-[3] text-black bg-white border-b-gray-400 border-b-[1px]">
-        <div
-          className={classNames(
-            isOpenNotification
-              ? "absolute top-[7rem] right-[1rem] scale-100 opacity-100 transition-all duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]"
-              : "absolute top-[7rem] right-[1rem] z-[-10] scale-0 opacity-0 transition-all duration-300 max-w-[30rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
-          )}
-        >
-          <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">
-            product added to cart!!!
-          </span>
-        </div>
-
         <div
           className={classNames(
             isOpenNotificationUpdateCart
@@ -417,10 +401,7 @@ function Header() {
             </Link>
 
             <Link
-              className={classNames(
-                "group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center",
-                isScaleCart && "scale-[1.6]",
-              )}
+              className="group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
               href="/cart"
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />

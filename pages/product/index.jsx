@@ -21,7 +21,6 @@ function Product(props) {
   const [categoryList, setCategoryList] = useState([]);
   const [supplierList, setsupplierList] = useState([]);
   const onChange = (list) => {
-    console.log("◀◀◀ list ▶▶▶", list);
     setCheckedList(list);
   };
   const handleFilter = useCallback(async () => {
@@ -38,7 +37,7 @@ function Product(props) {
         }`,
       );
       setProductList(result.data.payload);
-      console.log("◀◀◀ result ▶▶▶", result);
+      // console.log("◀◀◀ result ▶▶▶", result);
       setLoading(false);
       setFilter((prev) => ({
         ...prev,
@@ -46,6 +45,7 @@ function Product(props) {
       }));
     } catch (error) {
       setLoading(false);
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
     }
   }, [filter]);
@@ -56,6 +56,7 @@ function Product(props) {
         categoryId: id,
         isChanged: true,
       }));
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ filter ▶▶▶", filter);
       // try {
       //   setLoading(true);
@@ -86,6 +87,7 @@ function Product(props) {
       //   console.log("◀◀◀ error ▶▶▶", error);
       // }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter],
   );
   useEffect(() => {
@@ -99,6 +101,7 @@ function Product(props) {
     }));
     setCategoryList(newList);
     setsupplierList(newListSuplier);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

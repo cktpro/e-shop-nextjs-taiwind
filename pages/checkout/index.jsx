@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, Input, message } from "antd";
+// import { Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,8 +19,8 @@ function Checkout() {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    // watch,
+    // formState: { errors },
   } = useForm();
   const [address, setAddress] = useState([]);
   const [districtId, setDistrictId] = useState("");
@@ -104,14 +104,17 @@ function Checkout() {
         setCookie("orderId", result?.data?.payload?._id);
 
         cartData.resetCart();
+
         handlePlaceOrder(finalTotal);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
     }
 
     // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
   };
+
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -444,16 +447,17 @@ function Checkout() {
             </div>
           </div> */}
 
-            {cartData.cart.map((item) => {
+            {cartData?.cart?.map((item) => {
               totalPrice +=
-                ((item.productDetail.price * (100 - item.productDetail.discount)) / 100) * item.product.quantity;
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                ((item?.productDetail?.price * (100 - item?.productDetail?.discount)) / 100) * item?.product?.quantity;
               return (
                 <div key={item.product._id} className="flex items-center gap-[1.5rem]">
                   <Image
                     className="max-w-[3.375rem] max-h-[3.375rem] object-contain"
                     // src="/assets/images/products/banphimda.webp"
-                    src={item.image.location}
-                    alt={item.productDetail.name}
+                    src={item?.image?.location}
+                    alt={item?.productDetail?.name}
                     width={1000}
                     height={1000}
                   />
@@ -461,15 +465,15 @@ function Checkout() {
                   <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
                     <div className="flex flex-col gap-1">
                       <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        {item.productDetail.name}
+                        {item?.productDetail?.name}
                       </span>
                       <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        Quantity: {item.product.quantity}
+                        Quantity: {item?.product.quantity}
                       </span>
                     </div>
 
                     <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      {formattedMoney(item.productDetail.price)}
+                      {formattedMoney(item?.productDetail?.price)}
                     </span>
                   </div>
                 </div>
@@ -597,8 +601,7 @@ function Checkout() {
               <ViewAllProducts text="Apply Coupon" type="button" onClick={() => {}} />
             </div>
 
-            <ViewAllProducts text="Place Order" type="submit" />
-            {/* onClick={(e) => handlePlaceOrder(e)} */}
+            <ViewAllProducts text="Place Order" type="submit" onClick={() => {}} />
           </div>
         </form>
       ) : (

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 
-import { endOfSale } from "@/constant";
 import { useTrans } from "@/helper/chanLang";
-import { getTime } from "@/helper/getTime";
 
 import ViewAllProducts from "../buttons/viewAllProduct";
 import FlashSaleCarousel from "../carouselFlashSale";
@@ -14,30 +12,22 @@ import TimeFlashSale from "../timeFlashSale";
 function FlashSale(props) {
   const { flashSales } = props;
 
-  // const convertFlashSales = flashSales.reduce((prev, item) => {
-  //   prev.push({
-  //     id: item.product._id,
-  //     name: item.product.name,
-  //     price: item.product.price,
-  //     discount: item.discount,
-  //     stock: item.product.stock,
-  //     categoryId: item.product.categoryId,
-  //     supplierId: item.product.supplierId,
-  //     description: item.product.description,
-  //     isDeleted: item.product.isDeleted,
-  //     image: item.product.image,
-  //     rate: item.product.rate,
-  //     rateCount: item.product.rateCount,
-  //     discountedPrice: (+item.product.price * (100 - +item.discount)) / 100,
-  //   });
+  const convertFlashSales = flashSales.reduce((prev, item) => {
+    prev.push({
+      id: item.product._id,
+      name: item.product.name,
+      price: item.product.price,
+      discount: item.discount,
+      stock: item.stock,
+      categoryId: item.product.categoryId,
+      supplierId: item.product.supplierId,
+      description: item.product.description,
+      isDeleted: item.product.isDeleted,
+      image: { location: item.product.image.location },
+      discountedPrice: (+item.product.price * (100 - +item.discount)) / 100,
+    });
 
-  //   return prev;
-  // }, []);
-
-  const [timeToEndSale, setTimeToEndSale] = useState(getTime(endOfSale));
-
-  useEffect(() => {
-    setTimeToEndSale(getTime(endOfSale));
+    return prev;
   }, []);
 
   return (
@@ -59,20 +49,16 @@ function FlashSale(props) {
           </h2>
         </div>
 
-        <TimeFlashSale second={timeToEndSale} />
+        <TimeFlashSale />
       </div>
 
-      <FlashSaleCarousel flashSales={flashSales} />
+      <FlashSaleCarousel flashSales={convertFlashSales} />
 
       <div className="text-center mt-[3.75rem]">
-        <Link href="/">
+        <Link href="/all-flashsale">
           <ViewAllProducts text="View All Products" type="button" onClick={() => {}} />
         </Link>
       </div>
-
-      {/* <div className="container mt-[3.75rem] mb-[5rem]">
-        <hr className="border-1 border-solid border-black border-opacity-30" />
-      </div> */}
     </div>
   );
 }

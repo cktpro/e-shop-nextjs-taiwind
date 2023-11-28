@@ -28,7 +28,7 @@ function BestSelling(props) {
       </div>
 
       <div className="relative flex items-center justify-center">
-        <Link href="/">
+        <Link href="/product">
           <ViewAll />
         </Link>
 
