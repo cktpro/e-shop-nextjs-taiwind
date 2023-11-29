@@ -1,618 +1,506 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-// import { Form, Input, message } from "antd";
-import { setCookie } from "cookies-next";
+import { notification } from "antd";
+import classNames from "classnames";
+import { deleteCookie, getCookie } from "cookies-next";
+import { Heart, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-
-import ViewAllProducts from "@/components/buttons/viewAllProduct";
+import { signOut } from "next-auth/react";
+import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
-import { formattedMoney } from "@/helper/formatDocument";
+import { checkTime } from "@/helper/checkTimeFlashSale";
 import useCartStore from "@/store/cart/useCartStore";
-import useFetchCheckout from "@/store/checkout";
-import { useShippingStore } from "@/store/checkout/shipping";
 
-function Checkout() {
-  const {
-    register,
-    handleSubmit,
-    // watch,
-    // formState: { errors },
-  } = useForm();
-  const [address, setAddress] = useState([]);
-  const [districtId, setDistrictId] = useState("");
-  let totalPrice = 0;
-  const shipping = useShippingStore((state) => state);
-  const { data: session, status } = useSession();
-  const router = useRouter();
+import Card from "../card";
+import Rectangle from "../svg/rectangle";
 
-  const cartData = useCartStore((state) => state);
+import styles from "./productDetails.module.scss";
 
-  const fetchCheckout = useFetchCheckout((state) => state.fetch);
+function ProductDetails(props) {
+  const { product, relatedItem } = props;
 
-  const urlVnpay = useFetchCheckout((state) => state.payload.url);
-  const handleChangeFee = async (e) => {
-    const addressShip = {
-      districtId,
-      wardId: e.target.value.toString(),
-    };
-    // setTimeout(() => console.log("◀◀◀ address ▶▶▶", address), 2000);
-    shipping.getFee(addressShip, cartData.cart);
-  };
-  useEffect(() => {
-    if (urlVnpay) {
-      router.push(urlVnpay);
+  const [coverImg, setCoverImg] = useState(product?.image?.location);
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const [inputQuantity, setInputQuantity] = useState(1);
+
+  const addToCart = useCartStore((state) => state.addToCart);
+
+  const cart = useCartStore((state) => state.cart);
+
+  const [isFlashsale, setIsFlashsale] = useState(false);
+
+  const [stockFlashsale, setStockFlashsale] = useState(0);
+
+  const fnCheckFlashsale = useCallback(async () => {
+    const check = await axiosClient.get(`/flashsale/check-flashsale?productId=${product._id}`);
+
+    if (check.data.message === "found") {
+      setIsFlashsale(true);
+      setStockFlashsale(check.data.stock);
     }
-  }, [router, urlVnpay]);
+  }, [product._id]);
+
   useEffect(() => {
-    cartData.getListCart();
-    shipping.getProvince();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
-    if (status === "authenticated" && cartData.cart.length > 0) {
-      shipping.getFee(session.user.address[0], cartData.cart);
-      setAddress(session.user.address[0]);
+    if (product._id) {
+      fnCheckFlashsale();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartData.cart, status]);
+  }, [product._id]);
 
-  const handlePlaceOrder = useCallback(
-    (finalTotal) => {
-      const data = {
-        amount: finalTotal * 24000,
-        bankCode: "NCB",
-        language: "en",
-        returnUrl: process.env.NEXT_PUBLIC_VNPAY_RETURN_URL,
-      };
+  const openNotificationWithIcon = useCallback(
+    (type, message) => {
+      switch (type) {
+        case "error":
+          api[type]({
+            message: "ERROR",
+            description: message,
+          });
+          break;
 
-      fetchCheckout(data);
+        case "success":
+          api[type]({
+            message: "SUCCESS",
+            description: message,
+          });
+          break;
+
+        default:
+          break;
+      }
     },
-    [fetchCheckout],
+    [api],
   );
 
-  const onSubmit = async (data) => {
-    const dayShip = new Date();
-    dayShip.setDate(dayShip.getDate() + 3);
-    const shipFee = (shipping.feeShip / 24000).toFixed(2);
-    const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
-    const orderDetails = cartData.cart.map((item) => {
-      return {
-        productId: item.product.productId,
-        quantity: item.product.quantity,
-        discount: item.productDetail.discount,
-        price: item.productDetail.price,
-      };
-    });
-    const order = {
-      customerId: session.user.id,
-      shippedDate: dayShip,
-      status: "WAITING",
-      shippingFee: shipFee,
-      totalPrice,
-      shippingAddress: shipAddress,
-      paymentType: data.paymentType,
-      orderDetails,
-    };
-    try {
-      const result = await axiosClient.post("orders", order);
-      if (result) {
-        setCookie("orderId", result?.data?.payload?._id);
+  const handleClickAddToCart = useCallback(
+    async (item) => {
+      const getToken = getCookie("TOKEN");
+      const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-        cartData.resetCart();
+      if (cart.length > 0) {
+        const checkFlashsale = await axiosClient.get(
+          `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
+        );
 
-        if (data.paymentType === "CREDIT_CARD") {
-          handlePlaceOrder(finalTotal);
-        } else {
-          router.push("/order-success");
+        if (checkFlashsale.data.message === "found") {
+          openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+
+          return;
+        }
+      } else {
+        const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+          axiosClient.get("/time-flashsale"),
+        ]);
+
+        if (getTimeFlashsale.data.payload.expirationTime) {
+          let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+
+          endOfSale += " 23:59:59";
+
+          const checkTimeF = checkTime(endOfSale);
+
+          if (checkTimeF <= 0) {
+            openNotificationWithIcon("error", "The flash sale period has ended");
+
+            return;
+          }
+
+          if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+            openNotificationWithIcon("error", "Flash sale has not opened yet");
+
+            return;
+          }
+        }
+
+        if (checkStockFlashsale.data.stock <= 0) {
+          openNotificationWithIcon("error", "The product has been sold out");
+
+          return;
         }
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log("◀◀◀ error ▶▶▶", error);
+
+      try {
+        const response = await axiosClient.get("/authCustomers/profile");
+
+        if (getToken && getRefreshToken && response.data.payload) {
+          const data = {
+            productId: item.id,
+            name: item.name,
+            image: item.image.location,
+            price: item.price.discountedPrice,
+            quantity: parseInt(inputQuantity, 10),
+          };
+
+          addToCart(data);
+
+          openNotificationWithIcon("success", "product added to cart!!!");
+        } else {
+          deleteCookie("TOKEN");
+          deleteCookie("REFRESH_TOKEN");
+          deleteCookie("email");
+          signOut({ callbackUrl: "/log-in" });
+        }
+      } catch (error) {
+        deleteCookie("TOKEN");
+        deleteCookie("REFRESH_TOKEN");
+        deleteCookie("email");
+        signOut({ callbackUrl: "/log-in" });
+      }
+    },
+    [addToCart, cart, inputQuantity, openNotificationWithIcon],
+  );
+
+  const handleClickPlus = useCallback(() => {
+    setInputQuantity((num) => parseInt(num, 10) + 1);
+  }, []);
+
+  const handleClickMinus = useCallback(() => {
+    if (inputQuantity <= 1) {
+      setInputQuantity(1);
+    } else {
+      setInputQuantity((num) => parseInt(num, 10) - 1);
     }
+  }, [inputQuantity]);
 
-    // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
-  };
+  const handleChangeInputQuantity = useCallback((e) => {
+    if (e.target.value) {
+      setInputQuantity(e.target.value);
+    } else {
+      setInputQuantity("");
+    }
+  }, []);
 
+  const handleBlurInputQuantity = useCallback((e) => {
+    if (!e.target.value || e.target.value <= 0) {
+      setInputQuantity(1);
+    }
+  }, []);
   return (
-    <div className="container mt-[5rem]">
-      <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
-        <Link
-          href="/"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
-        >
-          Home
-        </Link>
+    <>
+      {contextHolder}
 
-        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
+      <div className="container mt-[5rem] flex flex-col items-center justify-center">
+        <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
+          <Link
+            href="/"
+            className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+          >
+            Home
+          </Link>
 
-        <Link
-          href="/cart"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
-        >
-          Cart
-        </Link>
+          <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
 
-        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
+          <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+            {product?.name}
+          </span>
+        </div>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
-      </div>
-
-      <h2 className="max-w-[15.75rem] mt-[5rem] text-text-2 font-inter text-[2.25rem] font-[500] leading-[1.875rem] tracking-[0.09rem] whitespace-nowrap">
-        Billing Details
-      </h2>
-
-      {status === "authenticated" ? (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="min-w-full grid grid-cols-12 lg:flex items-start justify-between"
-        >
-          <div className="mt-[3rem] col-span-12 inline-flex flex-col items-center gap-[1.5rem]">
-            <div className="flex flex-col items-start gap-[2rem]">
-              <label htmlFor="firstName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div className="max-h-[1.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    First Name
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+        <div className="min-w-full mt-[5rem] grid grid-cols-12">
+          <div className="hidden col-span-12 xl:col-span-2 xl:flex flex-col items-start justify-start gap-[1rem]">
+            {product.imageList?.map((item) => {
+              return (
+                <div key={item.id} className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+                  <Image
+                    className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+                    src={item?.location}
+                    alt="..."
+                    width={1000}
+                    height={1000}
+                    onClick={() => {
+                      setCoverImg(item.location);
+                    }}
+                  />
                 </div>
-                {/* <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
-                  <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
-                </Form.Item> */}
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.firstName || null}
-                  {...register("firstName")}
-                />
-              </label>
-
-              <label htmlFor="companyName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <span className="max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                  Last Name
-                </span>
-
-                <input
-                  type="text"
-                  id="companyName"
-                  name="companyName"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.lastName || null}
-                  {...register("lastName")}
-                />
-              </label>
-
-              <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Street Address
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-
-                <input
-                  type="text"
-                  id="streetAddress"
-                  name="streetAddress"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.address[0]?.address || ""}
-                  {...register("streetAddress", { required: true })}
-                />
-              </label>
-
-              <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                  Province
-                </span>
-                <select
-                  className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  // onChange={(e) => shipping.getDistrict(e.target.value)}
-                  name="province"
-                  defaultValue={session?.user?.address[0]?.provinceId || ""}
-                  {...register("province", {
-                    onChange: (e) => {
-                      document.getElementById("streetAddress").value = null;
-                      setAddress((prev) => ({
-                        ...prev,
-                        provinceId: e.target.value,
-                        provinceName: e.target.options[e.target.options.selectedIndex].text,
-                      }));
-                      shipping.getDistrict(e.target.value);
-                    },
-                  })}
-                >
-                  {shipping?.isProvince === true &&
-                    shipping?.provinceList?.map((item) => {
-                      if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
-                        return (
-                          <option value={item.ProvinceID} key={item.ProvinceID} selected>
-                            {item.ProvinceName}{" "}
-                          </option>
-                        );
-                      }
-                      return (
-                        <option value={item.ProvinceID} key={item.ProvinceID}>
-                          {item.ProvinceName}{" "}
-                        </option>
-                      );
-                    })}
-                </select>
-                {/* <input
-                type="text"
-                id="apartment"
-                name="apartment"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
-              </label>
-
-              <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    District
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-                <select
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  // onChange={(e) => {
-                  //   setDistrictId(e.target.value);
-                  //   shipping.getWard(e.target.value);
-                  // }}
-                  // defaultValue={session?.user?.address[0]?.districtId}
-                  id="district"
-                  name="district"
-                  {...register(
-                    "district",
-                    {
-                      onChange: (e) => {
-                        setAddress((prev) => ({
-                          ...prev,
-                          districtId: e.target.value,
-                          districtName: e.target.options[e.target.options.selectedIndex].text,
-                        }));
-                        setDistrictId(e.target.value);
-                        shipping.getWard(e.target.value);
-                      },
-                    },
-                    { required: true },
-                  )}
-                >
-                  {shipping?.districtList?.length > 0 ? (
-                    shipping.districtList.map((item) => {
-                      if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
-                        return (
-                          <option value={item.DistrictID} key={item.DistrictID}>
-                            {item.item.DistrictName}{" "}
-                          </option>
-                        );
-                      }
-                      return (
-                        <option value={item.DistrictID} key={item.DistrictID}>
-                          {item.DistrictName}{" "}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <option value={session?.user?.address[0]?.districtId} hidden>
-                        {session?.user?.address[0]?.districtName}{" "}
-                      </option>
-                      <option value="" disabled>
-                        Please choose province
-                      </option>
-                    </>
-                  )}
-                </select>
-                {/* <input
-                type="text"
-                id="city"
-                name="city"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
-              </label>
-
-              <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Ward
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-                <select
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  name="distric"
-                  // onChange={async (e) => {
-                  //   setAddress((prev) => ({
-                  //     ...prev,
-                  //     wardIdId: e.target.value,
-                  //     wardName: e.target.options[e.target.options.selectedIndex].text,
-                  //   }));
-                  //   handleChangeFee(e);
-                  // }}
-                  defaultValue={session?.user?.address[0]?.wardId}
-                  {...register("ward", {
-                    onChange: (e) => {
-                      setAddress((prev) => ({
-                        ...prev,
-                        wardId: e.target.value,
-                        wardName: e.target.options[e.target.options.selectedIndex].text,
-                      }));
-                      handleChangeFee(e);
-                    },
-                  })}
-                >
-                  {shipping?.wardList?.length > 0 ? (
-                    shipping.wardList.map((item) => {
-                      return (
-                        <option value={item.WardCode} key={item.WardCode}>
-                          {item.WardName}{" "}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <option value={session?.user?.address[0]?.wardId} hidden>
-                        {session?.user?.address[0]?.wardName}
-                      </option>
-                      <option value="" disabled>
-                        Please choose distict
-                      </option>
-                    </>
-                  )}
-                </select>
-                {/* <input
-                type="text"
-                id="phoneNumber"
-                name="phoneNumber"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
-              </label>
-
-              <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Phone Number
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.phoneNumber}
-                  {...register("phoneNumber")}
-                />
-              </label>
-
-              <label htmlFor="emailAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Email Address
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-
-                <input
-                  type="text"
-                  id="emailAddress"
-                  name="emailAddress"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.email}
-                  {...register("email")}
-                />
-              </label>
-            </div>
-
-            <label
-              htmlFor="saveInfo"
-              className="max-w-[20rem] sm:max-w-fit lg:min-w-full transition-opacity max-h-[1.5rem] flex items-center justify-start gap-[1rem]"
-            >
-              <input
-                type="checkbox"
-                id="saveInfo"
-                name="saveInfo"
-                className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
-              />
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                Save this information for faster check-out next time
-              </span>
-            </label>
-          </div>
-
-          <div className="mt-[5rem] col-span-12 inline-flex flex-col items-center lg:items-start gap-[2rem]">
-            {/* <div className="flex items-center gap-[1.5rem]">
+              );
+            })}
+            {/* <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
             <Image
-              className="max-w-[3.375rem] max-h-[3.375rem] object-contain"
-              src="/assets/images/products/banphimda.webp"
+              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+              src={coverImg}
               alt="..."
               width={1000}
               height={1000}
             />
-
-            <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">LCD Monitor</span>
-
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">$650</span>
-            </div>
           </div> */}
 
-            {cartData?.cart?.map((item) => {
-              totalPrice +=
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                ((item?.productDetail?.price * (100 - item?.productDetail?.discount)) / 100) * item?.product?.quantity;
-              return (
-                <div key={item.product._id} className="flex items-center gap-[1.5rem]">
-                  <Image
-                    className="max-w-[3.375rem] max-h-[3.375rem] object-contain"
-                    // src="/assets/images/products/banphimda.webp"
-                    src={item?.image?.location}
-                    alt={item?.productDetail?.name}
-                    width={1000}
-                    height={1000}
+            {/* <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+            <Image
+              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+              src={product?.image?.location || product?.imageList[0]}
+              alt="..."
+              width={1000}
+              height={1000}
+            />
+          </div>
+
+          <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+            <Image
+              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+              src={product?.image?.location}
+              alt="..."
+              width={1000}
+              height={1000}
+            />
+          </div>
+
+          <div className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
+            <Image
+              className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
+              src={product?.image?.location || product?.images[1]}
+              alt="..."
+              width={1000}
+              height={1000}
+            />
+          </div> */}
+          </div>
+
+          <div className="col-span-12 xl:col-span-5 pl-[1.4rem] flex justify-center">
+            <div className="relative flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
+              {isFlashsale && (
+                <div className="absolute top-0 left-0 gap-[1rem] flex flex-col items-center justify-center px-[0.75rem] py-[0.75rem] bg-secondary-2 rounded-[0.25rem]">
+                  <span className="text-text-1 font-poppins text-[2rem] font-[700] leading-[2rem]">FLASH SALE</span>
+
+                  <span className="text-text-1 font-poppins text-[1.5rem] font-[700] leading-[1.5rem]">
+                    Stock: {stockFlashsale}
+                  </span>
+                </div>
+              )}
+
+              <Image
+                className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
+                src={coverImg}
+                alt="..."
+                width={1000}
+                height={1000}
+              />
+            </div>
+          </div>
+
+          <div className="col-span-12 xl:col-span-5 flex flex-col items-center xl:items-start justify-start mt-[2rem] xl:mt-0 xl:pl-[5.45rem]">
+            <h2 className="max-w-[24rem] whitespace-nowrap overflow-hidden text-ellipsis text-text-2 font-inter text-[1.5rem] font-[600] leading-[1.5rem] tracking-[0.045rem]">
+              {product?.name}
+            </h2>
+
+            <div className="mt-[1rem] max-h-[1.3125rem] flex items-start justify-start">
+              <Image
+                className="max-w-[6.25rem] max-h-[1.25rem]"
+                src="/assets/images/star/FourStar.png"
+                alt="..."
+                width={1000}
+                height={1000}
+              />
+
+              <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
+                ({product?.rateCount} Reviews)
+              </span>
+
+              <div className="ml-[1rem] mt-[0.1rem] min-h-[1rem] min-w-[0.0625rem] bg-black opacity-[0.5]" />
+
+              <span className="ml-[1rem] opacity-[0.6] text-button-3 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                In Stock
+              </span>
+            </div>
+
+            <span className="mt-[1rem] text-text-2 font-inter text-[1.5rem] font-[400] leading-[1.5rem] tracking-[0.045rem]">
+              ${parseFloat(product?.price).toFixed(2)}
+            </span>
+
+            <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+              {product?.description}
+            </span>
+
+            <hr className="mt-[1.5rem] min-w-[25rem] border-solid border-[1px] border-gray-400" />
+
+            <div className="mt-[1.5rem] inline-flex items-start gap-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1.25rem] font-[400] leading-[1.25rem] tracking-[0.0375rem]">
+                Colours:
+              </span>
+
+              <div className="flex items-start gap-[0.5rem]">
+                <Image
+                  className="max-w-[1.25rem] max-h-[1.25rem]"
+                  src="/assets/images/color/color1.png"
+                  alt="..."
+                  width={1000}
+                  height={1000}
+                />
+
+                <Image
+                  className="max-w-[1.25rem] max-h-[1.25rem]"
+                  src="/assets/images/color/color2.png"
+                  alt="..."
+                  width={1000}
+                  height={1000}
+                />
+              </div>
+            </div>
+
+            <div className="mt-[1.5rem] inline-flex items-center gap-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1.25rem] font-[400] leading-[1.25rem] tracking-[0.0375rem]">
+                Size:
+              </span>
+
+              <ul className="flex items-start gap-[1rem]">
+                <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
+                  <span className="min-w-[1.125rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                    XS
+                  </span>
+                </li>
+
+                <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
+                  <span className="min-w-[0.5rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                    S
+                  </span>
+                </li>
+
+                <li className="bg-secondary-2 flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
+                  <span className="min-w-[0.75rem] min-h-[1.125rem] flex-shrink-0 text-text-1 font-poppins font-[500] leading-[1.3125rem]">
+                    M
+                  </span>
+                </li>
+
+                <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
+                  <span className="min-w-[0.375rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                    L
+                  </span>
+                </li>
+
+                <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
+                  <span className="min-w-[1rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                    XL
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-[1.5rem] flex items-center justify-start">
+              {!isFlashsale && (
+                <>
+                  <button
+                    onClick={() => handleClickMinus()}
+                    type="button"
+                    className="flex items-center justify-center min-w-[2.5rem] min-h-[2.75rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)] rounded-tl-[0.25rem] rounded-bl-[0.25rem]"
+                  >
+                    <span className="min-w-[1.5rem] min-h-[1.5rem] flex-shrink-0">
+                      <Minus />
+                    </span>
+                  </button>
+
+                  <input
+                    type="number"
+                    value={inputQuantity}
+                    onBlur={(e) => handleBlurInputQuantity(e)}
+                    onChange={(e) => handleChangeInputQuantity(e)}
+                    className={classNames(
+                      "flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]",
+                      styles.no_arrow_input,
+                    )}
                   />
 
-                  <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        {item?.productDetail?.name}
-                      </span>
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                        Quantity: {item?.product.quantity}
-                      </span>
-                    </div>
-
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      {formattedMoney(item?.productDetail?.price)}
+                  <button
+                    onClick={() => handleClickPlus()}
+                    type="button"
+                    className="rounded-tr-[0.25rem] rounded-br-[0.25rem] flex min-w-[2.5625rem] min-h-[2.75rem] flex-col items-center justify-center bg-secondary-2"
+                  >
+                    <span className="min-w-[1.5rem] min-h-[1.5rem] flex-shrink-0">
+                      <Plus className="text-text-1" />
                     </span>
-                  </div>
+                  </button>
+                </>
+              )}
+
+              <button
+                onClick={() => handleClickAddToCart(product)}
+                type="button"
+                className="whitespace-nowrap ml-[1rem] inline-flex px-[3rem] py-[0.625rem] items-center justify-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2"
+              >
+                <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
+              </button>
+
+              <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
+                <Heart />
+              </div>
+            </div>
+
+            <div className="mt-[2.5rem] flex flex-col items-start justify-start min-w-[24.9375rem] min-h-[11.25rem] flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
+              <div className="mt-[1.5rem] ml-[1rem] inline-flex items-center gap-[1rem]">
+                <Image
+                  className="max-w-[2.5rem] max-h-[2.5rem] object-contain"
+                  src="/assets/images/services/delivery.png"
+                  alt="..."
+                  width={1000}
+                  height={1000}
+                />
+
+                <div className="flex flex-col items-start gap-[0.5rem]">
+                  <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+                    Free Delivery
+                  </span>
+
+                  <span className="text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem] underline">
+                    Enter your postal code for Delivery Availability
+                  </span>
+                </div>
+              </div>
+
+              <hr className="mt-[1rem] min-w-full border-solid border-[1px] border-gray-400" />
+
+              <div className="mt-[1rem] ml-[1rem] inline-flex items-center gap-[1rem]">
+                <Image
+                  className="max-w-[2.5rem] max-h-[2.5rem] object-contain"
+                  src="/assets/images/services/return.png"
+                  alt="..."
+                  width={1000}
+                  height={1000}
+                />
+
+                <div className="flex flex-col items-start gap-[0.5rem]">
+                  <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+                    Return Delivery
+                  </span>
+
+                  <span className="text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+                    Free 30 Days Delivery Returns. <u>Details</u>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="min-w-full mt-[8.75rem] inline-flex flex-col items-start gap-[3.75rem]">
+          <div className="flex items-center gap-[1rem]">
+            <div className="min-w-[1.25rem] max-h-[2.5rem">
+              <Rectangle />
+            </div>
+
+            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Related Item</h3>
+          </div>
+
+          <div className="min-w-full grid grid-cols-12 xl:flex items-start xl:gap-[1.875rem]">
+            {relatedItem.map((item) => {
+              return (
+                <div
+                  className="mb-[3rem] xl:mb-0 col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 flex items-center justify-center"
+                  key={item.name}
+                >
+                  <Card product={item} />
                 </div>
               );
             })}
-
-            <div className="flex flex-col items-start gap-[1rem]">
-              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
-
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  {formattedMoney(totalPrice)}
-                </span>
-              </div>
-
-              <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
-
-              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
-
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 || 0)}
-                </span>
-              </div>
-
-              <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
-
-              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
-
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  {/* {shipping.isLoading === false
-                  ? formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)
-                  : "Loading"} */}
-                  {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)}
-                </span>
-              </div>
-            </div>
-
-            <div className="min-w-[20rem] sm:min-w-[26.6875rem] flex items-center justify-between">
-              <label htmlFor="bank" className="transition-opacity flex items-center justify-center gap-[1rem]">
-                <input
-                  className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
-                  type="radio"
-                  id="bank"
-                  name="bank-cash"
-                  value="CREDIT_CARD"
-                  checked
-                  {...register("paymentType")}
-                />
-
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
-              </label>
-
-              <div className="flex items-start gap-[0.5rem]">
-                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.13125rem] py-[0.35rem] justify-center items-center">
-                  <Image
-                    className="max-w-[2.3625rem] max-h-[1.05rem] flex-shrink-0"
-                    src="/assets/images/banks/bk.png"
-                    width={1200}
-                    height={800}
-                    priority
-                    alt="..."
-                  />
-                </div>
-
-                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.13125rem] py-[0.525rem]">
-                  <Image
-                    className="max-w-[2.3625rem] max-h-[0.7rem] flex-shrink-0"
-                    src="/assets/images/banks/visa.png"
-                    width={4096}
-                    height={1256}
-                    priority
-                    alt="..."
-                  />
-                </div>
-
-                <div className="flex min-w-[2.625rem] min-h-[1.75rem] p-[0.0875rem] items-center justify-center">
-                  <Image
-                    className="max-w-[2.45rem] max-h-[1.575rem] flex-shrink-0"
-                    src="/assets/images/banks/master.png"
-                    width={1280}
-                    height={764}
-                    priority
-                    alt="..."
-                  />
-                </div>
-
-                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.0875rem] py-[0.30625rem items-center justify-center]">
-                  <Image
-                    className="max-w-[2.45rem] max-h-[1.575rem] flex-shrink-0"
-                    src="/assets/images/banks/o.png"
-                    width={3000}
-                    height={2000}
-                    priority
-                    alt="..."
-                  />
-                </div>
-              </div>
-            </div>
-
-            <label
-              htmlFor="cash"
-              className="min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]"
-            >
-              <input
-                className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
-                type="radio"
-                id="cash"
-                name="bank-cash"
-                value="CASH"
-                {...register("paymentType")}
-              />
-
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
-            </label>
-
-            <div className="sm:flex items-end gap-[1rem]">
-              <input
-                className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-                type="text"
-                placeholder="Coupon Code"
-              />
-
-              <ViewAllProducts text="Apply Coupon" type="button" onClick={() => {}} />
-            </div>
-
-            <ViewAllProducts text="Place Order" type="submit" onClick={() => {}} />
           </div>
-        </form>
-      ) : (
-        ""
-      )}
-    </div>
+        </div>
+      </div>
+    </>
   );
 }
 
-export default Checkout;
+export default ProductDetails;
+
+ProductDetails.propTypes = {
+  product: PropTypes.instanceOf(Object).isRequired,
+  relatedItem: PropTypes.instanceOf(Array).isRequired,
+};
