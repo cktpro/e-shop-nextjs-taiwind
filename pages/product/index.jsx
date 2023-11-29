@@ -27,10 +27,10 @@ function Product(props) {
     setCheckedList(list);
   };
   const handleFilter = useCallback(async () => {
-    const test = `products?${filter?.categoryId ? `categoryId=${filter.categoryId}&` : ""}${
-      filter?.supplierId ? `supplierId=${filter.supplierId}` : ""
-    }`;
-    console.log("◀◀◀ test ▶▶▶", test);
+    // const test = `products?${filter?.categoryId ? `categoryId=${filter.categoryId}&` : ""}${
+    //   filter?.supplierId ? `supplierId=${filter.supplierId}` : ""
+    // }`;
+    // console.log("◀◀◀ test ▶▶▶", test);
     try {
       setLoading(true);
 

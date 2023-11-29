@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Form, Input, message, Select } from "antd";
+import { Form } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
@@ -70,41 +70,40 @@ function Checkout() {
   );
 
   const onSubmit = async (data) => {
-    console.log("◀◀◀ data ▶▶▶", data);
-    // const dayShip = new Date();
-    // dayShip.setDate(dayShip.getDate() + 3);
-    // const shipFee = (shipping.feeShip / 24000).toFixed(2);
-    // const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    // const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
-    // const orderDetails = cartData.cart.map((item) => {
-    //   return {
-    //     productId: item.product.productId,
-    //     quantity: item.product.quantity,
-    //     discount: item.productDetail.discount,
-    //     price: item.productDetail.price,
-    //   };
-    // });
-    // const order = {
-    //   customerId: session.user.id,
-    //   shippedDate: dayShip,
-    //   status: "WAITING",
-    //   shippingFee: shipFee,
-    //   totalPrice,
-    //   shippingAddress: shipAddress,
-    //   paymentType: data.paymentType,
-    //   orderDetails,
-    // };
-    // try {
-    //   const result = await axiosClient.post("orders", order);
-    //   if (result) {
-    //     setCookie("orderId", result?.data?.payload?._id);
+    const dayShip = new Date();
+    dayShip.setDate(dayShip.getDate() + 3);
+    const shipFee = (shipping.feeShip / 24000).toFixed(2);
+    const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
+    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
+    const orderDetails = cartData.cart.map((item) => {
+      return {
+        productId: item.product.productId,
+        quantity: item.product.quantity,
+        discount: item.productDetail.discount,
+        price: item.productDetail.price,
+      };
+    });
+    const order = {
+      customerId: session.user.id,
+      shippedDate: dayShip,
+      status: "WAITING",
+      shippingFee: shipFee,
+      totalPrice,
+      shippingAddress: shipAddress,
+      paymentType: data.paymentType,
+      orderDetails,
+    };
+    try {
+      const result = await axiosClient.post("orders", order);
+      if (result) {
+        setCookie("orderId", result?.data?.payload?._id);
 
-    //     cartData.resetCart();
-    //     handlePlaceOrder(finalTotal);
-    //   }
-    // } catch (error) {
-    //   console.log("◀◀◀ error ▶▶▶", error);
-    // }
+        cartData.resetCart();
+        handlePlaceOrder(finalTotal);
+      }
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
 
     // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
   };

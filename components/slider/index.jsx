@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import classNames from "classnames";
 import { ChevronRight, MenuSquare, XCircle } from "lucide-react";
 // import Image from "next/image";
@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 // import banner1 from "@/assets/images/banner/banner1.jpg";
-import { useTrans } from "@/helper/chanLang";
+// import { useTrans } from "@/helper/chanLang";
 import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
 
 import Banner from "../banner";
