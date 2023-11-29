@@ -1,456 +1,618 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { message } from "antd";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { useForm } from "react-hook-form";
+// import { Form, Input, message } from "antd";
+import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
-import UpdateCart from "@/components/buttons/updateCart";
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
-import ProcessLoader from "@/components/loader/processLoader";
-import CanCel from "@/components/svg/cancel";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 import { formattedMoney } from "@/helper/formatDocument";
 import useCartStore from "@/store/cart/useCartStore";
-// import useNotificationUpdateCart from "@/store/showNotificationUpdateCart";
+import useFetchCheckout from "@/store/checkout";
+import { useShippingStore } from "@/store/checkout/shipping";
 
-function CartPage() {
-  const router = useRouter();
+function Checkout() {
+  const {
+    register,
+    handleSubmit,
+    // watch,
+    // formState: { errors },
+  } = useForm();
+  const [address, setAddress] = useState([]);
+  const [districtId, setDistrictId] = useState("");
   let totalPrice = 0;
-  const [isChanged, setIsChanged] = useState({
-    update: false,
-    checkout: false,
-  });
-  const [cartItem, setCartItem] = useState([]);
-  const [inputCoupon, setInputCoupon] = useState("");
-
-  const [isFlashsale, setIsFlashsale] = useState(false);
-
-  // const OpenNotificationUpdateCart = useNotificationUpdateCart((state) => state.openNotification);
-
-  // const CloseNotificationUpdateCart = useNotificationUpdateCart((state) => state.closeNotification);
+  const shipping = useShippingStore((state) => state);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const cartData = useCartStore((state) => state);
 
-  // const increase = useCartStore((state) => state.increase);
+  const fetchCheckout = useFetchCheckout((state) => state.fetch);
 
-  // const reduce = useCartStore((state) => state.reduce);
-
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-
-  const applyCoupon = useCartStore((state) => state.applyCoupon);
-
-  // const timeoutRef = useRef(null);
-
-  const checkFlashsale = useCallback(async () => {
-    const check = await axiosClient.get(`/flashsale/check-flashsale?productId=${cartData.cart[0]?.product?.productId}`);
-
-    if (check.data.message === "found") {
-      setIsFlashsale(true);
-    }
-  }, [cartData]);
-
+  const urlVnpay = useFetchCheckout((state) => state.payload.url);
+  const handleChangeFee = async (e) => {
+    const addressShip = {
+      districtId,
+      wardId: e.target.value.toString(),
+    };
+    // setTimeout(() => console.log("◀◀◀ address ▶▶▶", address), 2000);
+    shipping.getFee(addressShip, cartData.cart);
+  };
   useEffect(() => {
-    if (cartData.cart && cartData.cart.length > 0) {
-      checkFlashsale();
+    if (urlVnpay) {
+      router.push(urlVnpay);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartData.cart]);
-
-  const handleClickIncrease = useCallback(
-    async (index) => {
-      const newItem = cartItem;
-      setIsChanged((prev) => ({
-        ...prev,
-        update: true,
-        checkout: true,
-      }));
-      const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
-      if (valueQuantity >= newItem[index].productDetail.stock) {
-        document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
-        newItem[index].product.quantity = newItem[index].productDetail.stock;
-        setCartItem(newItem);
-        message.error("Không đủ sản phẩm");
-      } else {
-        document.getElementById(`quantity${index}`).value = parseInt(valueQuantity, 10) + 1;
-        newItem[index].product.quantity += 1;
-        setCartItem(newItem);
-      }
-    },
-    [cartItem],
-  );
-  const handleChangeQuantity = useCallback(
-    (value, index) => {
-      setIsChanged((prev) => ({
-        ...prev,
-        update: true,
-        checkout: true,
-      }));
-      const newItem = cartItem;
-      if (value > newItem[index].productDetail.stock) {
-        document.getElementById(`quantity${index}`).value = newItem[index].productDetail.stock;
-        newItem[index].product.quantity = newItem[index].productDetail.stock;
-        setCartItem(newItem);
-        message.error("Số lượng không đủ");
-      } else if (value < 1) {
-        document.getElementById(`quantity${index}`).value = 1;
-        newItem[index].product.quantity = 1;
-        setCartItem(newItem);
-        message.error("Số lượng không hợp lệ");
-      } else {
-        newItem[index].product.quantity = parseInt(value, 10);
-        setCartItem(newItem);
-      }
-    },
-    [cartItem],
-  );
-  const handleClickReduce = useCallback(
-    (index) => {
-      setIsChanged((prev) => ({
-        ...prev,
-        update: true,
-        checkout: true,
-      }));
-      const newItem = cartItem;
-      const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
-      if (valueQuantity <= 1) {
-        const text = "Bạn có muốn xóa sản phẩm này?";
-        // eslint-disable-next-line no-alert
-        if (window.confirm(text) === true) {
-          cartData.removeFromCart(newItem[index].product);
-          return;
-        }
-        return;
-      }
-      document.getElementById(`quantity${index}`).value = parseInt(valueQuantity, 10) - 1;
-      newItem[index].product.quantity -= 1;
-      setCartItem(newItem);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [cartItem],
-  );
-
-  const handleClickRemoveFromCart = useCallback(
-    (product) => {
-      // eslint-disable-next-line no-alert
-      if (window.confirm("Bạn có muốn xóa sản phẩm này?") === true) {
-        removeFromCart(product);
-      }
-    },
-    [removeFromCart],
-  );
-
-  const handleChangeInputCoupon = useCallback((e) => {
-    setInputCoupon(e.target.value);
-  }, []);
-
-  const handleClickApplyCoupon = useCallback(
-    (e) => {
-      e.preventDefault();
-      applyCoupon(inputCoupon);
-    },
-    [applyCoupon, inputCoupon],
-  );
-
-  const handleClickUpdateCart = useCallback(() => {
-    if (isChanged === false) {
-      message.warning("Không có gì để cập nhật");
-      return;
-    }
-    cartData.updateCart(cartItem);
-    setIsChanged((prev) => ({
-      ...prev,
-      update: false,
-      checkout: false,
-    }));
-    // OpenNotificationUpdateCart();
-
-    // if (timeoutRef.current) {
-    //   clearTimeout(timeoutRef.current);
-    // }
-
-    // timeoutRef.current = setTimeout(() => {
-    //   CloseNotificationUpdateCart();
-
-    //   clearTimeout(timeoutRef.current);
-
-    //   timeoutRef.current = null;
-    // }, 3000);
-  }, [cartItem, cartData, isChanged]);
-  const handleClickCheckoutCart = useCallback(() => {
-    setIsChanged((prev) => ({
-      ...prev,
-      update: false,
-      checkout: true,
-    }));
-    if (isChanged === true) {
-      message.warning("Vui lòng cập nhật trước khi checkout");
-    } else if (isFlashsale) {
-      router.push("/checkout-flashsale");
-    } else {
-      router.push("/checkout");
-    }
-  }, [isChanged, isFlashsale, router]);
-  useEffect(() => {
-    if (cartData.cart.length > 0) {
-      setCartItem(cartData.cart);
-    }
-  }, [cartData]);
+  }, [router, urlVnpay]);
   useEffect(() => {
     cartData.getListCart();
+    shipping.getProvince();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (status === "authenticated" && cartData.cart.length > 0) {
+      shipping.getFee(session.user.address[0], cartData.cart);
+      setAddress(session.user.address[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartData.cart, status]);
+
+  const handlePlaceOrder = useCallback(
+    (finalTotal) => {
+      const data = {
+        amount: finalTotal * 24000,
+        bankCode: "NCB",
+        language: "en",
+        returnUrl: process.env.NEXT_PUBLIC_VNPAY_RETURN_URL,
+      };
+
+      fetchCheckout(data);
+    },
+    [fetchCheckout],
+  );
+
+  const onSubmit = async (data) => {
+    const dayShip = new Date();
+    dayShip.setDate(dayShip.getDate() + 3);
+    const shipFee = (shipping.feeShip / 24000).toFixed(2);
+    const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
+    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
+    const orderDetails = cartData.cart.map((item) => {
+      return {
+        productId: item.product.productId,
+        quantity: item.product.quantity,
+        discount: item.productDetail.discount,
+        price: item.productDetail.price,
+      };
+    });
+    const order = {
+      customerId: session.user.id,
+      shippedDate: dayShip,
+      status: "WAITING",
+      shippingFee: shipFee,
+      totalPrice,
+      shippingAddress: shipAddress,
+      paymentType: data.paymentType,
+      orderDetails,
+    };
+    try {
+      const result = await axiosClient.post("orders", order);
+      if (result) {
+        setCookie("orderId", result?.data?.payload?._id);
+
+        cartData.resetCart();
+
+        if (data.paymentType === "CREDIT_CARD") {
+          handlePlaceOrder(finalTotal);
+        } else {
+          router.push("/order-success");
+        }
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
+
+    // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
+  };
+
   return (
-    <>
-      <ProcessLoader isLoading={cartData.isLoading} />
-      {cartData.cart.length > 0 ? (
-        <div className="container mt-[5rem] flex flex-col items-center justify-center">
-          <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
-            <Link
-              href="/"
-              className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+    <div className="container mt-[5rem]">
+      <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
+        <Link
+          href="/"
+          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+        >
+          Home
+        </Link>
+
+        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
+
+        <Link
+          href="/cart"
+          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+        >
+          Cart
+        </Link>
+
+        <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
+
+        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
+      </div>
+
+      <h2 className="max-w-[15.75rem] mt-[5rem] text-text-2 font-inter text-[2.25rem] font-[500] leading-[1.875rem] tracking-[0.09rem] whitespace-nowrap">
+        Billing Details
+      </h2>
+
+      {status === "authenticated" ? (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="min-w-full grid grid-cols-12 lg:flex items-start justify-between"
+        >
+          <div className="mt-[3rem] col-span-12 inline-flex flex-col items-center gap-[1.5rem]">
+            <div className="flex flex-col items-start gap-[2rem]">
+              <label htmlFor="firstName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div className="max-h-[1.5rem]">
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    First Name
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+                {/* <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
+                  <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
+                </Form.Item> */}
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.firstName || null}
+                  {...register("firstName")}
+                />
+              </label>
+
+              <label htmlFor="companyName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <span className="max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  Last Name
+                </span>
+
+                <input
+                  type="text"
+                  id="companyName"
+                  name="companyName"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.lastName || null}
+                  {...register("lastName")}
+                />
+              </label>
+
+              <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div>
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Street Address
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+
+                <input
+                  type="text"
+                  id="streetAddress"
+                  name="streetAddress"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.address[0]?.address || ""}
+                  {...register("streetAddress", { required: true })}
+                />
+              </label>
+
+              <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  Province
+                </span>
+                <select
+                  className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  // onChange={(e) => shipping.getDistrict(e.target.value)}
+                  name="province"
+                  defaultValue={session?.user?.address[0]?.provinceId || ""}
+                  {...register("province", {
+                    onChange: (e) => {
+                      document.getElementById("streetAddress").value = null;
+                      setAddress((prev) => ({
+                        ...prev,
+                        provinceId: e.target.value,
+                        provinceName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      shipping.getDistrict(e.target.value);
+                    },
+                  })}
+                >
+                  {shipping?.isProvince === true &&
+                    shipping?.provinceList?.map((item) => {
+                      if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                        return (
+                          <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                            {item.ProvinceName}{" "}
+                          </option>
+                        );
+                      }
+                      return (
+                        <option value={item.ProvinceID} key={item.ProvinceID}>
+                          {item.ProvinceName}{" "}
+                        </option>
+                      );
+                    })}
+                </select>
+                {/* <input
+                type="text"
+                id="apartment"
+                name="apartment"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+              /> */}
+              </label>
+
+              <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div>
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    District
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+                <select
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  // onChange={(e) => {
+                  //   setDistrictId(e.target.value);
+                  //   shipping.getWard(e.target.value);
+                  // }}
+                  // defaultValue={session?.user?.address[0]?.districtId}
+                  id="district"
+                  name="district"
+                  {...register(
+                    "district",
+                    {
+                      onChange: (e) => {
+                        setAddress((prev) => ({
+                          ...prev,
+                          districtId: e.target.value,
+                          districtName: e.target.options[e.target.options.selectedIndex].text,
+                        }));
+                        setDistrictId(e.target.value);
+                        shipping.getWard(e.target.value);
+                      },
+                    },
+                    { required: true },
+                  )}
+                >
+                  {shipping?.districtList?.length > 0 ? (
+                    shipping.districtList.map((item) => {
+                      if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
+                        return (
+                          <option value={item.DistrictID} key={item.DistrictID}>
+                            {item.item.DistrictName}{" "}
+                          </option>
+                        );
+                      }
+                      return (
+                        <option value={item.DistrictID} key={item.DistrictID}>
+                          {item.DistrictName}{" "}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <option value={session?.user?.address[0]?.districtId} hidden>
+                        {session?.user?.address[0]?.districtName}{" "}
+                      </option>
+                      <option value="" disabled>
+                        Please choose province
+                      </option>
+                    </>
+                  )}
+                </select>
+                {/* <input
+                type="text"
+                id="city"
+                name="city"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+              /> */}
+              </label>
+
+              <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div>
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Ward
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+                <select
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  name="distric"
+                  // onChange={async (e) => {
+                  //   setAddress((prev) => ({
+                  //     ...prev,
+                  //     wardIdId: e.target.value,
+                  //     wardName: e.target.options[e.target.options.selectedIndex].text,
+                  //   }));
+                  //   handleChangeFee(e);
+                  // }}
+                  defaultValue={session?.user?.address[0]?.wardId}
+                  {...register("ward", {
+                    onChange: (e) => {
+                      setAddress((prev) => ({
+                        ...prev,
+                        wardId: e.target.value,
+                        wardName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      handleChangeFee(e);
+                    },
+                  })}
+                >
+                  {shipping?.wardList?.length > 0 ? (
+                    shipping.wardList.map((item) => {
+                      return (
+                        <option value={item.WardCode} key={item.WardCode}>
+                          {item.WardName}{" "}
+                        </option>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <option value={session?.user?.address[0]?.wardId} hidden>
+                        {session?.user?.address[0]?.wardName}
+                      </option>
+                      <option value="" disabled>
+                        Please choose distict
+                      </option>
+                    </>
+                  )}
+                </select>
+                {/* <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+              /> */}
+              </label>
+
+              <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div>
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Phone Number
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.phoneNumber}
+                  {...register("phoneNumber")}
+                />
+              </label>
+
+              <label htmlFor="emailAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <div>
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Email Address
+                  </span>
+
+                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                </div>
+
+                <input
+                  type="text"
+                  id="emailAddress"
+                  name="emailAddress"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  defaultValue={session?.user?.email}
+                  {...register("email")}
+                />
+              </label>
+            </div>
+
+            <label
+              htmlFor="saveInfo"
+              className="max-w-[20rem] sm:max-w-fit lg:min-w-full transition-opacity max-h-[1.5rem] flex items-center justify-start gap-[1rem]"
             >
-              Home
-            </Link>
-
-            <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">
-              /
-            </span>
-
-            <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Cart</span>
+              <input
+                type="checkbox"
+                id="saveInfo"
+                name="saveInfo"
+                className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+              />
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                Save this information for faster check-out next time
+              </span>
+            </label>
           </div>
 
-          <div className="inline-flex flex-col items-start gap-[2rem] sm:gap-[5rem] mt-[5rem]">
-            <div className="flex flex-col items-start gap-[1.5rem]">
-              <div className="xl:flex xl:flex-col items-center xl:gap-[2.5rem]">
-                <div className="flex xl:max-w-[73.125rem] max-w-[43.8rem] min-h-[4.5rem] pt-[1.5rem] pr-[2.4375rem] pb-[1.5rem] pl-[2.5rem] rounded-[0.25rem] bg-primary-1 shadow-custom">
-                  <div className="flex items-center xl:gap-[17.75rem] sm:gap-[8rem]">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Product</span>
+          <div className="mt-[5rem] col-span-12 inline-flex flex-col items-center lg:items-start gap-[2rem]">
+            {/* <div className="flex items-center gap-[1.5rem]">
+            <Image
+              className="max-w-[3.375rem] max-h-[3.375rem] object-contain"
+              src="/assets/images/products/banphimda.webp"
+              alt="..."
+              width={1000}
+              height={1000}
+            />
 
-                    <span className="text-text-2 ml-[1rem] sm:ml-0 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      Price
-                    </span>
+            <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">LCD Monitor</span>
 
-                    <span className="text-text-2 sm:ml-0 ml-[2.2rem] font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      Quantity
-                    </span>
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">$650</span>
+            </div>
+          </div> */}
 
-                    <span className="text-text-2 sm:ml-0 ml-[1rem] font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      Subtotal
+            {cartData?.cart?.map((item) => {
+              totalPrice +=
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                ((item?.productDetail?.price * (100 - item?.productDetail?.discount)) / 100) * item?.product?.quantity;
+              return (
+                <div key={item.product._id} className="flex items-center gap-[1.5rem]">
+                  <Image
+                    className="max-w-[3.375rem] max-h-[3.375rem] object-contain"
+                    // src="/assets/images/products/banphimda.webp"
+                    src={item?.image?.location}
+                    alt={item?.productDetail?.name}
+                    width={1000}
+                    height={1000}
+                  />
+
+                  <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                        {item?.productDetail?.name}
+                      </span>
+                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                        Quantity: {item?.product.quantity}
+                      </span>
+                    </div>
+
+                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {formattedMoney(item?.productDetail?.price)}
                     </span>
                   </div>
                 </div>
-                <form
-                  id="quantity_form"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleClickUpdateCart();
-                  }}
-                >
-                  {cartData.cart.map((item, idx) => {
-                    totalPrice += item.productDetail.price * item.product.quantity;
-                    return (
-                      <div
-                        key={item.product._id}
-                        className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
-                      >
-                        <Image
-                          title={item.productDetail.name}
-                          className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
-                          src={item.image.location}
-                          alt="..."
-                          width={1000}
-                          height={1000}
-                        />
+              );
+            })}
 
-                        <button
-                          onClick={() => handleClickRemoveFromCart(item.product)}
-                          type="button"
-                          className="absolute top-[1rem] left-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        >
-                          <CanCel />
-                        </button>
-
-                        <Link
-                          className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
-                          href={`/${item.productDetail._id}`}
-                        >
-                          <span
-                            title={item.productDetail.name}
-                            className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
-                          >
-                            {item.productDetail.name}
-                          </span>
-                        </Link>
-
-                        <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[1.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
-                          {formattedMoney(item.productDetail.price)}
-                        </span>
-
-                        <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
-                          {isFlashsale ? (
-                            <span className="cursor-default min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                              {item.product.quantity}
-                            </span>
-                          ) : (
-                            <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
-                              <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                                <input
-                                  type="number"
-                                  name="quantity"
-                                  id={`quantity${idx}`}
-                                  className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                  defaultValue={item.product.quantity}
-                                  onChange={(e) =>
-                                    e.target.value
-                                      ? handleChangeQuantity(e.target.value, idx)
-                                      : setIsChanged((prev) => ({
-                                          ...prev,
-                                          update: true,
-                                          checkout: true,
-                                        }))
-                                  }
-                                  required
-                                />
-                              </span>
-
-                              <div className="flex flex-col items-center justify-center">
-                                <button
-                                  onClick={() => handleClickIncrease(idx)}
-                                  type="button"
-                                  className="max-w-[1rem] max-h-[1rem]"
-                                >
-                                  <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
-                                </button>
-
-                                <button
-                                  onClick={() => handleClickReduce(idx)}
-                                  type="button"
-                                  className="max-w-[1rem] max-h-[1rem]"
-                                >
-                                  <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
-                          {formattedMoney(
-                            (parseInt(item.product.quantity, 10) * parseFloat(item.productDetail.price)).toFixed(2),
-                          )}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </form>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 items-start xl:gap-[47.3125rem] sm:min-w-[43.8rem] min-w-[20rem] justify-between">
-                <button
-                  onClick={() => {
-                    window.history.back();
-                  }}
-                  type="button"
-                  className="flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
-                >
-                  <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
-                    Return To Shop
-                  </span>
-                </button>
-
-                <button
-                  // onClick={() => handleClickUpdateCart()}
-                  // onClick={() => handleSubmit(onSubmit)}
-                  type="submit"
-                  form="quantity_form"
-                  className="disabled:opacity-50 min-w-[13.7rem] sm:min-w-fit flex px-[3rem] py-[1rem] h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]"
-                  disabled={!isChanged.update}
-                >
-                  <span className=" text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] h-[1.5rem] whitespace-nowrap">
-                    Update Cart
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            <div className="xl:flex grid grid-cols-12 items-start xl:gap-[10.8125rem] min-w-full">
-              <div className="flex flex-col col-span-12 items-start justify-start xl:gap-[3rem] xl:mb-0 mb-10">
-                <form className="min-w-full sm:min-w-fit flex flex-col sm:flex-row items-start sm:items-center justify-center gap-[1rem]">
-                  <input
-                    type="text"
-                    placeholder="Type freeship or 10%"
-                    onChange={handleChangeInputCoupon}
-                    className="min-w-full sm:min-w-[18.75rem] max-h-[3.5rem] box-border px-[1.5rem] py-[1rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] flex items-center rounded-[0.25rem] border-[1px] border-solid border-black"
-                  />
-
-                  <ViewAllProducts text="Apply Coupon" type="submit" onClick={handleClickApplyCoupon} />
-                </form>
+            <div className="flex flex-col items-start gap-[1rem]">
+              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
 
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  {cartData.coupon}
+                  {formattedMoney(totalPrice)}
                 </span>
               </div>
 
-              <div className="min-w-full xl:min-w-fit col-span-12 flex justify-end">
-                <div className="flex flex-col xl:pt-0 pt-[2rem] col-span-12 items-start justify-center max-w-[29.375rem] max-h-[20.25rem] box-border rounded-[0.25rem] border-[1.5px] border-solid border-black">
-                  <span className="mt-[2rem] ml-[1.5rem] min-w-[6.25rem] min-h-[1.75rem] text-text-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
-                    Cart Total
-                  </span>
+              <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
-                  <div className="inline-flex mx-[1.5rem] mt-[1.5rem] items-start min-w-[20rem] sm:min-w-[26.375rem] justify-between">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal:</span>
+              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
 
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      {formattedMoney(totalPrice)}
-                    </span>
-                  </div>
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 || 0)}
+                </span>
+              </div>
 
-                  <hr className="mx-[1.5rem] min-w-[20rem] sm:min-w-[26.375rem] mt-[1rem] border-solid border-[1px] border-gray-400" />
+              <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
-                  <div className="inline-flex mx-[1.5rem] mt-[1rem] items-start min-w-[20rem] sm:min-w-[26.375rem] justify-between">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
+              <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
 
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      {`$${cartData.shipping}`}
-                    </span>
-                  </div>
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  {/* {shipping.isLoading === false
+                  ? formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)
+                  : "Loading"} */}
+                  {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)}
+                </span>
+              </div>
+            </div>
 
-                  <hr className="mx-[1.5rem] min-w-[20rem] sm:min-w-[26.375rem] mt-[1rem] border-solid border-[1px] border-gray-400" />
+            <div className="min-w-[20rem] sm:min-w-[26.6875rem] flex items-center justify-between">
+              <label htmlFor="bank" className="transition-opacity flex items-center justify-center gap-[1rem]">
+                <input
+                  className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                  type="radio"
+                  id="bank"
+                  name="bank-cash"
+                  value="CREDIT_CARD"
+                  checked
+                  {...register("paymentType")}
+                />
 
-                  <div className="inline-flex mx-[1.5rem] mt-[1rem] mb-[1rem] items-start min-w-[20rem] sm:min-w-[26.375rem] justify-between">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
+                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
+              </label>
 
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                      {formattedMoney(totalPrice + cartData.shipping)}
-                    </span>
-                  </div>
+              <div className="flex items-start gap-[0.5rem]">
+                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.13125rem] py-[0.35rem] justify-center items-center">
+                  <Image
+                    className="max-w-[2.3625rem] max-h-[1.05rem] flex-shrink-0"
+                    src="/assets/images/banks/bk.png"
+                    width={1200}
+                    height={800}
+                    priority
+                    alt="..."
+                  />
+                </div>
 
-                  {/* <Link href="/checkout" className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]"> */}
-                  <div className="ml-[3.43rem] sm:ml-[5.56rem] mb-[2rem]">
-                    <UpdateCart
-                      text="Process to checkout"
-                      type="button"
-                      onClick={() => {
-                        handleClickCheckoutCart();
-                      }}
-                      disabled={isChanged?.update || false}
-                    />
-                  </div>
-                  {/* </Link> */}
+                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.13125rem] py-[0.525rem]">
+                  <Image
+                    className="max-w-[2.3625rem] max-h-[0.7rem] flex-shrink-0"
+                    src="/assets/images/banks/visa.png"
+                    width={4096}
+                    height={1256}
+                    priority
+                    alt="..."
+                  />
+                </div>
+
+                <div className="flex min-w-[2.625rem] min-h-[1.75rem] p-[0.0875rem] items-center justify-center">
+                  <Image
+                    className="max-w-[2.45rem] max-h-[1.575rem] flex-shrink-0"
+                    src="/assets/images/banks/master.png"
+                    width={1280}
+                    height={764}
+                    priority
+                    alt="..."
+                  />
+                </div>
+
+                <div className="flex min-w-[2.625rem] min-h-[1.75rem] px-[0.0875rem] py-[0.30625rem items-center justify-center]">
+                  <Image
+                    className="max-w-[2.45rem] max-h-[1.575rem] flex-shrink-0"
+                    src="/assets/images/banks/o.png"
+                    width={3000}
+                    height={2000}
+                    priority
+                    alt="..."
+                  />
                 </div>
               </div>
             </div>
+
+            <label
+              htmlFor="cash"
+              className="min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]"
+            >
+              <input
+                className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                type="radio"
+                id="cash"
+                name="bank-cash"
+                value="CASH"
+                {...register("paymentType")}
+              />
+
+              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
+            </label>
+
+            <div className="sm:flex items-end gap-[1rem]">
+              <input
+                className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                type="text"
+                placeholder="Coupon Code"
+              />
+
+              <ViewAllProducts text="Apply Coupon" type="button" onClick={() => {}} />
+            </div>
+
+            <ViewAllProducts text="Place Order" type="submit" onClick={() => {}} />
           </div>
-        </div>
+        </form>
       ) : (
-        <div className="h-[25vh] container flex items-center justify-center">
-          <p>Vui lòng thêm sản phẩm vào giỏ hàng</p>
-        </div>
+        ""
       )}
-    </>
+    </div>
   );
 }
 
-export default CartPage;
+export default Checkout;
