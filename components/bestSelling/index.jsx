@@ -32,13 +32,14 @@ function BestSelling(props) {
           <ViewAll />
         </Link>
 
-        <div className="grid grid-cols-12 sm:gap-[1.875rem]">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-[1.875rem] gap-[1.875rem]">
           {bestSelling.length > 0 ? (
             bestSelling.map((item) => {
               return (
                 <div
-                  className="max-w-[16.875rem] min-h-[15.625rem] bg-white rounded-[0.25rem] col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
+                  className="max-w-[16.875rem] min-h-[15.625rem] bg-white rounded-[0.25rem]  mb-[2.875rem] sm:mb-0"
                   key={item.name}
+                  // col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3
                 >
                   <Card product={item} />
                 </div>
