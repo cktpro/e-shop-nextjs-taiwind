@@ -212,7 +212,7 @@ function Header() {
   useEffect(() => {
     getListCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   return (
     <>

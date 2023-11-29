@@ -99,7 +99,12 @@ function Checkout() {
         setCookie("orderId", result?.data?.payload?._id);
 
         cartData.resetCart();
-        handlePlaceOrder(finalTotal);
+
+        if (data.paymentType === "CREDIT_CARD") {
+          handlePlaceOrder(finalTotal);
+        } else {
+          router.push("/order-success");
+        }
       }
     } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);
@@ -193,7 +198,7 @@ function Checkout() {
                   id="streetAddress"
                   name="streetAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.address[0]?.address}
+                  defaultValue={session?.user?.address[0]?.address || ""}
                   {...register("streetAddress", { required: true })}
                 />
               </label>

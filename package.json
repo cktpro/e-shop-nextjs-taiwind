@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "add": "^2.0.6",
     "antd": "^5.11.5",
     "axios": "^1.6.0",
