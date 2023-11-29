@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { notification } from "antd";
 import classNames from "classnames";
-import { getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import { Heart, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { checkTime } from "@/helper/checkTimeFlashSale";
 import useCartStore from "@/store/cart/useCartStore";
 
 import Card from "../card";
@@ -18,8 +19,8 @@ import styles from "./productDetails.module.scss";
 
 function ProductDetails(props) {
   const { product, relatedItem } = props;
+
   const [coverImg, setCoverImg] = useState(product?.image?.location);
-  const router = useRouter();
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -88,27 +89,68 @@ function ProductDetails(props) {
 
           return;
         }
+      } else {
+        const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+          axiosClient.get("/time-flashsale"),
+        ]);
+
+        if (getTimeFlashsale.data.payload.expirationTime) {
+          let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+
+          endOfSale += " 23:59:59";
+
+          const checkTimeF = checkTime(endOfSale);
+
+          if (checkTimeF <= 0) {
+            openNotificationWithIcon("error", "The flash sale period has ended");
+
+            return;
+          }
+
+          if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+            openNotificationWithIcon("error", "Flash sale has not opened yet");
+
+            return;
+          }
+        }
+
+        if (checkStockFlashsale.data.stock <= 0) {
+          openNotificationWithIcon("error", "The product has been sold out");
+
+          return;
+        }
       }
 
-      const response = await axiosClient.get("/authCustomers/profile");
+      try {
+        const response = await axiosClient.get("/authCustomers/profile");
 
-      if (getToken && getRefreshToken && response.data.payload) {
-        const data = {
-          productId: item.id,
-          name: item.name,
-          image: item.image.location,
-          price: item.price.discountedPrice,
-          quantity: parseInt(inputQuantity, 10),
-        };
+        if (getToken && getRefreshToken && response.data.payload) {
+          const data = {
+            productId: item.id,
+            name: item.name,
+            image: item.image.location,
+            price: item.price.discountedPrice,
+            quantity: parseInt(inputQuantity, 10),
+          };
 
-        addToCart(data);
+          addToCart(data);
 
-        openNotificationWithIcon("success", "product added to cart!!!");
-      } else {
-        router.push("/log-in");
+          openNotificationWithIcon("success", "product added to cart!!!");
+        } else {
+          deleteCookie("TOKEN");
+          deleteCookie("REFRESH_TOKEN");
+          deleteCookie("email");
+          signOut({ callbackUrl: "/log-in" });
+        }
+      } catch (error) {
+        deleteCookie("TOKEN");
+        deleteCookie("REFRESH_TOKEN");
+        deleteCookie("email");
+        signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart, inputQuantity, openNotificationWithIcon, router],
+    [addToCart, cart, inputQuantity, openNotificationWithIcon],
   );
 
   const handleClickPlus = useCallback(() => {

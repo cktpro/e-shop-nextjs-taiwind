@@ -57,68 +57,6 @@ function AccountPage() {
         </label>
       </div>
 
-      <div className="mt-[1.5rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
-        {/* <label htmlFor="email" className="flex flex-col items-start gap-[0.5rem]">
-          <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Email</span>
-
-          <input
-            defaultValue={profile?.email}
-            autoComplete="off"
-            type="text"
-            id="email"
-            name="email"
-            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-          />
-        </label> */}
-
-        {/* <label htmlFor="address" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
-          <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Address</span>
-
-          <input
-            defaultValue={profile?.address}
-            autoComplete="off"
-            type="text"
-            id="address"
-            name="address"
-            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-          />
-        </label> */}
-      </div>
-
-      {/* <div className="mt-[1.5rem] min-w-full inline-flex flex-col items-start gap-[1rem]">
-        <label htmlFor="currentPassword" className="min-w-full flex flex-col items-start gap-[0.5rem]">
-          <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Password Changes</span>
-
-          <div className="min-w-full flex flex-col items-start gap-[1rem]">
-            <input
-              defaultValue={profile?.password}
-              autoComplete="new-password"
-              id="currentPassword"
-              name="currentPassword"
-              type="password"
-              placeholder="Current Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-            />
-
-            <input
-              id="NewPasswod"
-              name="NewPasswod"
-              type="password"
-              placeholder="New Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-            />
-
-            <input
-              id="confirmNewPasswod"
-              name="confirmNewPasswod"
-              type="password"
-              placeholder="Confirm New Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-            />
-          </div>
-        </label>
-      </div> */}
-
       <div className="min-w-full flex items-center justify-end">
         <div className="mt-[1.5rem] inline-flex items-center gap-[2rem]">
           <button type="button" className="text font-poppins text-[1rem] font-[400] leading-[1.5rem]">
