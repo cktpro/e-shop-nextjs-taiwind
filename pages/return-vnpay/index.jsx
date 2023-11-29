@@ -8,7 +8,7 @@ import ViewAllProducts from "@/components/buttons/viewAllProduct";
 import useCheckIpnVnpay from "@/store/checkout/checkIPN";
 import useCheckReturnFromVnpay from "@/store/checkout/checkReturn";
 
-function NotFoundPage() {
+function ReturnVnpayPage() {
   const searchParams = useSearchParams();
 
   const [statusCode, setStatusCode] = useState("");
@@ -86,4 +86,4 @@ function NotFoundPage() {
   );
 }
 
-export default NotFoundPage;
+export default ReturnVnpayPage;

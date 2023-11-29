@@ -1,18 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { notification } from "antd";
+import classNames from "classnames";
 // import { Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import * as yup from "yup";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 import { checkTime } from "@/helper/checkTimeFlashSale";
 import { formattedMoney } from "@/helper/formatDocument";
+import useAuthUser from "@/store/authUser";
 import useCartStore from "@/store/cart/useCartStore";
 import useCartStoreFlashsale from "@/store/cart/useCartStoreFlashsale";
 import useFetchCheckout from "@/store/checkout";
@@ -21,12 +25,83 @@ import { useShippingStore } from "@/store/checkout/shipping";
 function CheckoutFlashsale() {
   const [api, contextHolder] = notification.useNotification();
 
+  const schema = yup.object({
+    firstName: yup.string().required(),
+
+    lastName: yup.string().required(),
+
+    streetAddress: yup.string().required(),
+
+    province: yup.string().required(),
+
+    district: yup.string().required(),
+
+    ward: yup.string().required(),
+
+    email: yup.string().required(),
+
+    phoneNumber: yup
+      .string()
+      .required()
+      // eslint-disable-next-line no-template-curly-in-string
+      .test("phoneNumber type", "phone number is invalid", (value) => {
+        if (!value) return true;
+
+        const phoneRegex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+
+        return phoneRegex.test(value);
+      }),
+
+    paymentType: yup.string().required(),
+  });
+
   const {
     register,
     handleSubmit,
-    // watch,
-    // formState: { errors },
-  } = useForm();
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const validation = {
+    firstName: {
+      ...register("firstName"),
+    },
+
+    lastName: {
+      ...register("lastName"),
+    },
+
+    streetAddress: {
+      ...register("streetAddress"),
+    },
+
+    province: {
+      ...register("province"),
+    },
+
+    district: {
+      ...register("district"),
+    },
+
+    ward: {
+      ...register("ward"),
+    },
+
+    email: {
+      ...register("email"),
+    },
+
+    phoneNumber: {
+      ...register("phoneNumber"),
+    },
+
+    paymentType: {
+      ...register("paymentType"),
+    },
+  };
+
   const [address, setAddress] = useState([]);
   const [districtId, setDistrictId] = useState("");
   // const totalPrice = 0;
@@ -42,6 +117,8 @@ function CheckoutFlashsale() {
   const fetchCheckout = useFetchCheckout((state) => state.fetch);
 
   const urlVnpay = useFetchCheckout((state) => state.payload.url);
+
+  const profile = useAuthUser((state) => state.profile);
 
   const openNotificationWithIcon = useCallback(
     (type, message) => {
@@ -85,13 +162,13 @@ function CheckoutFlashsale() {
     shipping.getProvince();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    if (status === "authenticated" && cartData.cart.length > 0) {
-      shipping.getFee(session.user.address[0], cartData.cart);
-      setAddress(session.user.address[0]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartData.cart, status]);
+  // useEffect(() => {
+  //   if (status === "authenticated" && cartData.cart.length > 0) {
+  //     shipping.getFee(session.user.address[0], cartData.cart);
+  //     setAddress(session.user.address[0]);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [cartData.cart, status]);
 
   const handlePlaceOrder = useCallback(
     (finalTotal) => {
@@ -143,7 +220,7 @@ function CheckoutFlashsale() {
     dayShip.setDate(dayShip.getDate() + 3);
     const shipFee = (shipping.feeShip / 24000).toFixed(2);
     const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
+    const shipAddress = `${data.streetAddress} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
     const orderDetails = cartData.cart.map((item) => {
       return {
         productId: item.product.productId,
@@ -153,7 +230,7 @@ function CheckoutFlashsale() {
       };
     });
     const order = {
-      customerId: session.user.id,
+      customerId: profile._id,
       shippedDate: dayShip,
       status: "WAITING",
       shippingFee: shipFee,
@@ -168,7 +245,12 @@ function CheckoutFlashsale() {
         setCookie("orderId", result?.data?.payload?._id);
 
         cartData.resetCart();
-        handlePlaceOrder(finalTotal);
+
+        if (data.paymentType === "CREDIT_CARD") {
+          handlePlaceOrder(finalTotal);
+        } else {
+          router.push("/order-success");
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -238,32 +320,216 @@ function CheckoutFlashsale() {
 
                     <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
-                  {/* <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
-                  <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
-                </Form.Item> */}
+
                   <input
+                    {...validation.firstName}
                     type="text"
                     id="firstName"
                     name="firstName"
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    defaultValue={session?.user?.firstName || null}
-                    {...register("firstName")}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.firstName && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    defaultValue={profile?.firstName}
                   />
+
+                  {errors.firstName && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.firstName.message}
+                    </p>
+                  )}
                 </label>
 
-                <label htmlFor="companyName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <label htmlFor="lastName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <span className="max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Last Name
                   </span>
 
                   <input
+                    {...validation.lastName}
                     type="text"
-                    id="companyName"
-                    name="companyName"
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    defaultValue={session?.user?.lastName || null}
-                    {...register("lastName")}
+                    id="lastName"
+                    name="lastName"
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.lastName && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    defaultValue={profile?.lastName}
                   />
+
+                  {errors.lastName && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.lastName.message}
+                    </p>
+                  )}
+                </label>
+
+                <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Province
+                  </span>
+
+                  <select
+                    {...validation.province}
+                    onChange={(e) => {
+                      setValue("province", e.target.value, { shouldValidate: true });
+                      document.getElementById("streetAddress").value = null;
+                      setAddress((prev) => ({
+                        ...prev,
+                        provinceId: e.target.value,
+                        provinceName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      shipping.getDistrict(e.target.value);
+                    }}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.province && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    name="province"
+                    // defaultValue={session?.user?.address[0]?.provinceId || ""}
+                  >
+                    <option value={null}>{null}</option>
+
+                    {shipping?.isProvince === true &&
+                      shipping?.provinceList?.map((item) => {
+                        // if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                        //   return (
+                        //     <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                        //       {item.ProvinceName}{" "}
+                        //     </option>
+                        //   );
+                        // }
+                        return (
+                          <option value={item.ProvinceID} key={item.ProvinceID}>
+                            {item.ProvinceName}{" "}
+                          </option>
+                        );
+                      })}
+                  </select>
+
+                  {errors.province && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.province.message}
+                    </p>
+                  )}
+                </label>
+
+                <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                  <div>
+                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      District
+                    </span>
+
+                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                  </div>
+                  <select
+                    {...validation.district}
+                    onChange={(e) => {
+                      setValue("district", e.target.value, { shouldValidate: true });
+                      setAddress((prev) => ({
+                        ...prev,
+                        districtId: e.target.value,
+                        districtName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      setDistrictId(e.target.value);
+                      shipping.getWard(e.target.value);
+                    }}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.district && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    id="district"
+                    name="district"
+                  >
+                    <option value={null}>{null}</option>
+
+                    {shipping?.districtList?.length > 0 ? (
+                      shipping.districtList.map((item) => {
+                        // if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
+                        //   return (
+                        //     <option value={item.DistrictID} key={item.DistrictID}>
+                        //       {item.item.DistrictName}{" "}
+                        //     </option>
+                        //   );
+                        // }
+                        return (
+                          <option value={item.DistrictID} key={item.DistrictID}>
+                            {item.DistrictName}{" "}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <>
+                        {/* <option value={session?.user?.address[0]?.districtId} hidden>
+                          {session?.user?.address[0]?.districtName}{" "}
+                        </option> */}
+                        <option value="" disabled>
+                          Please choose province
+                        </option>
+                      </>
+                    )}
+                  </select>
+
+                  {errors.district && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.district.message}
+                    </p>
+                  )}
+                </label>
+
+                <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                  <div>
+                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      Ward
+                    </span>
+
+                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                  </div>
+                  <select
+                    {...validation.ward}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.ward && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    name="ward"
+                    onChange={(e) => {
+                      setValue("ward", e.target.value, { shouldValidate: true });
+                      setAddress((prev) => ({
+                        ...prev,
+                        wardId: e.target.value,
+                        wardName: e.target.options[e.target.options.selectedIndex].text,
+                      }));
+                      handleChangeFee(e);
+                    }}
+                    // defaultValue={session?.user?.address[0]?.wardId}
+                  >
+                    <option value={null}>{null}</option>
+
+                    {shipping?.wardList?.length > 0 ? (
+                      shipping.wardList.map((item) => {
+                        return (
+                          <option value={item.WardCode} key={item.WardCode}>
+                            {item.WardName}{" "}
+                          </option>
+                        );
+                      })
+                    ) : (
+                      <>
+                        {/* <option value={session?.user?.address[0]?.wardId} hidden>
+                          {session?.user?.address[0]?.wardName}
+                        </option> */}
+                        <option value="" disabled>
+                          Please choose distict
+                        </option>
+                      </>
+                    )}
+                  </select>
+
+                  {errors.ward && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.ward.message}
+                    </p>
+                  )}
                 </label>
 
                 <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
@@ -276,183 +542,22 @@ function CheckoutFlashsale() {
                   </div>
 
                   <input
+                    {...validation.streetAddress}
                     type="text"
                     id="streetAddress"
                     name="streetAddress"
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    defaultValue={session?.user?.address[0]?.address}
-                    {...register("streetAddress", { required: true })}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.streetAddress && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    // defaultValue={session?.user?.address[0]?.address}
                   />
-                </label>
 
-                <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Province
-                  </span>
-                  <select
-                    className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    // onChange={(e) => shipping.getDistrict(e.target.value)}
-                    name="province"
-                    defaultValue={session?.user?.address[0]?.provinceId}
-                    {...register("province", {
-                      onChange: (e) => {
-                        document.getElementById("streetAddress").value = null;
-                        setAddress((prev) => ({
-                          ...prev,
-                          provinceId: e.target.value,
-                          provinceName: e.target.options[e.target.options.selectedIndex].text,
-                        }));
-                        shipping.getDistrict(e.target.value);
-                      },
-                    })}
-                  >
-                    {shipping?.isProvince === true &&
-                      shipping?.provinceList?.map((item) => {
-                        if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
-                          return (
-                            <option value={item.ProvinceID} key={item.ProvinceID} selected>
-                              {item.ProvinceName}{" "}
-                            </option>
-                          );
-                        }
-                        return (
-                          <option value={item.ProvinceID} key={item.ProvinceID}>
-                            {item.ProvinceName}{" "}
-                          </option>
-                        );
-                      })}
-                  </select>
-                  {/* <input
-                type="text"
-                id="apartment"
-                name="apartment"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
-                </label>
-
-                <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                  <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                      District
-                    </span>
-
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                  </div>
-                  <select
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    // onChange={(e) => {
-                    //   setDistrictId(e.target.value);
-                    //   shipping.getWard(e.target.value);
-                    // }}
-                    // defaultValue={session?.user?.address[0]?.districtId}
-                    id="district"
-                    name="district"
-                    {...register(
-                      "district",
-                      {
-                        onChange: (e) => {
-                          setAddress((prev) => ({
-                            ...prev,
-                            districtId: e.target.value,
-                            districtName: e.target.options[e.target.options.selectedIndex].text,
-                          }));
-                          setDistrictId(e.target.value);
-                          shipping.getWard(e.target.value);
-                        },
-                      },
-                      { required: true },
-                    )}
-                  >
-                    {shipping?.districtList?.length > 0 ? (
-                      shipping.districtList.map((item) => {
-                        if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
-                          return (
-                            <option value={item.DistrictID} key={item.DistrictID}>
-                              {item.item.DistrictName}{" "}
-                            </option>
-                          );
-                        }
-                        return (
-                          <option value={item.DistrictID} key={item.DistrictID}>
-                            {item.DistrictName}{" "}
-                          </option>
-                        );
-                      })
-                    ) : (
-                      <>
-                        <option value={session?.user?.address[0]?.districtId} hidden>
-                          {session?.user?.address[0]?.districtName}{" "}
-                        </option>
-                        <option value="" disabled>
-                          Please choose province
-                        </option>
-                      </>
-                    )}
-                  </select>
-                  {/* <input
-                type="text"
-                id="city"
-                name="city"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
-                </label>
-
-                <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                  <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                      Ward
-                    </span>
-
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                  </div>
-                  <select
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    name="distric"
-                    // onChange={async (e) => {
-                    //   setAddress((prev) => ({
-                    //     ...prev,
-                    //     wardIdId: e.target.value,
-                    //     wardName: e.target.options[e.target.options.selectedIndex].text,
-                    //   }));
-                    //   handleChangeFee(e);
-                    // }}
-                    defaultValue={session?.user?.address[0]?.wardId}
-                    {...register("ward", {
-                      onChange: (e) => {
-                        setAddress((prev) => ({
-                          ...prev,
-                          wardId: e.target.value,
-                          wardName: e.target.options[e.target.options.selectedIndex].text,
-                        }));
-                        handleChangeFee(e);
-                      },
-                    })}
-                  >
-                    {shipping?.wardList?.length > 0 ? (
-                      shipping.wardList.map((item) => {
-                        return (
-                          <option value={item.WardCode} key={item.WardCode}>
-                            {item.WardName}{" "}
-                          </option>
-                        );
-                      })
-                    ) : (
-                      <>
-                        <option value={session?.user?.address[0]?.wardId} hidden>
-                          {session?.user?.address[0]?.wardName}
-                        </option>
-                        <option value="" disabled>
-                          Please choose distict
-                        </option>
-                      </>
-                    )}
-                  </select>
-                  {/* <input
-                type="text"
-                id="phoneNumber"
-                name="phoneNumber"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-              /> */}
+                  {errors.streetAddress && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.streetAddress.message}
+                    </p>
+                  )}
                 </label>
 
                 <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
@@ -468,13 +573,22 @@ function CheckoutFlashsale() {
                     type="text"
                     id="phoneNumber"
                     name="phoneNumber"
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    defaultValue={session?.user?.phoneNumber}
-                    {...register("phoneNumber")}
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.phoneNumber && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    defaultValue={profile?.phoneNumber?.includes("null") ? "" : profile?.phoneNumber}
+                    {...validation.phoneNumber}
                   />
+
+                  {errors.phoneNumber && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.phoneNumber.message}
+                    </p>
+                  )}
                 </label>
 
-                <label htmlFor="emailAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                <label htmlFor="email" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
                     <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Email Address
@@ -484,13 +598,22 @@ function CheckoutFlashsale() {
                   </div>
 
                   <input
+                    {...validation.email}
                     type="text"
-                    id="emailAddress"
-                    name="emailAddress"
-                    className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                    defaultValue={session?.user?.email}
-                    {...register("email")}
+                    id="email"
+                    name="email"
+                    className={classNames(
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      errors.email && "border-solid border-secondary-2 border-[2px]",
+                    )}
+                    defaultValue={profile?.email}
                   />
+
+                  {errors.email && (
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </label>
               </div>
 
@@ -570,16 +693,24 @@ function CheckoutFlashsale() {
                 </div>
               </div>
 
-              <div className="min-w-[20rem] sm:min-w-[26.6875rem] flex items-center justify-between">
-                <label htmlFor="bank" className="transition-opacity flex items-center justify-center gap-[1rem]">
+              <div
+                className={classNames(
+                  "min-w-[20rem] sm:min-w-[26.6875rem] flex items-center justify-between",
+                  errors.paymentType && "border-solid border-secondary-2 border-[2px]",
+                )}
+              >
+                <label htmlFor="paymentType" className="transition-opacity flex items-center justify-center gap-[1rem]">
                   <input
-                    className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                    {...validation.paymentType}
+                    className={classNames(
+                      "min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2",
+                      errors.paymentType && "border-solid border-secondary-2 border-[2px]",
+                    )}
                     type="radio"
-                    id="bank"
-                    name="bank-cash"
+                    id="paymentType"
+                    name="paymentType"
                     value="CREDIT_CARD"
-                    checked
-                    {...register("paymentType")}
+                    // checked
                   />
 
                   <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
@@ -633,22 +764,31 @@ function CheckoutFlashsale() {
               </div>
 
               <label
-                htmlFor="cash"
-                className="min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]"
+                htmlFor="paymentType"
+                className={classNames(
+                  "min-w-[20rem] sm:min-w-[26.6rem] transition-opacity flex items-center justify-start gap-[1rem]",
+                  errors.paymentType && "border-solid border-secondary-2 border-[2px]",
+                )}
               >
                 <input
+                  {...validation.paymentType}
                   className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
                   type="radio"
-                  id="cash"
-                  name="bank-cash"
+                  id="paymentType"
+                  name="paymentType"
                   value="CASH"
-                  {...register("paymentType")}
                 />
 
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                   Cash on delivery
                 </span>
               </label>
+
+              {errors.paymentType && (
+                <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  {errors.paymentType.message}
+                </p>
+              )}
 
               <div className="sm:flex items-end gap-[1rem]">
                 <input

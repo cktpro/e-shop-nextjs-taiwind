@@ -105,7 +105,11 @@ function Checkout() {
 
         cartData.resetCart();
 
-        handlePlaceOrder(finalTotal);
+        if (data.paymentType === "CREDIT_CARD") {
+          handlePlaceOrder(finalTotal);
+        } else {
+          router.push("/order-success");
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -200,7 +204,7 @@ function Checkout() {
                   id="streetAddress"
                   name="streetAddress"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.address[0]?.address}
+                  defaultValue={session?.user?.address[0]?.address || ""}
                   {...register("streetAddress", { required: true })}
                 />
               </label>
@@ -213,7 +217,7 @@ function Checkout() {
                   className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   // onChange={(e) => shipping.getDistrict(e.target.value)}
                   name="province"
-                  defaultValue={session?.user?.address[0]?.provinceId}
+                  defaultValue={session?.user?.address[0]?.provinceId || ""}
                   {...register("province", {
                     onChange: (e) => {
                       document.getElementById("streetAddress").value = null;

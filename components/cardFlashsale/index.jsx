@@ -55,8 +55,7 @@ function CardFlashsale(props) {
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      const [getMe, checkStockFlashsale, getTimeFlashsale] = await Promise.all([
-        axiosClient.get("/authCustomers/profile"),
+      const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
         axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
         axiosClient.get("/time-flashsale"),
       ]);
@@ -91,19 +90,30 @@ function CardFlashsale(props) {
         return;
       }
 
-      if (getToken && getRefreshToken && getMe.data.payload) {
-        const data = {
-          productId: item.id,
-          name: item.name,
-          image: item.image.location,
-          price: item.discountedPrice,
-          quantity: 1,
-        };
+      try {
+        const url = "/authCustomers/profile";
 
-        addToCart(data);
+        const response = await axiosClient.get(url);
 
-        openNotificationWithIcon("success", "product added to cart!!!");
-      } else {
+        if (getToken && getRefreshToken && response.data.payload) {
+          const data = {
+            productId: item.id,
+            name: item.name,
+            image: item.image.location,
+            price: item.discountedPrice,
+            quantity: 1,
+          };
+
+          addToCart(data);
+
+          openNotificationWithIcon("success", "product added to cart!!!");
+        } else {
+          deleteCookie("TOKEN");
+          deleteCookie("REFRESH_TOKEN");
+          deleteCookie("email");
+          signOut({ callbackUrl: "/log-in" });
+        }
+      } catch (error) {
         deleteCookie("TOKEN");
         deleteCookie("REFRESH_TOKEN");
         deleteCookie("email");
