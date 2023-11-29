@@ -11,11 +11,11 @@ import SaleHunter from "@/components/saleHunter";
 import Services from "@/components/services";
 import Slider from "@/components/slider";
 
-// import { categories } from "@/data/categoriesItems.jsx";
+import { categories } from "@/data/categoriesItems.jsx";
 import { axiosServer } from "@/helper/axios/axiosServer";
 import useKeySuggest from "@/store/keySuggest/useKeySuggest";
 
-export default function Home({ products, bestSelling, flashSales, categories }) {
+export default function Home({ products, bestSelling, flashSales }) {
   const addKeySuggest = useKeySuggest((state) => state.addKeySuggest);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Home({ products, bestSelling, flashSales, categories }) 
       </Head>
 
       <section>
-        <Slider data={categories} />
+        <Slider />
       </section>
 
       <section>
@@ -73,16 +73,14 @@ Home.propTypes = {
   products: PropTypes.instanceOf(Array).isRequired,
   bestSelling: PropTypes.instanceOf(Array).isRequired,
   flashSales: PropTypes.instanceOf(Array).isRequired,
-  categories: PropTypes.instanceOf(Array).isRequired,
 };
 
 export async function getServerSideProps() {
   try {
-    const [response, bestSelling, flashSales, category] = await Promise.all([
+    const [response, bestSelling, flashSales] = await Promise.all([
       axiosServer.get("/products"),
       axiosServer.get("/products?page=1&pageSize=4"),
       axiosServer.get("/flashSale"),
-      axiosServer.get("/categories"),
     ]);
 
     return {
@@ -90,7 +88,6 @@ export async function getServerSideProps() {
         products: response.data.payload || [],
         bestSelling: bestSelling.data.payload || [],
         flashSales: flashSales.data.payload || [],
-        categories: category.data.payload || [],
       },
 
       // revalidate: 24 * 60 * 60,
@@ -102,7 +99,6 @@ export async function getServerSideProps() {
         products: [],
         bestSelling: [],
         flashSales: [],
-        categories: [],
       },
     };
   }

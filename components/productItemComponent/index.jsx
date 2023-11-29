@@ -42,8 +42,8 @@ function ProductItemComponent(props) {
     [addCart],
   );
   return (
-    <div className="relative flex flex-col items-start gap-[1rem] border bg-white rounded-[0.25rem]">
-      <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1 mx-auto">
+    <div className="flex flex-col items-start gap-[1rem] border">
+      <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
         <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
           <span className="text-text-1 font-poppins text-[0.75rem] font-[400] leading-[1.125rem]">
             {formattedDiscount(product.discount)}
@@ -67,14 +67,13 @@ function ProductItemComponent(props) {
         </div>
 
         <Image
-          className=" max-w-full max-h-[15.625rem] object-contain"
-          // className=" w-full h-full object-contain"
+          className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
           src={product?.image?.location || product?.imageList[0]?.location}
           alt="..."
           width={1000}
           height={1000}
           priority
-          // style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "auto" }}
         />
 
         <button
@@ -86,7 +85,7 @@ function ProductItemComponent(props) {
         </button>
       </div>
 
-      <div className="flex flex-col items-start gap-[0.5rem] p-[0.75rem] ">
+      <div className="flex flex-col items-start gap-[0.5rem]">
         <h4 className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
           {product?.name}
         </h4>
