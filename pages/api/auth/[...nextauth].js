@@ -59,6 +59,7 @@ const nextAuthOptions = (req, res) => {
 
             return user;
           } catch (error) {
+            // eslint-disable-next-line no-console
             console.log("««««« error »»»»»", error);
             return null;
           }
@@ -116,6 +117,7 @@ const nextAuthOptions = (req, res) => {
                 }
               }
             } catch (err) {
+              // eslint-disable-next-line no-console
               console.log("««««« err »»»»»", err);
               return false;
             }

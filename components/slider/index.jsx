@@ -3,7 +3,10 @@ import classNames from "classnames";
 import { ChevronRight, MenuSquare, XCircle } from "lucide-react";
 // import Image from "next/image";
 import Link from "next/link";
+// import { fetchData } from "next-auth/client/_utils";
+import PropTypes from "prop-types";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 // import banner1 from "@/assets/images/banner/banner1.jpg";
 import { useTrans } from "@/helper/chanLang";
 import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
@@ -12,8 +15,9 @@ import Banner from "../banner";
 
 import styles from "./slider.module.scss";
 
-function Slider() {
-  const data = useTrans("slideBar");
+function Slider(props) {
+  // const data = useTrans("slideBar");
+  const { data } = props;
 
   const [categories, setCategories] = useState(data);
 
@@ -25,9 +29,14 @@ function Slider() {
 
   const leftDrawderRef = useOutsideLeftDrawderClick(openDrawerLeft, closeDrawerLeft, isOpenDrawderLeft);
 
-  useEffect(() => {
-    setCategories(data);
-  }, [categories, data]);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const res = await axiosClient.get("/categories");
+  //     console.log("◀◀◀ res ▶▶▶", res);
+  //   }
+  //   fetchData();
+  //   // setCategories(data);
+  // }, []);
 
   const toggleFrameCategories = useCallback(
     (event, index) => {
@@ -96,7 +105,7 @@ function Slider() {
       </div>
 
       <div className="relative pt-[2.5rem] lg:pl-[2.81rem]">
-        <div className="grid grid-cols-12 bg-black">
+        <div className="grid grid-cols-12 bg-text-2 rounded-[0.25rem] overflow-hidden">
           <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-12">
             <Banner />
           </div>
@@ -184,3 +193,16 @@ function Slider() {
 }
 
 export default Slider;
+
+Slider.propTypes = {
+  data: PropTypes.instanceOf(Object).isRequired,
+};
+
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const res = await axiosClient.get("/categories");
+  const data = await res.data.payload;
+
+  // Pass data to the page via props
+  return { props: { category: data } };
+}

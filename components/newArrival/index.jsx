@@ -59,7 +59,7 @@ function NewArrival() {
             <div className="relative xl:max-w-[35.625rem] xl:max-h-[17.75rem] rounded-[0.25rem] bg-text-2">
               <div className="xl:max-w-[27rem] xl:max-h-[17.875rem] ml-[8.62rem] mb-[0.12rem]">
                 <Image
-                  className="object-contain"
+                  className="object-contain rounded-[0.25rem]"
                   src="/assets/images/arrival/hat.png"
                   alt="..."
                   width={1000}

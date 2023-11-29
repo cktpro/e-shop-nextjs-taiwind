@@ -29,7 +29,7 @@ function OurProducts(props) {
       <OurProductsCarousel products={products} />
 
       <div className="text-center mt-[3.75rem]">
-        <Link href="/">
+        <Link href="/product">
           <ViewAllProducts text="View All Products" type="button" onClick={() => {}} />
         </Link>
       </div>
