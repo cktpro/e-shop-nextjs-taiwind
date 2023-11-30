@@ -18,7 +18,7 @@ function FlashSale(props) {
       name: item.product.name,
       price: item.product.price,
       discount: item.discount,
-      stock: item.stock,
+      stock: item.flashsaleStock,
       categoryId: item.product.categoryId,
       supplierId: item.product.supplierId,
       description: item.product.description,

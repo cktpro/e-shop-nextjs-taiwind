@@ -107,7 +107,7 @@ function CheckoutFlashsale() {
   // const totalPrice = 0;
   const [totalPrice, setTotalPrice] = useState(0);
   const shipping = useShippingStore((state) => state);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   const cartData = useCartStore((state) => state);
@@ -190,6 +190,12 @@ function CheckoutFlashsale() {
       axiosClient.get("/time-flashsale"),
     ]);
 
+    if (checkStockFlashsale.data.message === "not found") {
+      openNotificationWithIcon("error", "The product has been sold out");
+
+      return;
+    }
+
     if (getTimeFlashsale.data.payload.expirationTime) {
       let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
@@ -210,7 +216,7 @@ function CheckoutFlashsale() {
       }
     }
 
-    if (checkStockFlashsale.data.stock <= 0) {
+    if (checkStockFlashsale.data.flashsaleStock <= 0) {
       openNotificationWithIcon("error", "The product has been sold out");
 
       return;

@@ -48,7 +48,11 @@ function CartPage() {
 
     if (check.data.message === "found") {
       setIsFlashsale(true);
+
+      return true;
     }
+
+    return false;
   }, [cartData]);
 
   useEffect(() => {
@@ -178,7 +182,9 @@ function CartPage() {
     //   timeoutRef.current = null;
     // }, 3000);
   }, [cartItem, cartData, isChanged]);
-  const handleClickCheckoutCart = useCallback(() => {
+  const handleClickCheckoutCart = useCallback(async () => {
+    const checkFl = await checkFlashsale();
+
     setIsChanged((prev) => ({
       ...prev,
       update: false,
@@ -186,12 +192,13 @@ function CartPage() {
     }));
     if (isChanged === true) {
       message.warning("Vui lòng cập nhật trước khi checkout");
-    } else if (isFlashsale) {
+    } else if (checkFl) {
       router.push("/checkout-flashsale");
     } else {
       router.push("/checkout");
     }
-  }, [isChanged, isFlashsale, router]);
+  }, [checkFlashsale, isChanged, router]);
+
   useEffect(() => {
     if (cartData.cart.length > 0) {
       setCartItem(cartData.cart);
