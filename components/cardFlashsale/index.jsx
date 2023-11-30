@@ -80,7 +80,7 @@ function CardFlashsale(props) {
         }
       }
 
-      if (checkStockFlashsale.data.stock <= 0) {
+      if (checkStockFlashsale.data.flashsaleStock <= 0) {
         openNotificationWithIcon("error", "The product has been sold out");
         return;
       }

@@ -39,9 +39,11 @@ function ProductDetails(props) {
   const fnCheckFlashsale = useCallback(async () => {
     const check = await axiosClient.get(`/flashsale/check-flashsale?productId=${product._id}`);
 
+    console.log("««««« check.data »»»»»", check.data);
+
     if (check.data.message === "found") {
       setIsFlashsale(true);
-      setStockFlashsale(check.data.stock);
+      setStockFlashsale(check.data.flashsaleStock);
     }
   }, [product._id]);
 
@@ -122,7 +124,7 @@ function ProductDetails(props) {
           }
         }
 
-        if (checkStockFlashsale.data.stock <= 0) {
+        if (checkStockFlashsale.data.flashsaleStock <= 0) {
           openNotificationWithIcon("error", "The product has been sold out");
 
           return;

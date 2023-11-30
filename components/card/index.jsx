@@ -8,6 +8,7 @@ import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { checkTime } from "@/helper/checkTimeFlashSale";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
 
@@ -61,6 +62,37 @@ function Card(props) {
 
         if (checkFlashsale.data.message === "found") {
           openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+
+          return;
+        }
+      } else {
+        const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+          axiosClient.get("/time-flashsale"),
+        ]);
+
+        if (getTimeFlashsale.data.payload.expirationTime) {
+          let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+
+          endOfSale += " 23:59:59";
+
+          const checkTimeF = checkTime(endOfSale);
+
+          if (checkTimeF <= 0) {
+            openNotificationWithIcon("error", "The flash sale period has ended");
+
+            return;
+          }
+
+          if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+            openNotificationWithIcon("error", "Flash sale has not opened yet");
+
+            return;
+          }
+        }
+
+        if (checkStockFlashsale.data.flashsaleStock <= 0) {
+          openNotificationWithIcon("error", "The product has been sold out");
 
           return;
         }
