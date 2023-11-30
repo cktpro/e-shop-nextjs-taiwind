@@ -20,7 +20,9 @@ import styles from "./productDetails.module.scss";
 function ProductDetails(props) {
   const { product, relatedItem } = props;
 
-  const [coverImg, setCoverImg] = useState(product?.image?.location);
+  const [coverImg, setCoverImg] = useState(
+    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vectors%2Fno-picture-vectors&psig=AOvVaw0azVwCrbXOTKbmnnotREZt&ust=1701421028071000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMiPm7Kt64IDFQAAAAAdAAAAABAJ",
+  );
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -49,7 +51,12 @@ function ProductDetails(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product._id]);
-
+  useEffect(() => {
+    if (product._id) {
+      setCoverImg(product?.image.location);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
   const openNotificationWithIcon = useCallback(
     (type, message) => {
       switch (type) {
@@ -204,6 +211,7 @@ function ProductDetails(props) {
               return (
                 <div key={item.id} className="flex w-[10.625rem] h-[8.625rem] items-center justify-center">
                   <Image
+                    id={item.id}
                     className="object-contain max-w-[7.5625rem] max-h-[7.5625rem]"
                     src={item?.location}
                     alt="..."
@@ -211,6 +219,9 @@ function ProductDetails(props) {
                     height={1000}
                     onClick={() => {
                       setCoverImg(item.location);
+                    }}
+                    onError={() => {
+                      document.getElementById(item.id).style.display = "none";
                     }}
                   />
                 </div>
@@ -273,6 +284,7 @@ function ProductDetails(props) {
                 className="object-contain max-w-[29.25rem] sm:max-w-[31.25rem] max-h-[37.5rem]"
                 src={coverImg}
                 alt="..."
+                onError={() => setCoverImg(product.image.location)}
                 width={1000}
                 height={1000}
               />

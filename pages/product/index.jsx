@@ -112,7 +112,6 @@ function Product(props) {
   useEffect(() => {
     setProductList(product.payload);
   }, [product]);
-  console.log("◀◀◀ productList ▶▶▶", productList);
   return (
     <>
       <HeadMeta title="Products Page" />
