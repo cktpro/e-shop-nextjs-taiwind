@@ -4,6 +4,7 @@ const nextConfig = {
   images: {
     domains: [
       "images.unsplash.com",
+      "www.google.com",
       "pub-50cd0051de0b47509baf9c4fc482606a.r2.dev",
       "pub-2c55e2ff64f541759b0b060c0c90e9bb.r2.dev",
     ],
