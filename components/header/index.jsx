@@ -143,7 +143,8 @@ function Header() {
         deleteCookie("REFRESH_TOKEN");
         deleteCookie("email");
 
-        signOut({ callbackUrl: "/log-in" });
+        // signOut({ callbackUrl: "/log-in" });
+        signOut();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,7 +169,8 @@ function Header() {
 
     setIsOpenUserSetting(false);
 
-    signOut({ callbackUrl: "/log-in" });
+    // signOut({ callbackUrl: "/log-in" });
+    signOut();
   }, [resetCartItem]);
 
   const changeLang = useCallback(
@@ -748,8 +750,8 @@ function Header() {
                       </span>
                     </Link>
 
-                    <Link
-                      href="/log-in"
+                    <button
+                      type="button"
                       onClick={() => {
                         handleLogout();
                         closeDrawerRight();
@@ -761,14 +763,13 @@ function Header() {
                       <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Logout
                       </span>
-                    </Link>
+                    </button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-start gap-[0.8125rem]">
                     <Link
                       href="/log-in"
                       onClick={() => {
-                        handleLogout();
                         closeDrawerRight();
                       }}
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
