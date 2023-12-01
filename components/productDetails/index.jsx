@@ -39,8 +39,6 @@ function ProductDetails(props) {
   const fnCheckFlashsale = useCallback(async () => {
     const check = await axiosClient.get(`/flashsale/check-flashsale?productId=${product._id}`);
 
-    console.log("««««« check.data »»»»»", check.data);
-
     if (check.data.message === "found") {
       setIsFlashsale(true);
       setStockFlashsale(check.data.flashsaleStock);
@@ -104,30 +102,32 @@ function ProductDetails(props) {
           axiosClient.get("/time-flashsale"),
         ]);
 
-        if (getTimeFlashsale.data.payload.expirationTime) {
-          let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+        if (checkStockFlashsale.data.message === "found") {
+          if (getTimeFlashsale.data.payload.expirationTime) {
+            let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
-          endOfSale += " 23:59:59";
+            endOfSale += " 23:59:59";
 
-          const checkTimeF = checkTime(endOfSale);
+            const checkTimeF = checkTime(endOfSale);
 
-          if (checkTimeF <= 0) {
-            openNotificationWithIcon("error", "The flash sale period has ended");
+            if (checkTimeF <= 0) {
+              openNotificationWithIcon("error", "The flash sale period has ended");
+
+              return;
+            }
+
+            if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+              openNotificationWithIcon("error", "Flash sale has not opened yet");
+
+              return;
+            }
+          }
+
+          if (checkStockFlashsale.data.flashsaleStock <= 0) {
+            openNotificationWithIcon("error", "The product has been sold out");
 
             return;
           }
-
-          if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
-            openNotificationWithIcon("error", "Flash sale has not opened yet");
-
-            return;
-          }
-        }
-
-        if (checkStockFlashsale.data.flashsaleStock <= 0) {
-          openNotificationWithIcon("error", "The product has been sold out");
-
-          return;
         }
       }
 
