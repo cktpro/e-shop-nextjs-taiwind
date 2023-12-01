@@ -4,7 +4,6 @@ import { deleteCookie, getCookie } from "cookies-next";
 import {
   AlignJustify,
   ChevronDown,
-  Heart,
   LogIn,
   LogOut,
   Search,
@@ -392,16 +391,16 @@ function Header() {
               </button>
             </form>
 
-            <Link
+            {/* <Link
               title="wish list"
               className="group rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1.5rem] mr-[1rem] flex justify-center items-center"
               href="/wish-list"
             >
               <Heart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
-            </Link>
+            </Link> */}
 
             <Link
-              className="group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
+              className="ml-[1.5rem] group relative rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
               href="/cart"
             >
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
@@ -654,13 +653,13 @@ function Header() {
             </form>
 
             <div className="relative flex mt-[2rem] gap-1">
-              <Link
+              {/* <Link
                 onClick={closeDrawerRight}
                 className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
                 href="/wish-list"
               >
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
-              </Link>
+              </Link> */}
 
               <Link
                 onClick={closeDrawerRight}
