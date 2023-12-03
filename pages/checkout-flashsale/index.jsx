@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { notification } from "antd";
 import classNames from "classnames";
-// import { Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
 import Link from "next/link";
