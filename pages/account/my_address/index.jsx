@@ -3,27 +3,44 @@ import React, { useCallback, useEffect, useState } from "react";
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { useShippingStore } from "@/store/checkout/shipping";
 
 import AccountLayout from "../layout";
 
 function MyAccount() {
-  const [address, setAddress] = useState({});
-
+  const [profile, setProfile] = useState({});
+  const [newAddress, setNewAddress] = useState({});
+  const shipping = useShippingStore((state) => state);
   const getProfile = useCallback(async () => {
     try {
       const res = await axiosClient.get("/authCustomers/profile");
-      setAddress(res?.data?.payload.address[0]);
+      setProfile(res?.data?.payload);
     } catch (error) {
-      setAddress(error?.response?.data || {});
+      setProfile(error?.response?.data || {});
     }
   }, []);
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = newAddress;
+    data.customerId = profile.id;
+    console.log("◀◀◀ data ▶▶▶", data);
+    try {
+      const res = await axiosClient.post("/customers/address", data);
+      console.log("◀◀◀ res ▶▶▶", res);
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
+  };
   useEffect(() => {
     getProfile();
+    shipping.getProvince();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <form className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
+    <form
+      onSubmit={(e) => handleSubmit(e)}
+      className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom"
+    >
       <span className="max-w-[12.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
         Edit Your Address
       </span>
@@ -32,27 +49,82 @@ function MyAccount() {
         <label htmlFor="firtsName" className="flex flex-col items-start gap-[0.5rem]">
           <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Tỉnh/Thành Phô</span>
 
-          <input
+          {/* <input
             defaultValue={address?.provinceName}
             autoComplete="off"
             type="text"
             id="firtsName"
             name="firtsName"
             className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-          />
+          /> */}
+          <select
+            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            // onChange={(e) => shipping.getDistrict(e.target.value)}
+            name="province"
+            // defaultValue={session?.user?.address[0]?.provinceId || ""}
+            // {...register("province", {
+            onChange={(e) => {
+              setNewAddress((prev) => ({
+                ...prev,
+                provinceId: e.target.value,
+                provinceName: e.target.options[e.target.options.selectedIndex].text,
+              }));
+              shipping.getDistrict(e.target.value);
+            }}
+            // })}
+          >
+            {shipping?.isProvince === true &&
+              shipping?.provinceList?.map((item) => {
+                return (
+                  <option value={item.ProvinceID} key={item.ProvinceID}>
+                    {item.ProvinceName}{" "}
+                  </option>
+                );
+              })}
+          </select>
         </label>
 
         <label htmlFor="lastName" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
           <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Quận/Huyện</span>
 
-          <input
+          {/* <input
             defaultValue={address?.districtName}
             autoComplete="off"
             type="text"
             id="lastName"
             name="lastName"
             className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-          />
+          /> */}
+          <select
+            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            // onChange={(e) => shipping.getDistrict(e.target.value)}
+            name="province"
+            // defaultValue={session?.user?.address[0]?.provinceId || ""}
+            // {...register("province", {
+            onChange={(e) => {
+              setNewAddress((prev) => ({
+                ...prev,
+                districtId: e.target.value,
+                districtName: e.target.options[e.target.options.selectedIndex].text,
+              }));
+              shipping.getWard(e.target.value);
+            }}
+            // })}
+          >
+            {shipping?.districtList?.length > 0 ? (
+              shipping.districtList.map((item) => {
+                return (
+                  <option value={item.DistrictID} key={item.DistrictID}>
+                    {item.DistrictName}{" "}
+                  </option>
+                );
+              })
+            ) : (
+              <option value="" disabled>
+                Please choose province
+              </option>
+            )}
+          </select>
         </label>
       </div>
 
@@ -60,26 +132,59 @@ function MyAccount() {
         <label htmlFor="email" className="flex flex-col items-start gap-[0.5rem]">
           <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Phường Xã</span>
 
-          <input
+          {/* <input
             defaultValue={address?.wardName}
             autoComplete="off"
             type="text"
             id="email"
             name="email"
             className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-          />
+          /> */}
+          <select
+            required
+            autoComplete="off"
+            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            name="distric"
+            onChange={async (e) => {
+              setNewAddress((prev) => ({
+                ...prev,
+                wardId: e.target.value,
+                wardName: e.target.options[e.target.options.selectedIndex].text,
+              }));
+            }}
+          >
+            {shipping?.wardList?.length > 0 ? (
+              shipping.wardList.map((item) => {
+                return (
+                  <option value={item.WardCode} key={item.WardCode}>
+                    {item.WardName}{" "}
+                  </option>
+                );
+              })
+            ) : (
+              <option value="" disabled>
+                Please choose distict
+              </option>
+            )}
+          </select>
         </label>
 
         <label htmlFor="address" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
           <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Street Address</span>
 
           <input
-            defaultValue={address?.address}
+            required
             autoComplete="off"
             type="text"
             id="address"
             name="address"
             className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            onChange={(e) =>
+              setNewAddress((prev) => ({
+                ...prev,
+                streetAddress: e.target.value,
+              }))
+            }
           />
         </label>
       </div>
