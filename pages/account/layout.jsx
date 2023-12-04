@@ -103,13 +103,13 @@ function AccountLayout({ children }) {
             </ul>
           </li>
 
-          <li className="mt-[1rem]">
+          {/* <li className="mt-[1rem]">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/wish-list">
               <span className="max-w-[5.8125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
                 My WishList
               </span>
             </Link>
-          </li>
+          </li> */}
         </ul>
       </div>
 
@@ -211,13 +211,13 @@ function AccountLayout({ children }) {
             </ul>
           </li>
 
-          <li className="mt-[1rem]">
+          {/* <li className="mt-[1rem]">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/wish-list">
               <span className="max-w-[5.8125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
                 My WishList
               </span>
             </Link>
-          </li>
+          </li> */}
         </ul>
         {children}
       </div>
