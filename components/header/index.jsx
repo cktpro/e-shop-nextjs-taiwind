@@ -452,7 +452,7 @@ function Header() {
                   </Link>
 
                   <Link
-                    href="/"
+                    href="/account/my_orders"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
                     <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />

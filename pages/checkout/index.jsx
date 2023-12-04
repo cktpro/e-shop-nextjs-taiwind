@@ -79,7 +79,7 @@ function Checkout() {
     dayShip.setDate(dayShip.getDate() + 3);
     const shipFee = (shipping.feeShip / 24000).toFixed(2);
     const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    const shipAddress = `${address.address} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
+    const shipAddress = `${address.streetAddress} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
     const orderDetails = cartData.cart.map((item) => {
       return {
         productId: item.product.productId,

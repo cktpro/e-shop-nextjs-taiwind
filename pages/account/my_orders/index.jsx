@@ -1,106 +1,105 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Table } from "antd";
+import Link from "next/link";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { formattedMoney } from "@/helper/formatDocument";
 
 import AccountLayout from "../layout";
 
-function MyOrders(props) {
+function MyOrders() {
+  const [order, setOrder] = useState([]);
+  const getProfile = async () => {
+    try {
+      const res = await axiosClient.get("/authCustomers/profile");
+      const userId = res.data.payload.id;
+      const res2 = await axiosClient.get(`/orders/customer?customerId=${userId}`);
+      setOrder(res2?.data?.payload);
+      console.log("◀◀◀ data ▶▶▶", res2);
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
+  };
+  const renderStatus = (status) => {
+    switch (status.toString()) {
+      case "WAITING":
+        return "bg-yellow-200";
+      case "COMPLETED":
+        return "bg-green-200";
+      case "REJECT":
+        return "bg-red-200";
+      case "CANCELED":
+        return "bg-gred-200";
+      case "DELIVERING":
+        return "bg-blue-200";
+      default:
+        return "bg-gray-200";
+    }
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
+  const columns = [
+    {
+      title: "ID",
+      //   dataIndex: "_id",
+      //   key: "name",
+      render: (text, record, id) => <Link href={`/account/my_orders/${record.id}`}>Order #{id + 1}</Link>,
+    },
+    {
+      title: "Created Date",
+      //   dataIndex: "age",
+      render: (record) => new Date(record?.createdDate).toLocaleDateString("en-GB"),
+    },
+    {
+      title: "Shipped Date",
+      render: (record) => new Date(record?.shippedDate).toLocaleDateString("en-GB"),
+
+      //   dataIndex: "address",
+      //   key: "address",
+    },
+    {
+      title: "Status",
+      render: (record) => (
+        <span className={`inline-flex items-center rounded-md  px-2 py-1 text-xs ${renderStatus(record.status)}`}>
+          {record.status}
+        </span>
+      ),
+
+      //   key: "tags",
+      //   dataIndex: "status",
+    },
+    {
+      title: "Total",
+      render: (record) => formattedMoney(record?.totalPrice),
+    },
+    {
+      title: "Shipping",
+      render: (record) => formattedMoney(record?.shippingFee),
+    },
+    {
+      title: "Address",
+      dataIndex: "shippingAddress",
+      width: "20%",
+    },
+  ];
   return (
-    <div className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center  max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
-      <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
+    <div className="w-full overflow-x-auto     flex flex-col items-start justify-center  max-w-[54.375rem]  flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
+      {/* <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
         Your Order
-      </span>
-      {/* {cartData.cart.map((item, idx) => {
-        totalPrice += item.productDetail.price * item.product.quantity;
+      </span> */}
+      {order.length <= 0 && <p>Bạn chưa có đơn hàng nào</p>}
+      <Table style={{ width: "auto" }} columns={columns} dataSource={order} pagination={false} />
+      {/* {order.map((item) => {
         return (
-          <div
-            key={item.product._id}
-            className="relative group flex items-center justify-start xl:min-w-[73.125rem] min-h-[6.375rem] rounded-[0.25rem] bg-primary-1 shadow-custom"
-          >
-            <Image
-              title={item.productDetail.name}
-              className="max-w-[3.125rem] max-h-[2.4375rem] flex items-center justify-center flex-shrink-0 ml-[2.5rem] object-contain"
-              src={item.image.location}
-              alt="..."
-              width={1000}
-              height={1000}
-            />
-
-            <button
-              onClick={() => handleClickRemoveFromCart(item.product)}
-              type="button"
-              className="absolute top-[1rem] left-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            >
-              <CanCel />
-            </button>
-
-            <Link
-              className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
-              href={`/${item.productDetail._id}`}
-            >
-              <span
-                title={item.productDetail.name}
-                className="xl:min-w-[16rem] xl:max-w-[16rem] sm:max-w-[6rem] max-w-[0rem] max-h-[1.5rem] overflow-hidden whitespace-nowrap text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] ml-[1.25rem]"
-              >
-                {item.productDetail.name}
-              </span>
-            </Link>
-
-            <span className="w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[1.06rem] sm:ml-[1.5rem] ml-[0.5rem]">
-              {formattedMoney(item.productDetail.price)}
-            </span>
-
-            <div className="flex min-w-[4.5rem] box-border max-h-[2.75rem] px-[0.75rem] py-[0.375rem] justify-center items-center flex-shrink-0 rounded-[0.25rem] border-[1.5px] border-solid border-[rgba(0,0,0,0.40)] xl:ml-[17.63rem] sm:ml-[7.8rem] ml-[2rem]">
-              {isFlashsale ? (
-                <span className="cursor-default min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  {item.product.quantity}
-                </span>
-              ) : (
-                <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
-                  <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                    <input
-                      type="number"
-                      name="quantity"
-                      id={`quantity${idx}`}
-                      className="w-full outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      defaultValue={item.product.quantity}
-                      onChange={(e) =>
-                        e.target.value
-                          ? handleChangeQuantity(e.target.value, idx)
-                          : setIsChanged((prev) => ({
-                              ...prev,
-                              update: true,
-                              checkout: true,
-                            }))
-                      }
-                      required
-                    />
-                  </span>
-
-                  <div className="flex flex-col items-center justify-center">
-                    <button
-                      onClick={() => handleClickIncrease(idx)}
-                      type="button"
-                      className="max-w-[1rem] max-h-[1rem]"
-                    >
-                      <ChevronUp className="max-w-[1rem] max-h-[1rem]" />
-                    </button>
-
-                    <button onClick={() => handleClickReduce(idx)} type="button" className="max-w-[1rem] max-h-[1rem]">
-                      <ChevronDown className="max-w-[1rem] max-h-[1rem]" />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <span className="min-w-[2.5625rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] xl:ml-[17.56rem] sm:ml-[7.7rem] ml-[0.7rem]">
-              {formattedMoney((parseInt(item.product.quantity, 10) * parseFloat(item.productDetail.price)).toFixed(2))}
-            </span>
+          <div key={item.id} className="flex gap-1 content-center justify-start">
+            <div>{item.description}</div>
+            <div>{new Date(item?.createdDate).toLocaleDateString("en-GB")}</div>
+            <div>{new Date(item?.shippedDate).toLocaleDateString("en-GB")}</div>
+            <div>{item?.status}</div>
           </div>
         );
       })} */}
-      <div className="rounded-[0.25rem] w-full border">bbbb</div>
     </div>
   );
 }

@@ -92,7 +92,11 @@ function AccountLayout({ children }) {
 
             <ul className="mt-[1rem] ml-[2.19rem] inline-flex flex-col items-start gap-[0.5rem]">
               <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_orders">
+                <Link
+                  className="hover:opacity-50"
+                  onClick={closeDrawerLeft}
+                  href={`/account/my_orders?customerId=${profile.id}`}
+                >
                   Order List
                 </Link>
               </li>
@@ -196,7 +200,11 @@ function AccountLayout({ children }) {
                   router.pathname === "/account/my_orders" ? "text-secondary-2 " : `text-text-2 opacity-50`
                 } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
               >
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_orders">
+                <Link
+                  className="hover:opacity-50"
+                  onClick={closeDrawerLeft}
+                  href={`/account/my_orders?customerId=${profile.id}`}
+                >
                   Order List
                 </Link>
               </li>
