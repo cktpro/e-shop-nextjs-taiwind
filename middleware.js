@@ -45,18 +45,6 @@ export default async function middleware(req, res) {
     return NextResponse.rewrite(currentUrl);
   }
 
-  if (
-    req.nextUrl.pathname === "/cart" ||
-    req.nextUrl.pathname === "/wish-list" ||
-    req.nextUrl.pathname === "/account"
-  ) {
-    if (getToken && getRefreshToken) {
-      return NextResponse.rewrite(currentUrl);
-    }
-
-    return NextResponse.redirect(new URL("/log-in", req.url));
-  }
-
   if (req.nextUrl.pathname === "/checkout" || req.nextUrl.pathname === "/checkout-flashsale") {
     if (getToken && getRefreshToken) {
       let isHaveCart;
@@ -89,9 +77,13 @@ export default async function middleware(req, res) {
     return NextResponse.redirect(new URL("/log-in", req.url));
   }
 
-  return NextResponse.rewrite(currentUrl);
+  if (getToken && getRefreshToken) {
+    return NextResponse.rewrite(currentUrl);
+  }
+
+  return NextResponse.redirect(new URL("/log-in", req.url));
 }
 
 export const config = {
-  matcher: ["/cart", "/wish-list", "/account", "/log-in", "/sign-up", "/checkout-flashsale", "/checkout"],
+  matcher: ["/cart", "/wish-list", "/account/:path*", "/log-in", "/sign-up", "/checkout-flashsale", "/checkout"],
 };

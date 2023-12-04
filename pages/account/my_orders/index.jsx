@@ -15,7 +15,6 @@ function MyOrders() {
       const userId = res.data.payload.id;
       const res2 = await axiosClient.get(`/orders/customer?customerId=${userId}`);
       setOrder(res2?.data?.payload);
-      console.log("◀◀◀ data ▶▶▶", res2);
     } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);
     }
@@ -39,27 +38,31 @@ function MyOrders() {
   useEffect(() => {
     getProfile();
   }, []);
+
   const columns = [
     {
       title: "ID",
       //   dataIndex: "_id",
-      //   key: "name",
+      key: "_id",
       render: (text, record, id) => <Link href={`/account/my_orders/${record.id}`}>Order #{id + 1}</Link>,
     },
     {
       title: "Created Date",
       //   dataIndex: "age",
+      key: "createdDate",
       render: (record) => new Date(record?.createdDate).toLocaleDateString("en-GB"),
     },
-    {
-      title: "Shipped Date",
-      render: (record) => new Date(record?.shippedDate).toLocaleDateString("en-GB"),
+    // {
+    //   title: "Shipped Date",
+    //   key: "createdDate",
+    //   render: (record) => new Date(record?.shippedDate).toLocaleDateString("en-GB"),
 
-      //   dataIndex: "address",
-      //   key: "address",
-    },
+    //   //   dataIndex: "address",
+    //   //   key: "address",
+    // },
     {
       title: "Status",
+      key: "status",
       render: (record) => (
         <span className={`inline-flex items-center rounded-md  px-2 py-1 text-xs ${renderStatus(record.status)}`}>
           {record.status}
@@ -71,14 +74,17 @@ function MyOrders() {
     },
     {
       title: "Total",
+      key: "totalPrice",
       render: (record) => formattedMoney(record?.totalPrice),
     },
     {
       title: "Shipping",
+      key: "shippingFee",
       render: (record) => formattedMoney(record?.shippingFee),
     },
     {
       title: "Address",
+      key: "shippingAddress",
       dataIndex: "shippingAddress",
       width: "20%",
     },
@@ -89,7 +95,7 @@ function MyOrders() {
         Your Order
       </span> */}
       {order.length <= 0 && <p>Bạn chưa có đơn hàng nào</p>}
-      <Table style={{ width: "auto" }} columns={columns} dataSource={order} pagination={false} />
+      <Table rowKey="_id" style={{ width: "auto" }} columns={columns} dataSource={order} pagination={false} />
       {/* {order.map((item) => {
         return (
           <div key={item.id} className="flex gap-1 content-center justify-start">
