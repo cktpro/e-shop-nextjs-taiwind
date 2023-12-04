@@ -4,6 +4,7 @@ import { ChevronRight, MenuSquare, XCircle } from "lucide-react";
 // import Image from "next/image";
 import Link from "next/link";
 
+import { axiosClient } from "@/helper/axios/axiosClient";
 // import banner1 from "@/assets/images/banner/banner1.jpg";
 import { useTrans } from "@/helper/chanLang";
 import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
@@ -25,9 +26,17 @@ function Slider() {
 
   const leftDrawderRef = useOutsideLeftDrawderClick(openDrawerLeft, closeDrawerLeft, isOpenDrawderLeft);
 
+  const getCategory = async () => {
+    try {
+      const res = axiosClient.get("/categories");
+      setCategories((await res).data.payload);
+    } catch (error) {
+      console.log("◀◀◀ error ▶▶▶", error);
+    }
+  };
   useEffect(() => {
-    setCategories(data);
-  }, [categories, data]);
+    getCategory();
+  }, []);
 
   const toggleFrameCategories = useCallback(
     (event, index) => {
@@ -41,8 +50,8 @@ function Slider() {
 
   return (
     <div className="container flex items-center">
-      <div className="hidden lg:block w-fit mr-auto border-r-gray-400 border-r-[1px]">
-        <ul className="text-black font-poppins gap-[1rem] pt-[2.5rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
+      <div className="hidden  lg:block w-fit mr-auto border-r-gray-400 border-r-[1px]">
+        <ul className="text-black h-[25rem] pt-[2.6rem] font-poppins gap-[1rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
           {categories?.map((item, index) => {
             if (item?.child) {
               return (
@@ -86,9 +95,11 @@ function Slider() {
                 className="hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center max-h-[1.5rem]"
                 key={item.name}
               >
-                <Link className="!whitespace-nowrap block w-full" href="./">
-                  {item.name}
-                </Link>
+                <div className="hover:opacity-50 transition-opacity ease-in-out duration-300 max-h-[1.5rem] flex justify-between items-center cursor-pointer ">
+                  <Link className="mr-[3.19rem] !whitespace-nowrap" href={`/product/${item.id}?name=${item.name}`}>
+                    {item.name}
+                  </Link>
+                </div>
               </li>
             );
           })}
@@ -171,7 +182,7 @@ function Slider() {
                 className="hover:opacity-50 transition-opacity ease-in-out duration-300 flex items-center max-h-[1.5rem]"
                 key={item.name}
               >
-                <Link className="!whitespace-nowrap block w-full" href="./">
+                <Link className="!whitespace-nowrap block w-full" href={`/product/${item.id}?name=${item.name}`}>
                   {item.name}
                 </Link>
               </li>

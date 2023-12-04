@@ -301,7 +301,7 @@ function CartPage() {
                               {item.product.quantity}
                             </span>
                           ) : (
-                            <div className="flex max-w-[3rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
+                            <div className="flex max-w-[4rem] max-h-[2rem] items-center gap-[1rem] flex-shrink-0">
                               <span className="min-w-[1rem] max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                                 <input
                                   type="number"

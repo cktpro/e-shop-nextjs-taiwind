@@ -171,7 +171,7 @@ function Header() {
 
     // signOut({ callbackUrl: "/log-in" });
     signOut();
-  }, [resetCartItem]);
+  }, []);
 
   const changeLang = useCallback(
     (lang) => {

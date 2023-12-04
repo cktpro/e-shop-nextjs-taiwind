@@ -32,7 +32,7 @@ function BestSelling(props) {
           <ViewAll />
         </Link>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-[1.875rem] gap-[1.875rem]">
+        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-[1.875rem] gap-[1.875rem]">
           {bestSelling.length > 0 ? (
             bestSelling.map((item) => {
               return (
