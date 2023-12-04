@@ -76,8 +76,8 @@ function AccountLayout({ children }) {
               </li>
 
               <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Payment Options
+                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/change_password">
+                  Change Password
                 </Link>
               </li>
             </ul>
@@ -92,14 +92,8 @@ function AccountLayout({ children }) {
 
             <ul className="mt-[1rem] ml-[2.19rem] inline-flex flex-col items-start gap-[0.5rem]">
               <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Returns
-                </Link>
-              </li>
-
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Cancellations
+                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_orders">
+                  Order List
                 </Link>
               </li>
             </ul>
@@ -177,9 +171,13 @@ function AccountLayout({ children }) {
                 </Link>
               </li>
 
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Payment Options
+              <li
+                className={`${
+                  router.pathname === "/account/change_password" ? "text-secondary-2 " : `text-text-2 opacity-50`
+                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+              >
+                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/change_password">
+                  Change Password
                 </Link>
               </li>
             </ul>
@@ -193,15 +191,13 @@ function AccountLayout({ children }) {
             </Link>
 
             <ul className="mt-[1rem] ml-[2.19rem] inline-flex flex-col items-start gap-[0.5rem]">
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Returns
-                </Link>
-              </li>
-
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-                  My Cancellations
+              <li
+                className={`${
+                  router.pathname === "/account/my_orders" ? "text-secondary-2 " : `text-text-2 opacity-50`
+                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+              >
+                <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_orders">
+                  Order List
                 </Link>
               </li>
             </ul>

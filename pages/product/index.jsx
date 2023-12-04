@@ -116,7 +116,7 @@ function Product(props) {
     <>
       <HeadMeta title="Products Page" />
 
-      <div className="container bg-[#F3F3F3] pt-[1rem] pb-[4.25rem] mb-[4.38rem] rounded-[0.25rem] my-3">
+      <div className="container bg-[#F3F3F3] pt-[1rem] pb-[4.25rem] my-[4.38rem] rounded-[0.25rem]">
         <div className="sm:flex items-end mb-[1rem] xs:mb-[1rem]">
           <div className="sm:flex max-h-[6.4375rem] flex-col items-start gap-[1.25rem]">
             <div className="flex items-center gap-[1rem]">
@@ -187,7 +187,9 @@ function Product(props) {
             )}
           </Space>
           <div className="d-flex justify-content-start align-items-center mt-3 gap-3">
-            <span>{productList.length} Kết quả</span>
+            <span>
+              <b>{productList.length}</b> Kết quả
+            </span>
             {productList?.length > 0 && (
               <div>
                 <CheckboxGroup options={plainOptions} value={checkedList} onChange={onChange} className="my-2" />
@@ -210,13 +212,15 @@ function Product(props) {
             )}
           </div>
         </div>
-        <Pagination
-          showSizeChanger
-          onChange={onShowSizeChange}
-          onShowSizeChange={onShowSizeChange}
-          defaultCurrent={1}
-          total={product.total}
-        />
+        <div className="w-full flex justify-center items-center mt-[2rem]">
+          <Pagination
+            showSizeChanger
+            onChange={onShowSizeChange}
+            onShowSizeChange={onShowSizeChange}
+            defaultCurrent={1}
+            total={product.total}
+          />
+        </div>
         {/* <CategoriesCarousel categories={categories} /> */}
       </div>
     </>

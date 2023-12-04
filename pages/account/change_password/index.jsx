@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Form, Input } from "antd";
 
-import ViewAllProducts from "@/components/buttons/viewAllProduct";
-
 import { axiosClient } from "@/helper/axios/axiosClient";
 
-import AccountLayout from "./layout";
+import AccountLayout from "../layout";
 
-function AccountPage() {
+function ChangePass() {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState(false);
   const getProfile = useCallback(async () => {
     setLoading(true);
@@ -30,33 +27,24 @@ function AccountPage() {
   }, []);
   const handleSubmit = async (values) => {
     setComponentDisabled(true);
-    setIsChanged(false);
-    const data = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      phoneNumber: values.phoneNumber,
-      birthday: values.birthday,
-    };
-    try {
-      const res = await axiosClient.put(`/customers/${profile.id}`, data);
-      console.log("◀◀◀ res ▶▶▶", res);
-      setComponentDisabled(false);
-      setIsChanged(false);
-    } catch (error) {
-      setComponentDisabled(false);
-      setIsChanged(false);
-      console.log("◀◀◀ error ▶▶▶", error);
-    }
+    console.log("◀◀◀ values ▶▶▶", values);
+    // try {
+    //   const res = await axiosClient.put(`/customers/${profile.id}`, data);
+    //   console.log("◀◀◀ res ▶▶▶", res);
+    //   setComponentDisabled(false);
+    // } catch (error) {
+    //   setComponentDisabled(false);
+    //   console.log("◀◀◀ error ▶▶▶", error);
+    // }
   };
   if (!loading) {
     return profile?.isGoogle ? (
       <form className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center  max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
         <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
-          Edit Your Profile
+          The password change function cannot be performed with a google account
         </span>
 
-        <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
+        {/* <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <label htmlFor="firtsName" className="flex flex-col items-start gap-[0.5rem]">
             <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">First Name</span>
 
@@ -92,31 +80,29 @@ function AccountPage() {
 
             <ViewAllProducts text="Save Changes" type="submit" onClick={() => {}} />
           </div>
-        </div>
+        </div> */}
       </form>
     ) : (
       <Form
-        onChange={() => setIsChanged(true)}
         disabled={componentDisabled}
         layout="vertical"
         onFinish={handleSubmit}
         className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center  max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom"
       >
-        <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
-          Edit Your Profile
+        <span className="max-w-full text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
+          Change you password
         </span>
 
-        <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
+        {/* <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <div className="flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">First Name</span>
+            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cu</span>
 
             <Form.Item
-              name="firstName"
-              initialValue={profile?.firstName}
+              name="currentPass"
               rules={[
                 {
                   required: true,
-                  message: "Firstname is required",
+                  message: "Current password is required",
                 },
               ]}
             >
@@ -202,15 +188,73 @@ function AccountPage() {
               <Input className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1" />
             </Form.Item>
           </div>
-        </div>
+        </div> */}
 
-        {/* <div className="mt-[1.5rem] min-w-full inline-flex flex-col items-start gap-[1rem]">
-          <label htmlFor="currentPassword" className="min-w-full flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Password Changes</span>
-  
+        <div className="mt-[1.5rem] min-w-full inline-flex flex-col items-start gap-[1rem]">
+          <div htmlFor="currentPassword" className="min-w-full flex flex-col items-start gap-[0.5rem]">
+            {/* <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Password Changes</span> */}
+
             <div className="min-w-full flex flex-col items-start gap-[1rem]">
-              <input
-                defaultValue={profile?.password}
+              <Form.Item
+                name="currentPassword"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your password!",
+                  },
+                ]}
+                // hasFeedback
+              >
+                <Input.Password
+                  placeholder="Current Password"
+                  visibilityToggle={false}
+                  className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                />
+              </Form.Item>
+              <Form.Item
+                name="newPassword"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your password!",
+                  },
+                ]}
+                // hasFeedback
+              >
+                <Input.Password
+                  placeholder="New Password"
+                  visibilityToggle={false}
+                  className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                />
+              </Form.Item>
+              <Form.Item
+                name="confirmNewPassword"
+                dependencies={["newPassword"]}
+                // hasFeedback
+
+                rules={[
+                  {
+                    required: true,
+                    message: "Please confirm your password!",
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("newPassword") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error("The new password that you entered do not match!"));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password
+                  placeholder="Confirm Password"
+                  visibilityToggle={false}
+                  className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                />
+              </Form.Item>
+              {/* <input
+                // defaultValue={profile?.password}
                 autoComplete="new-password"
                 id="currentPassword"
                 name="currentPassword"
@@ -218,7 +262,7 @@ function AccountPage() {
                 placeholder="Current Passwod"
                 className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
               />
-  
+
               <input
                 id="NewPasswod"
                 name="NewPasswod"
@@ -226,17 +270,17 @@ function AccountPage() {
                 placeholder="New Passwod"
                 className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
               />
-  
+
               <input
                 id="confirmNewPasswod"
                 name="confirmNewPasswod"
                 type="password"
                 placeholder="Confirm New Passwod"
                 className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
-              />
+              /> */}
             </div>
-          </label>
-        </div> */}
+          </div>
+        </div>
 
         <div className="min-w-full flex items-center justify-end">
           <div className="mt-[1.5rem] inline-flex items-center gap-[2rem]">
@@ -252,7 +296,7 @@ function AccountPage() {
               // eslint-disable-next-line react/button-has-type
               type="submit"
               className="disabled:opacity-50 inline-flex px-[3rem] py-[1rem] min-h-[3.5rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-button-2"
-              disabled={!isChanged}
+              disabled={componentDisabled}
             >
               <span className="min-h-[1.5rem] text-text-1 font-poppins text-[1rem] font[500] leading-[1.5rem] whitespace-nowrap">
                 Save Changes
@@ -267,7 +311,7 @@ function AccountPage() {
   return <span>Loading</span>;
 }
 
-export default AccountPage;
-AccountPage.getLayout = function getLayout(page) {
+export default ChangePass;
+ChangePass.getLayout = function getLayout(page) {
   return <AccountLayout>{page}</AccountLayout>;
 };
