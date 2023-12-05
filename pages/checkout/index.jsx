@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Modal } from "antd";
 // import { Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
@@ -16,8 +15,6 @@ import useAuthUser from "@/store/authUser";
 import useCartStore from "@/store/cart/useCartStore";
 import useFetchCheckout from "@/store/checkout";
 import { useShippingStore } from "@/store/checkout/shipping";
-
-import { document } from "postcss";
 
 function Checkout() {
   const {
