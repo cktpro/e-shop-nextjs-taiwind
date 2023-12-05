@@ -187,7 +187,7 @@ function AccountPage() {
 
             <Form.Item
               name="birthday"
-              initialValue={new Date(profile?.birthday).toLocaleDateString()}
+              initialValue={new Date(profile?.birthday).toLocaleDateString("eu-ES")}
               rules={[
                 {
                   type: "date",

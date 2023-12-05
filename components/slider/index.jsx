@@ -123,7 +123,7 @@ function Slider() {
         ref={isOpenDrawderLeft ? leftDrawderRef : null}
         className={classNames(
           styles.left_drawder,
-          "fixed top-0 left-0 h-screen min-w-fit bg-white shadow-md z-[3]",
+          "fixed top-0 left-0 h-screen min-w-fit pe-[1rem] bg-white shadow-md z-[3]",
           !isOpenDrawderLeft && "hidden",
         )}
       >

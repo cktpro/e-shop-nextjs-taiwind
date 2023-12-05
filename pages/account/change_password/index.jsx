@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Form, Input } from "antd";
+import { Form, Input, message } from "antd";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 
@@ -27,15 +27,14 @@ function ChangePass() {
   }, []);
   const handleSubmit = async (values) => {
     setComponentDisabled(true);
-    console.log("◀◀◀ values ▶▶▶", values);
-    // try {
-    //   const res = await axiosClient.put(`/customers/${profile.id}`, data);
-    //   console.log("◀◀◀ res ▶▶▶", res);
-    //   setComponentDisabled(false);
-    // } catch (error) {
-    //   setComponentDisabled(false);
-    //   console.log("◀◀◀ error ▶▶▶", error);
-    // }
+    try {
+      await axiosClient.post(`/customers/change-password/${profile.id}`, values);
+      message.success("Change password success");
+      setComponentDisabled(false);
+    } catch (error) {
+      if (error.response.status === 412) message.error("Current password not match");
+      setComponentDisabled(false);
+    }
   };
   if (!loading) {
     return profile?.isGoogle ? (
@@ -213,11 +212,20 @@ function ChangePass() {
               </Form.Item>
               <Form.Item
                 name="newPassword"
+                dependencies={["currentPassword"]}
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
+                    message: "Please input new password!",
                   },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("currentPassword") !== value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error("The new password must not be the same as the old password!"));
+                    },
+                  }),
                 ]}
                 // hasFeedback
               >
@@ -228,14 +236,14 @@ function ChangePass() {
                 />
               </Form.Item>
               <Form.Item
-                name="confirmNewPassword"
+                name="confirmPassword"
                 dependencies={["newPassword"]}
                 // hasFeedback
 
                 rules={[
                   {
                     required: true,
-                    message: "Please confirm your password!",
+                    message: "Please confirm new password!",
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
