@@ -49,7 +49,7 @@ export default async function middleware(req, res) {
     if (getToken && getRefreshToken) {
       let isHaveCart;
 
-      await fetch("http://localhost:9000/cart", {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_USER}/cart`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${getToken}`,
