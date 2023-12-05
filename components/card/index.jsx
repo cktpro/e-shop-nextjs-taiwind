@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { notification } from "antd";
 import { deleteCookie, getCookie } from "cookies-next";
-import { Eye, Heart } from "lucide-react";
+// import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -132,7 +132,7 @@ function Card(props) {
             </span>
           </div>
 
-          <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
+          {/* <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
             <button
               title="love"
               type="button"
@@ -148,7 +148,7 @@ function Card(props) {
             >
               <Eye />
             </Link>
-          </div>
+          </div> */}
 
           <Link href={`/${product.id}`}>
             <Image
