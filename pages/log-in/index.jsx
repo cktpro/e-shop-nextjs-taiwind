@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 
 import BtnOk from "@/components/buttons/btnOk";
 import Loading from "@/components/svg/loading";
+import LogoGoogle from "@/components/svg/logoGoogle";
 
 import useCartStore from "@/store/cart/useCartStore";
 
@@ -171,10 +172,25 @@ function Login() {
                 <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Log In</span>
               </button>
 
-              <Link href="./" className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <Link href="/" className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                 Forget Password?
               </Link>
             </div>
+
+            <button
+              onClick={() => signIn("google")}
+              // onClick={() => signIn("facebook")}
+              type="button"
+              className="h-[3.5rem] w-[23.1875rem] flex flex-col px-[5.375rem] py[1rem] items-center justify-center gap-[0.625rem] rounded-[0.25rem] border-solid border-[1px] border-black whitespace-nowrap"
+            >
+              <div className="flex items-start gap-[1rem]">
+                <LogoGoogle />
+
+                <span className="flex items-center justify-center text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  Log in with Google
+                </span>
+              </div>
+            </button>
           </div>
         </form>
       </div>
