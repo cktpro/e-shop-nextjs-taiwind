@@ -17,6 +17,8 @@ import useCartStore from "@/store/cart/useCartStore";
 import useFetchCheckout from "@/store/checkout";
 import { useShippingStore } from "@/store/checkout/shipping";
 
+import { document } from "postcss";
+
 function Checkout() {
   const {
     register,
@@ -25,6 +27,7 @@ function Checkout() {
     // formState: { errors },
   } = useForm();
   const [address, setAddress] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState({});
   const [districtId, setDistrictId] = useState("");
   let totalPrice = 0;
   const shipping = useShippingStore((state) => state);
@@ -82,7 +85,6 @@ function Checkout() {
     dayShip.setDate(dayShip.getDate() + 3);
     const shipFee = (shipping.feeShip / 24000).toFixed(2);
     const finalTotal = (parseFloat(totalPrice) + parseFloat(shipFee)).toFixed(2);
-    const shipAddress = `${address.streetAddress} - ${address.wardName} - ${address.districtName} - ${address.provinceName}`;
     const orderDetails = cartData.cart.map((item) => {
       return {
         productId: item.product.productId,
@@ -92,12 +94,12 @@ function Checkout() {
       };
     });
     const order = {
-      customerId: session.user.id,
+      customerId: profile.id,
       shippedDate: dayShip,
       status: "WAITING",
       shippingFee: shipFee,
       totalPrice,
-      shippingAddress: shipAddress,
+      shippingAddress: `${data.phoneNumber} - ${shippingAddress?.streetAddress} - ${shippingAddress?.wardName} - ${shippingAddress?.districtName} - ${shippingAddress?.provinceName}`,
       paymentType: data.paymentType,
       orderDetails,
     };
@@ -118,8 +120,6 @@ function Checkout() {
       // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
     }
-
-    // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
   };
   return (
     <div className="container mt-[5rem]">
@@ -172,7 +172,7 @@ function Checkout() {
                   id="firstName"
                   name="firstName"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.firstName || null}
+                  defaultValue={profile?.firstName || null}
                   {...register("firstName")}
                 />
               </label>
@@ -187,43 +187,45 @@ function Checkout() {
                   id="companyName"
                   name="companyName"
                   className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.lastName || null}
+                  defaultValue={profile?.lastName || null}
                   {...register("lastName")}
                 />
               </label>
-              <label htmlFor="apartment" className="max-h-[full] flex flex-col items-start gap-[0.5rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                  Address
-                </span>
-                {address.length > 0 &&
-                  address.map((item) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className="flex justify-between items-center sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] p-[1rem]"
-                      >
-                        <span className=" max-w-[25rem] ">
-                          {item?.streetAddress} - {item.wardName} - {item.districtName} <br /> - {item.provinceName}
-                        </span>
-                        <input
-                          // onChange={setAddress(item)}
-                          className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
-                          type="radio"
-                          name="addressShipping"
-                        />
-                      </div>
-                    );
-                  })}
-                {/* <input
+              {address.length > 0 && (
+                <label htmlFor="apartment" className="max-h-[full] flex flex-col items-start gap-[0.5rem]">
+                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    Your Address
+                  </span>
+                  {address.length > 0 &&
+                    address.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className="flex justify-between items-center sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] p-[1rem]"
+                        >
+                          <span className=" max-w-[25rem] ">
+                            {item?.streetAddress} - {item.wardName} - {item.districtName} <br /> - {item.provinceName}
+                          </span>
+                          <input
+                            onClick={() => setShippingAddress(item)}
+                            className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                            type="radio"
+                            name="addressShipping"
+                          />
+                        </div>
+                      );
+                    })}
+                  {/* <input
                 type="text"
                 id="apartment"
                 name="apartment"
                 className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
-              </label>
+                </label>
+              )}
 
-              <Modal>
-                <div>
+              {address?.length <= 0 && (
+                <div className="flex flex-col items-start gap-[2rem]">
                   <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                     <div>
                       <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
@@ -234,12 +236,19 @@ function Checkout() {
                     </div>
 
                     <input
+                      required
                       type="text"
                       id="streetAddress"
                       name="streetAddress"
                       className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                      defaultValue={session?.user?.address[0]?.address || ""}
-                      {...register("streetAddress", { required: true })}
+                      {...register("streetAddress", {
+                        required: true,
+                        onChange: (e) =>
+                          setShippingAddress((prev) => ({
+                            ...prev,
+                            streetAddress: e.target.value,
+                          })),
+                      })}
                     />
                   </label>
 
@@ -248,14 +257,13 @@ function Checkout() {
                       Province
                     </span>
                     <select
+                      required
                       className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                       // onChange={(e) => shipping.getDistrict(e.target.value)}
                       name="province"
-                      defaultValue={session?.user?.address[0]?.provinceId || ""}
                       {...register("province", {
                         onChange: (e) => {
-                          document.getElementById("streetAddress").value = null;
-                          setAddress((prev) => ({
+                          setShippingAddress((prev) => ({
                             ...prev,
                             provinceId: e.target.value,
                             provinceName: e.target.options[e.target.options.selectedIndex].text,
@@ -264,15 +272,16 @@ function Checkout() {
                         },
                       })}
                     >
+                      <option value={null}>Select province</option>
                       {shipping?.isProvince === true &&
                         shipping?.provinceList?.map((item) => {
-                          if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
-                            return (
-                              <option value={item.ProvinceID} key={item.ProvinceID} selected>
-                                {item.ProvinceName}{" "}
-                              </option>
-                            );
-                          }
+                          // if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                          //   return (
+                          //     <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                          //       {item.ProvinceName}{" "}
+                          //     </option>
+                          //   );
+                          // }
                           return (
                             <option value={item.ProvinceID} key={item.ProvinceID}>
                               {item.ProvinceName}{" "}
@@ -309,7 +318,7 @@ function Checkout() {
                         "district",
                         {
                           onChange: (e) => {
-                            setAddress((prev) => ({
+                            setShippingAddress((prev) => ({
                               ...prev,
                               districtId: e.target.value,
                               districtName: e.target.options[e.target.options.selectedIndex].text,
@@ -323,13 +332,13 @@ function Checkout() {
                     >
                       {shipping?.districtList?.length > 0 ? (
                         shipping.districtList.map((item) => {
-                          if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
-                            return (
-                              <option value={item.DistrictID} key={item.DistrictID}>
-                                {item.item.DistrictName}{" "}
-                              </option>
-                            );
-                          }
+                          // if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
+                          //   return (
+                          //     <option value={item.DistrictID} key={item.DistrictID}>
+                          //       {item.item.DistrictName}{" "}
+                          //     </option>
+                          //   );
+                          // }
                           return (
                             <option value={item.DistrictID} key={item.DistrictID}>
                               {item.DistrictName}{" "}
@@ -338,9 +347,9 @@ function Checkout() {
                         })
                       ) : (
                         <>
-                          <option value={session?.user?.address[0]?.districtId} hidden>
-                            {session?.user?.address[0]?.districtName}{" "}
-                          </option>
+                          {/* <option value={session?.user?.address[0]?.districtId} hidden>
+                              {session?.user?.address[0]?.districtName}{" "}
+                            </option> */}
                           <option value="" disabled>
                             Please choose province
                           </option>
@@ -374,10 +383,10 @@ function Checkout() {
                       //   }));
                       //   handleChangeFee(e);
                       // }}
-                      defaultValue={session?.user?.address[0]?.wardId}
+                      // defaultValue={session?.user?.address[0]?.wardId}
                       {...register("ward", {
                         onChange: (e) => {
-                          setAddress((prev) => ({
+                          setShippingAddress((prev) => ({
                             ...prev,
                             wardId: e.target.value,
                             wardName: e.target.options[e.target.options.selectedIndex].text,
@@ -396,9 +405,9 @@ function Checkout() {
                         })
                       ) : (
                         <>
-                          <option value={session?.user?.address[0]?.wardId} hidden>
-                            {session?.user?.address[0]?.wardName}
-                          </option>
+                          {/* <option value={session?.user?.address[0]?.wardId} hidden>
+                              {session?.user?.address[0]?.wardName}
+                            </option> */}
                           <option value="" disabled>
                             Please choose distict
                           </option>
@@ -413,7 +422,7 @@ function Checkout() {
               /> */}
                   </label>
                 </div>
-              </Modal>
+              )}
 
               <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                 <div>
@@ -463,6 +472,7 @@ function Checkout() {
                 id="saveInfo"
                 name="saveInfo"
                 className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                {...register("save")}
               />
               <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                 Save this information for faster check-out next time
