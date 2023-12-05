@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Modal } from "antd";
 // import { Form, Input, message } from "antd";
 import { setCookie } from "cookies-next";
 import Image from "next/image";
@@ -11,6 +12,7 @@ import ViewAllProducts from "@/components/buttons/viewAllProduct";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 import { formattedMoney } from "@/helper/formatDocument";
+import useAuthUser from "@/store/authUser";
 import useCartStore from "@/store/cart/useCartStore";
 import useFetchCheckout from "@/store/checkout";
 import { useShippingStore } from "@/store/checkout/shipping";
@@ -28,7 +30,7 @@ function Checkout() {
   const shipping = useShippingStore((state) => state);
   const { data: session, status } = useSession();
   const router = useRouter();
-
+  const profile = useAuthUser((state) => state.profile);
   const cartData = useCartStore((state) => state);
 
   const fetchCheckout = useFetchCheckout((state) => state.fetch);
@@ -52,14 +54,15 @@ function Checkout() {
     shipping.getProvince();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // const profile = useAuthUser((state) => state.profile);
+  // const getProfile = useAuthUser((state) => state.fetchAuthUser());
   useEffect(() => {
     if (status === "authenticated" && cartData.cart.length > 0) {
-      shipping.getFee(session.user.address[0], cartData.cart);
-      setAddress(session.user.address[0]);
+      shipping.getFee(profile?.address[0], cartData.cart);
+      setAddress(profile?.address);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartData.cart, status]);
-
   const handlePlaceOrder = useCallback(
     (finalTotal) => {
       const data = {
@@ -118,7 +121,6 @@ function Checkout() {
 
     // data.feeShip = (shipping.feeShip / 24000).toFixed(2);
   };
-
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -189,63 +191,29 @@ function Checkout() {
                   {...register("lastName")}
                 />
               </label>
-
-              <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Street Address
-                  </span>
-
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-
-                <input
-                  type="text"
-                  id="streetAddress"
-                  name="streetAddress"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  defaultValue={session?.user?.address[0]?.address || ""}
-                  {...register("streetAddress", { required: true })}
-                />
-              </label>
-
-              <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+              <label htmlFor="apartment" className="max-h-[full] flex flex-col items-start gap-[0.5rem]">
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                  Province
+                  Address
                 </span>
-                <select
-                  className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  // onChange={(e) => shipping.getDistrict(e.target.value)}
-                  name="province"
-                  defaultValue={session?.user?.address[0]?.provinceId || ""}
-                  {...register("province", {
-                    onChange: (e) => {
-                      document.getElementById("streetAddress").value = null;
-                      setAddress((prev) => ({
-                        ...prev,
-                        provinceId: e.target.value,
-                        provinceName: e.target.options[e.target.options.selectedIndex].text,
-                      }));
-                      shipping.getDistrict(e.target.value);
-                    },
+                {address.length > 0 &&
+                  address.map((item) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-center sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] p-[1rem]"
+                      >
+                        <span className=" max-w-[25rem] ">
+                          {item?.streetAddress} - {item.wardName} - {item.districtName} <br /> - {item.provinceName}
+                        </span>
+                        <input
+                          // onChange={setAddress(item)}
+                          className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
+                          type="radio"
+                          name="addressShipping"
+                        />
+                      </div>
+                    );
                   })}
-                >
-                  {shipping?.isProvince === true &&
-                    shipping?.provinceList?.map((item) => {
-                      if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
-                        return (
-                          <option value={item.ProvinceID} key={item.ProvinceID} selected>
-                            {item.ProvinceName}{" "}
-                          </option>
-                        );
-                      }
-                      return (
-                        <option value={item.ProvinceID} key={item.ProvinceID}>
-                          {item.ProvinceName}{" "}
-                        </option>
-                      );
-                    })}
-                </select>
                 {/* <input
                 type="text"
                 id="apartment"
@@ -254,130 +222,198 @@ function Checkout() {
               /> */}
               </label>
 
-              <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+              <Modal>
                 <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    District
-                  </span>
+                  <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                    <div>
+                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                        Street Address
+                      </span>
 
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-                <select
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  // onChange={(e) => {
-                  //   setDistrictId(e.target.value);
-                  //   shipping.getWard(e.target.value);
-                  // }}
-                  // defaultValue={session?.user?.address[0]?.districtId}
-                  id="district"
-                  name="district"
-                  {...register(
-                    "district",
-                    {
-                      onChange: (e) => {
-                        setAddress((prev) => ({
-                          ...prev,
-                          districtId: e.target.value,
-                          districtName: e.target.options[e.target.options.selectedIndex].text,
-                        }));
-                        setDistrictId(e.target.value);
-                        shipping.getWard(e.target.value);
-                      },
-                    },
-                    { required: true },
-                  )}
-                >
-                  {shipping?.districtList?.length > 0 ? (
-                    shipping.districtList.map((item) => {
-                      if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
-                        return (
-                          <option value={item.DistrictID} key={item.DistrictID}>
-                            {item.item.DistrictName}{" "}
+                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    </div>
+
+                    <input
+                      type="text"
+                      id="streetAddress"
+                      name="streetAddress"
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      defaultValue={session?.user?.address[0]?.address || ""}
+                      {...register("streetAddress", { required: true })}
+                    />
+                  </label>
+
+                  <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      Province
+                    </span>
+                    <select
+                      className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      // onChange={(e) => shipping.getDistrict(e.target.value)}
+                      name="province"
+                      defaultValue={session?.user?.address[0]?.provinceId || ""}
+                      {...register("province", {
+                        onChange: (e) => {
+                          document.getElementById("streetAddress").value = null;
+                          setAddress((prev) => ({
+                            ...prev,
+                            provinceId: e.target.value,
+                            provinceName: e.target.options[e.target.options.selectedIndex].text,
+                          }));
+                          shipping.getDistrict(e.target.value);
+                        },
+                      })}
+                    >
+                      {shipping?.isProvince === true &&
+                        shipping?.provinceList?.map((item) => {
+                          if (item.ProvinceID.toString() === session?.user?.address[0]?.provinceId.toString()) {
+                            return (
+                              <option value={item.ProvinceID} key={item.ProvinceID} selected>
+                                {item.ProvinceName}{" "}
+                              </option>
+                            );
+                          }
+                          return (
+                            <option value={item.ProvinceID} key={item.ProvinceID}>
+                              {item.ProvinceName}{" "}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    {/* <input
+                type="text"
+                id="apartment"
+                name="apartment"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+              /> */}
+                  </label>
+
+                  <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                    <div>
+                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                        District
+                      </span>
+
+                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    </div>
+                    <select
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      // onChange={(e) => {
+                      //   setDistrictId(e.target.value);
+                      //   shipping.getWard(e.target.value);
+                      // }}
+                      // defaultValue={session?.user?.address[0]?.districtId}
+                      id="district"
+                      name="district"
+                      {...register(
+                        "district",
+                        {
+                          onChange: (e) => {
+                            setAddress((prev) => ({
+                              ...prev,
+                              districtId: e.target.value,
+                              districtName: e.target.options[e.target.options.selectedIndex].text,
+                            }));
+                            setDistrictId(e.target.value);
+                            shipping.getWard(e.target.value);
+                          },
+                        },
+                        { required: true },
+                      )}
+                    >
+                      {shipping?.districtList?.length > 0 ? (
+                        shipping.districtList.map((item) => {
+                          if (item.DistrictID.toString() === session?.user?.address[0]?.districtName.toString()) {
+                            return (
+                              <option value={item.DistrictID} key={item.DistrictID}>
+                                {item.item.DistrictName}{" "}
+                              </option>
+                            );
+                          }
+                          return (
+                            <option value={item.DistrictID} key={item.DistrictID}>
+                              {item.DistrictName}{" "}
+                            </option>
+                          );
+                        })
+                      ) : (
+                        <>
+                          <option value={session?.user?.address[0]?.districtId} hidden>
+                            {session?.user?.address[0]?.districtName}{" "}
                           </option>
-                        );
-                      }
-                      return (
-                        <option value={item.DistrictID} key={item.DistrictID}>
-                          {item.DistrictName}{" "}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <option value={session?.user?.address[0]?.districtId} hidden>
-                        {session?.user?.address[0]?.districtName}{" "}
-                      </option>
-                      <option value="" disabled>
-                        Please choose province
-                      </option>
-                    </>
-                  )}
-                </select>
-                {/* <input
+                          <option value="" disabled>
+                            Please choose province
+                          </option>
+                        </>
+                      )}
+                    </select>
+                    {/* <input
                 type="text"
                 id="city"
                 name="city"
                 className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
-              </label>
+                  </label>
 
-              <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
-                    Ward
-                  </span>
+                  <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
+                    <div>
+                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                        Ward
+                      </span>
 
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
-                </div>
-                <select
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
-                  name="distric"
-                  // onChange={async (e) => {
-                  //   setAddress((prev) => ({
-                  //     ...prev,
-                  //     wardIdId: e.target.value,
-                  //     wardName: e.target.options[e.target.options.selectedIndex].text,
-                  //   }));
-                  //   handleChangeFee(e);
-                  // }}
-                  defaultValue={session?.user?.address[0]?.wardId}
-                  {...register("ward", {
-                    onChange: (e) => {
-                      setAddress((prev) => ({
-                        ...prev,
-                        wardId: e.target.value,
-                        wardName: e.target.options[e.target.options.selectedIndex].text,
-                      }));
-                      handleChangeFee(e);
-                    },
-                  })}
-                >
-                  {shipping?.wardList?.length > 0 ? (
-                    shipping.wardList.map((item) => {
-                      return (
-                        <option value={item.WardCode} key={item.WardCode}>
-                          {item.WardName}{" "}
-                        </option>
-                      );
-                    })
-                  ) : (
-                    <>
-                      <option value={session?.user?.address[0]?.wardId} hidden>
-                        {session?.user?.address[0]?.wardName}
-                      </option>
-                      <option value="" disabled>
-                        Please choose distict
-                      </option>
-                    </>
-                  )}
-                </select>
-                {/* <input
+                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    </div>
+                    <select
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      name="distric"
+                      // onChange={async (e) => {
+                      //   setAddress((prev) => ({
+                      //     ...prev,
+                      //     wardIdId: e.target.value,
+                      //     wardName: e.target.options[e.target.options.selectedIndex].text,
+                      //   }));
+                      //   handleChangeFee(e);
+                      // }}
+                      defaultValue={session?.user?.address[0]?.wardId}
+                      {...register("ward", {
+                        onChange: (e) => {
+                          setAddress((prev) => ({
+                            ...prev,
+                            wardId: e.target.value,
+                            wardName: e.target.options[e.target.options.selectedIndex].text,
+                          }));
+                          handleChangeFee(e);
+                        },
+                      })}
+                    >
+                      {shipping?.wardList?.length > 0 ? (
+                        shipping.wardList.map((item) => {
+                          return (
+                            <option value={item.WardCode} key={item.WardCode}>
+                              {item.WardName}{" "}
+                            </option>
+                          );
+                        })
+                      ) : (
+                        <>
+                          <option value={session?.user?.address[0]?.wardId} hidden>
+                            {session?.user?.address[0]?.wardName}
+                          </option>
+                          <option value="" disabled>
+                            Please choose distict
+                          </option>
+                        </>
+                      )}
+                    </select>
+                    {/* <input
                 type="text"
                 id="phoneNumber"
                 name="phoneNumber"
                 className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
-              </label>
+                  </label>
+                </div>
+              </Modal>
 
               <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                 <div>
@@ -525,8 +561,8 @@ function Checkout() {
                   id="bank"
                   name="bank-cash"
                   value="CREDIT_CARD"
-                  checked
                   {...register("paymentType")}
+                  required
                 />
 
                 <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
