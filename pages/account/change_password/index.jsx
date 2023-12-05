@@ -39,7 +39,7 @@ function ChangePass() {
   if (!loading) {
     return profile?.isGoogle ? (
       <form className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center  max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
-        <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
+        <span className="max-w-[full] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
           The password change function cannot be performed with a google account
         </span>
 
