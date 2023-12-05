@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { notification } from "antd";
 import classNames from "classnames";
 import { deleteCookie, getCookie } from "cookies-next";
-import { Heart, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
@@ -328,7 +328,7 @@ function ProductDetails(props) {
 
             <hr className="mt-[1.5rem] min-w-[25rem] border-solid border-[1px] border-gray-400" />
 
-            <div className="mt-[1.5rem] inline-flex items-start gap-[1.5rem]">
+            {/* <div className="mt-[1.5rem] inline-flex items-start gap-[1.5rem]">
               <span className="text-text-2 font-inter text-[1.25rem] font-[400] leading-[1.25rem] tracking-[0.0375rem]">
                 Colours:
               </span>
@@ -350,9 +350,9 @@ function ProductDetails(props) {
                   height={1000}
                 />
               </div>
-            </div>
+            </div> */}
 
-            <div className="mt-[1.5rem] inline-flex items-center gap-[1.5rem]">
+            {/* <div className="mt-[1.5rem] inline-flex items-center gap-[1.5rem]">
               <span className="text-text-2 font-inter text-[1.25rem] font-[400] leading-[1.25rem] tracking-[0.0375rem]">
                 Size:
               </span>
@@ -388,7 +388,7 @@ function ProductDetails(props) {
                   </span>
                 </li>
               </ul>
-            </div>
+            </div> */}
 
             <div className="mt-[1.5rem] flex items-center justify-start">
               {!isFlashsale && (
@@ -434,9 +434,9 @@ function ProductDetails(props) {
                 <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
               </button>
 
-              <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
+              {/* <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
                 <Heart />
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-[2.5rem] flex flex-col items-start justify-start min-w-[24.9375rem] min-h-[11.25rem] flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">

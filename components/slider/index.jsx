@@ -6,7 +6,6 @@ import Link from "next/link";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 // import banner1 from "@/assets/images/banner/banner1.jpg";
-import { useTrans } from "@/helper/chanLang";
 import { useOutsideLeftDrawderClick } from "@/helper/clickOutsideElement";
 
 import Banner from "../banner";
@@ -14,9 +13,7 @@ import Banner from "../banner";
 import styles from "./slider.module.scss";
 
 function Slider() {
-  const data = useTrans("slideBar");
-
-  const [categories, setCategories] = useState(data);
+  const [categories, setCategories] = useState([]);
 
   const [isOpenDrawderLeft, setIsOpenDrawderLeft] = useState(false);
 
@@ -28,8 +25,8 @@ function Slider() {
 
   const getCategory = async () => {
     try {
-      const res = axiosClient.get("/categories");
-      setCategories((await res).data.payload);
+      const res = await axiosClient.get("/categories");
+      setCategories(res.data.payload);
     } catch (error) {
       console.log("◀◀◀ error ▶▶▶", error);
     }
