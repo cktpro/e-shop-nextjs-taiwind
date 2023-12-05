@@ -190,7 +190,7 @@ function Header() {
 
       setIsOpenSuggest(false);
       setIsOpenSuggestOnDrawder(false);
-      router.push(`search-products?key=${inputSearch}`);
+      router.push(`/search-products?key=${inputSearch}`);
     },
     [inputSearch, router],
   );
