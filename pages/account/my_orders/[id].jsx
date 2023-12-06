@@ -94,7 +94,7 @@ function OrderDetails(props) {
             </span>
             <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[700] leading-[1rem]">Price</span>
             <span className="min-w-[8rem] max-w-[8rem] font-inter text-[1rem] font-[700] leading-[1rem]">
-              Discounted Price
+              Sub Total
             </span>
           </div>
           {orderDetail?.orderDetails?.map((item) => {
@@ -131,18 +131,29 @@ function OrderDetails(props) {
                 </span>
 
                 <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                  ${(parseFloat(item?.price) * (100 - parseInt(item?.discount, 10))) / 100}
+                  $
+                  {(parseFloat(item?.quantity) * (parseFloat(item?.price) * (100 - parseInt(item?.discount, 10)))) /
+                    100}
                 </span>
               </div>
             );
           })}
+
           <div className="flex flex-col items-start justify-center mt-[2rem]">
+            <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
+              Total:{" "}
+              <span className="px-[0.5rem] py-[0.2rem] rounded-md bg-green-600 text-text-1">
+                ${parseFloat(orderDetail?.totalPrice).toFixed(2)}
+              </span>
+            </span>
+
             <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
               Status:{" "}
               <span className={classNames("px-[0.5rem] py-[0.2rem] rounded-md", renderStatus(orderDetail?.status))}>
                 {orderDetail?.status}
               </span>
             </span>
+
             <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
               Payment type: <span>{orderDetail?.paymentType}</span>
             </span>
