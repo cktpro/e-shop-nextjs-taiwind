@@ -335,11 +335,11 @@ function Header() {
             </li>
           </ul>
 
-          <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
+          <div className="relative ml-[8.12rem] flex items-center justify-center">
             <form
               ref={refClickSuggest}
               onSubmit={handleSubmitSearch}
-              className="relative min-w-[15.1875rem] max-h-[2.375rem]"
+              className="relative hidden md:block min-w-[15.1875rem] max-h-[2.375rem]"
             >
               <input
                 ref={inputSearchRef}
@@ -440,7 +440,7 @@ function Header() {
               )}
             >
               {isLogin ? (
-                <div className="flex flex-col items-start gap-[0.8125rem]">
+                <div className="whitespace-nowrap flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/account"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -463,7 +463,7 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link
+                  {/* <Link
                     href="/"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
@@ -483,7 +483,7 @@ function Header() {
                     <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Reviews
                     </span>
-                  </Link>
+                  </Link> */}
 
                   <button
                     type="button"
@@ -498,7 +498,7 @@ function Header() {
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-start gap-[0.8125rem]">
+                <div className="whitespace-nowrap flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/log-in"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -664,7 +664,7 @@ function Header() {
                 <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
               </Link> */}
 
-              <Link
+              {/* <Link
                 onClick={closeDrawerRight}
                 className="group relative rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
                 href="/cart"
@@ -693,7 +693,7 @@ function Header() {
                     isOpenUserSettingOnDrawder && "text-text-1",
                   )}
                 />
-              </button>
+              </button> */}
 
               <div
                 className={classNames(
@@ -727,7 +727,7 @@ function Header() {
                       </span>
                     </Link>
 
-                    <Link
+                    {/* <Link
                       onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -737,9 +737,9 @@ function Header() {
                       <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Cancellations
                       </span>
-                    </Link>
+                    </Link> */}
 
-                    <Link
+                    {/* <Link
                       onClick={closeDrawerRight}
                       href="/"
                       className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -749,7 +749,7 @@ function Header() {
                       <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Reviews
                       </span>
-                    </Link>
+                    </Link> */}
 
                     <button
                       type="button"

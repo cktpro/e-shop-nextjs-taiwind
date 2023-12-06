@@ -194,6 +194,12 @@ function ProductDetails(props) {
     <>
       {/* {contextHolder} */}
 
+      {isLoadingAddCart && (
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+          <Loading />
+        </div>
+      )}
+
       <div className="container mt-[5rem] flex flex-col items-center justify-center">
         <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
           <Link
@@ -434,12 +440,6 @@ function ProductDetails(props) {
               >
                 <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
               </button>
-
-              {isLoadingAddCart && (
-                <div className="absolute top-[-0.5rem] left-[22rem]">
-                  <Loading />
-                </div>
-              )}
 
               {/* <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
                 <Heart />
