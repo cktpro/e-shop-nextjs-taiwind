@@ -152,7 +152,7 @@ function OrderDetails(props) {
             <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
               Total:{" "}
               <span className="px-[0.5rem] py-[0.2rem] rounded-md bg-green-600 text-text-1">
-                ${parseFloat(orderDetail?.totalPrice) + parseFloat(orderDetail?.shippingFee)}
+                {formattedMoney(parseFloat(orderDetail?.totalPrice) + parseFloat(orderDetail?.shippingFee))}
               </span>
             </span>
 
