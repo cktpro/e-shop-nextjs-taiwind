@@ -179,8 +179,41 @@ body {
   box-shadow: 0 0 10px red, 0 0 5px red;
 }
 
+.cover_order .ant-table {
+  text-wrap: nowrap !important;
+  overflow: auto !important;
+  max-width: 55rem !important;
+  max-height: 30rem !important;
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 1rem;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fff;
+    border-radius: 1rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #bbbbbb;
+    border-radius: 1rem;
+    &:hover {
+      background-color: #999999;
+    }
+
+    &:active {
+      background-color: #999999;
+    }
+  }
+}
+
 .cover_order .ant-table-cell {
   font-family: Inter !important;
   font-size: 1.125rem !important;
   font-weight: 600 !important;
+  text-wrap: nowrap !important;
 }
