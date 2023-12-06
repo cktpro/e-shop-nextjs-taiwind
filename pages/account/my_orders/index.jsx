@@ -137,17 +137,17 @@ function MyOrders() {
         Your Order
       </span> */}
         {order.length <= 0 && <p>You not have any order</p>}
-        <Table rowKey="_id" style={{ width: "auto" }} columns={columns} dataSource={order} pagination={false} />
-        {/* {order.map((item) => {
-        return (
-          <div key={item.id} className="flex gap-1 content-center justify-start">
-            <div>{item.description}</div>
-            <div>{new Date(item?.createdDate).toLocaleDateString("en-GB")}</div>
-            <div>{new Date(item?.shippedDate).toLocaleDateString("en-GB")}</div>
-            <div>{item?.status}</div>
-          </div>
-        );
-      })} */}
+        <Table
+          scroll={{
+            y: 450,
+            x: 650,
+          }}
+          rowKey="_id"
+          style={{ width: "auto" }}
+          columns={columns}
+          dataSource={order}
+          pagination={false}
+        />
       </div>
     </>
   );
