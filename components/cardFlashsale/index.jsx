@@ -157,7 +157,7 @@ function CardFlashsale(props) {
           </div>
 
           {isLoadingAddCart && (
-            <div className="absolute top-[7.25rem] left-[7.25rem]">
+            <div className="absolute top-[6rem] left-[7.4rem]">
               <Loading />
             </div>
           )}
