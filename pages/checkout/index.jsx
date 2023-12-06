@@ -528,7 +528,7 @@ function Checkout() {
 
                     <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
                       <div className="flex flex-col gap-1">
-                        <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
+                        <span className="max-w-[12rem] sm:max-w-[18rem] truncate text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                           {item?.productDetail?.name}
                         </span>
                         <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
