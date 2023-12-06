@@ -9,7 +9,7 @@ import {
   Search,
   ShoppingBag,
   ShoppingCart,
-  Star,
+  // Star,
   User,
   XCircle,
 } from "lucide-react";
@@ -65,7 +65,7 @@ function Header() {
 
   const [isOpenUserSetting, setIsOpenUserSetting] = useState(false);
 
-  const [isOpenUserSettingOnDrawder, setIsOpenUserSettingOnDrawder] = useState(false);
+  // const [isOpenUserSettingOnDrawder, setIsOpenUserSettingOnDrawder] = useState(false);
 
   const keySuggest = useKeySuggest((state) => state.keySuggest);
 
@@ -85,7 +85,7 @@ function Header() {
 
   const openUserSettingMenu = useCallback(() => setIsOpenUserSetting(true), []);
 
-  const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
+  // const openUserSettingMenuOnDrawder = useCallback(() => setIsOpenUserSettingOnDrawder(true), []);
 
   const handleClickOutsideSuggestOnDrawder = useCallback(() => {
     setIsOpenSuggestOnDrawder(false);
@@ -119,11 +119,11 @@ function Header() {
 
   const refClickUser = useOutsideClick(handleClickOutsideUser);
 
-  const handleClickOutsideUserOnDrawder = useCallback(() => {
-    setIsOpenUserSettingOnDrawder(false);
-  }, []);
+  // const handleClickOutsideUserOnDrawder = useCallback(() => {
+  //   setIsOpenUserSettingOnDrawder(false);
+  // }, []);
 
-  const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
+  // const refClickUserOnDrawder = useOutsideClick(handleClickOutsideUserOnDrawder);
 
   const doAuthUser = useAuthUser((state) => state.fetchAuthUser);
 
@@ -335,11 +335,11 @@ function Header() {
             </li>
           </ul>
 
-          <div className="relative hidden ml-[8.12rem] md:flex items-center justify-center">
+          <div className="relative ml-[8.12rem] flex items-center justify-center">
             <form
               ref={refClickSuggest}
               onSubmit={handleSubmitSearch}
-              className="relative min-w-[15.1875rem] max-h-[2.375rem]"
+              className="relative hidden md:block min-w-[15.1875rem] max-h-[2.375rem]"
             >
               <input
                 ref={inputSearchRef}
@@ -440,7 +440,7 @@ function Header() {
               )}
             >
               {isLogin ? (
-                <div className="flex flex-col items-start gap-[0.8125rem]">
+                <div className="whitespace-nowrap flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/account"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -463,7 +463,7 @@ function Header() {
                     </span>
                   </Link>
 
-                  <Link
+                  {/* <Link
                     href="/"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
                   >
@@ -483,7 +483,7 @@ function Header() {
                     <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Reviews
                     </span>
-                  </Link>
+                  </Link> */}
 
                   <button
                     type="button"
@@ -498,7 +498,7 @@ function Header() {
                   </button>
                 </div>
               ) : (
-                <div className="flex flex-col items-start gap-[0.8125rem]">
+                <div className="whitespace-nowrap flex flex-col items-start gap-[0.8125rem]">
                   <Link
                     href="/log-in"
                     className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
@@ -654,137 +654,6 @@ function Header() {
                 <Search />
               </button>
             </form>
-
-            <div className="relative flex mt-[2rem] gap-1">
-              {/* <Link
-                onClick={closeDrawerRight}
-                className="group rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center"
-                href="/wish-list"
-              >
-                <Heart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
-              </Link> */}
-
-              <Link
-                onClick={closeDrawerRight}
-                className="group relative rounded-full min-w-[2.5rem] min-h-[2.5rem] hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] flex items-center justify-center ml-[1rem]"
-                href="/cart"
-              >
-                <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
-
-                <div className="absolute top-[-0.5rem] right-[-0.5rem] w-[1.5rem] h-[1.5rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
-                  <span className="flex-shrink-0 text-text-1 text-center font-inter text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
-                    {totalCartItem || 0}
-                  </span>
-                </div>
-              </Link>
-
-              <button
-                onClick={openUserSettingMenuOnDrawder}
-                ref={refClickUserOnDrawder}
-                type="button"
-                className={classNames(
-                  "group min-w-[2.5rem] min-h-[2.5rem] rounded-full hover:bg-secondary-2 transition-colors ease-in-out duration-300 w-[2rem] h-[2rem] ml-[1rem] flex items-center justify-center",
-                  isOpenUserSettingOnDrawder && "bg-secondary-2",
-                )}
-              >
-                <User
-                  className={classNames(
-                    "max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300",
-                    isOpenUserSettingOnDrawder && "text-text-1",
-                  )}
-                />
-              </button>
-
-              <div
-                className={classNames(
-                  "absolute whitespace-nowrap right-[-3rem] top-[2.5rem] max-w-[14rem] bg- flex pt-[1.125rem] pr-[0.75rem] pb-[0.625rem] pl-[1.25rem] justify-end items-center backdrop-blur-sm bg-[rgba(0,0,0,0.8)] rounded-[0.25rem]",
-                  !isOpenUserSettingOnDrawder && "hidden",
-                )}
-              >
-                {isLogin ? (
-                  <div className="flex flex-col items-start gap-[0.8125rem]">
-                    <Link
-                      onClick={closeDrawerRight}
-                      href="/account"
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <User className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Manage My Account
-                      </span>
-                    </Link>
-
-                    <Link
-                      onClick={closeDrawerRight}
-                      href="/account/my_orders"
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Order
-                      </span>
-                    </Link>
-
-                    <Link
-                      onClick={closeDrawerRight}
-                      href="/"
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <XCircle className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Cancellations
-                      </span>
-                    </Link>
-
-                    <Link
-                      onClick={closeDrawerRight}
-                      href="/"
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <Star className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        My Reviews
-                      </span>
-                    </Link>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleLogout();
-                        closeDrawerRight();
-                      }}
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <LogOut className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Logout
-                      </span>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-start gap-[0.8125rem]">
-                    <Link
-                      href="/log-in"
-                      onClick={() => {
-                        closeDrawerRight();
-                      }}
-                      className="flex items-center gap-[1rem] hover:opacity-50 transition-opacity ease-in-out duration-300"
-                    >
-                      <LogIn className="w-[2rem] h-[2rem] text-text-1" />
-
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
-                        Login
-                      </span>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
 
           <div className="lg:hidden mt-[3rem] w-full flex flex-col items-start gap-[2rem] text-[1rem] font-[400] leading-[1.5rem]">

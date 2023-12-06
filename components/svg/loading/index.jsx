@@ -2,7 +2,7 @@ import React from "react";
 
 function Loading() {
   return (
-    <svg version="1.0" width="64px" height="64px" viewBox="0 0 128 128">
+    <svg version="1.0" width="32" height="32" viewBox="0 0 128 128">
       <g>
         <linearGradient id="linear-gradient">
           <stop offset="0%" stopColor="#fff" />
