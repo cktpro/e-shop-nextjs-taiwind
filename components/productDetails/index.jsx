@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { formattedMoney } from "@/helper/formatDocument";
 // import { checkTime } from "@/helper/checkTimeFlashSale";
 import useCartStore from "@/store/cart/useCartStore";
 
@@ -326,7 +327,7 @@ function ProductDetails(props) {
             </div>
 
             <span className="mt-[1rem] text-text-2 font-inter text-[1.5rem] font-[400] leading-[1.5rem] tracking-[0.045rem]">
-              ${parseFloat(product?.price).toFixed(2)}
+              {formattedMoney(product?.price)}
             </span>
 
             <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">

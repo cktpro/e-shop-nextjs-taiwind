@@ -103,7 +103,7 @@ function MyOrders() {
       key: "totalPrice",
       render: (record) => (
         <span className="font-inter text-[1rem] text-text-2 font-[400] leading-[1rem]">
-          {formattedMoney(record?.totalPrice)}
+          {formattedMoney(parseFloat(record?.totalPrice) + parseFloat(record?.shippingFee))}
         </span>
       ),
     },

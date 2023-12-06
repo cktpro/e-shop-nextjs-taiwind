@@ -10,6 +10,7 @@ import RePayment from "@/components/buttons/rePayment";
 import Loading from "@/components/svg/loading";
 
 import { axiosServer } from "@/helper/axios/axiosServer";
+import { formattedMoney } from "@/helper/formatDocument";
 import useFetchCheckout from "@/store/checkout";
 
 function OrderDetails(props) {
@@ -133,13 +134,14 @@ function OrderDetails(props) {
                   </span>
 
                   <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                    ${parseFloat(item?.price).toFixed(2)}
+                    {formattedMoney(item?.price)}
                   </span>
 
                   <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                    $
-                    {(parseFloat(item?.quantity) * (parseFloat(item?.price) * (100 - parseInt(item?.discount, 10)))) /
-                      100}
+                    {formattedMoney(
+                      (parseFloat(item?.quantity) * (parseFloat(item?.price) * (100 - parseInt(item?.discount, 10)))) /
+                        100,
+                    )}
                   </span>
                 </div>
               );
@@ -150,7 +152,7 @@ function OrderDetails(props) {
             <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
               Total:{" "}
               <span className="px-[0.5rem] py-[0.2rem] rounded-md bg-green-600 text-text-1">
-                ${parseFloat(orderDetail?.totalPrice).toFixed(2)}
+                ${parseFloat(orderDetail?.totalPrice) + parseFloat(orderDetail?.shippingFee)}
               </span>
             </span>
 
