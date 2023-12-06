@@ -8,10 +8,7 @@ function About() {
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
-        <Link
-          href="/"
-          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
-        >
+        <Link href="/" className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
           Home
         </Link>
 
@@ -159,9 +156,7 @@ function About() {
                 Tom Cruise
               </h3>
 
-              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
-                Founder & Chairman
-              </span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Founder & Chairman</span>
             </div>
 
             <div className="flex items-start gap-[1rem]">
@@ -215,9 +210,7 @@ function About() {
                 Emma Watson
               </h3>
 
-              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
-                Managing Director
-              </span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Managing Director</span>
             </div>
 
             <div className="flex items-start gap-[1rem]">

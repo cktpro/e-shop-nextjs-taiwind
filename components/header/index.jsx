@@ -171,6 +171,7 @@ function Header() {
 
     // signOut({ callbackUrl: "/log-in" });
     signOut();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeLang = useCallback(

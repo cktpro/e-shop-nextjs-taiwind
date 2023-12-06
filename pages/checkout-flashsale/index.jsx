@@ -794,9 +794,7 @@ function CheckoutFlashsale() {
                   value="CASH"
                 />
 
-                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
-                  Cash on delivery
-                </span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
               </label>
 
               {errors.paymentType && (
