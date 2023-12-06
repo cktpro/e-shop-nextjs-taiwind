@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 // import { notification } from "antd";
 import { deleteCookie, getCookie } from "cookies-next";
+import { ShoppingCart } from "lucide-react";
 // import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -137,10 +138,20 @@ function CardBestSelling(props) {
           </div>
 
           {isLoadingAddCart && (
-            <div className="absolute top-[7.25rem] left-[7.25rem]">
+            <div className="absolute top-[12.25rem] left-[12.25rem] lg:top-[7.25rem] lg:left-[7.25rem]">
               <Loading />
             </div>
           )}
+
+          <button
+            type="button"
+            onClick={() => handleClickAddToCart(product)}
+            title="view"
+            href={`/${product.id}`}
+            className="bg-secondary-2 absolute top-[2rem] right-[2rem] flex lg:hidden items-center justify-center rounded-full min-w-[3.125rem] min-h-[3.125rem]"
+          >
+            <ShoppingCart className="text-text-1" />
+          </button>
 
           {/* <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
             <button
@@ -175,7 +186,7 @@ function CardBestSelling(props) {
           <button
             onClick={() => handleClickAddToCart(product)}
             type="button"
-            className="absolute bottom-0 flex min-w-[16.875rem] min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 bg-text-2"
+            className="hidden absolute bottom-0 lg:flex min-w-[16.875rem] min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 bg-text-2"
           >
             <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Add To Cart</span>
           </button>
