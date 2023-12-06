@@ -1,3 +1,32 @@
+.cover_order_detail {
+  text-wrap: nowrap !important;
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+    background-color: #fff !important;
+    border-radius: 1rem !important;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+    background-color: #fff !important;
+    border-radius: 1rem !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #bbbbbb !important;
+    border-radius: 1rem !important;
+    &:hover {
+      background-color: #999999 !important;
+    }
+
+    &:active {
+      background-color: #999999 !important;
+    }
+  }
+}
+
 .cover_order .ant-table-body {
   text-wrap: nowrap !important;
 
