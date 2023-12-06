@@ -119,7 +119,7 @@ function CartPage() {
       const newItem = cartItem;
       const valueQuantity = parseInt(document.getElementById(`quantity${index}`).value, 10);
       if (valueQuantity <= 1) {
-        const text = "Bạn có muốn xóa sản phẩm này?";
+        const text = "Are you sure, you want to delete this?";
         // eslint-disable-next-line no-alert
         if (window.confirm(text) === true) {
           cartData.removeFromCart(newItem[index].product);
@@ -138,7 +138,7 @@ function CartPage() {
   const handleClickRemoveFromCart = useCallback(
     (product) => {
       // eslint-disable-next-line no-alert
-      if (window.confirm("Bạn có muốn xóa sản phẩm này?") === true) {
+      if (window.confirm("Are you sure, you want to delete this?") === true) {
         removeFromCart(product);
       }
     },

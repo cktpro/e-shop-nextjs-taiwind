@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { notification } from "antd";
+// import { notification } from "antd";
 import { deleteCookie, getCookie } from "cookies-next";
 // import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
@@ -7,10 +7,12 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
-import { axiosClient } from "@/helper/axios/axiosClient";
-import { checkTime } from "@/helper/checkTimeFlashSale";
+// import { axiosClient } from "@/helper/axios/axiosClient";
+// import { checkTime } from "@/helper/checkTimeFlashSale";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
+
+import Loading from "../svg/loading";
 
 function CardFlashsale(props) {
   let { product } = props;
@@ -20,82 +22,88 @@ function CardFlashsale(props) {
     discountedPrice: (parseInt(product?.price, 10) * (100 - parseInt(product?.discount, 10))) / 100,
   };
 
-  const [api, contextHolder] = notification.useNotification();
+  // const [api, contextHolder] = notification.useNotification();
 
-  const addToCart = useCartStore((state) => state.addToCart);
+  const addFlashsaleToCart = useCartStore((state) => state.addFlashsaleToCart);
 
-  const cart = useCartStore((state) => state.cart);
+  // const cart = useCartStore((state) => state.cart);
 
-  const openNotificationWithIcon = useCallback(
-    (type, message) => {
-      switch (type) {
-        case "error":
-          api[type]({
-            message: "ERROR",
-            description: message,
-          });
-          break;
+  const isLoadingAddCart = useCartStore((state) => state.isLoading);
 
-        case "success":
-          api[type]({
-            message: "SUCCESS",
-            description: message,
-          });
-          break;
+  // const [isLoadingLocal, setIsLoadingLocal] = useState(false);
 
-        default:
-          break;
-      }
-    },
-    [api],
-  );
+  // const openNotificationWithIcon = useCallback(
+  //   (type, message) => {
+  //     switch (type) {
+  //       case "error":
+  //         api[type]({
+  //           message: "ERROR",
+  //           description: message,
+  //         });
+  //         break;
+
+  //       case "success":
+  //         api[type]({
+  //           message: "SUCCESS",
+  //           description: message,
+  //         });
+  //         break;
+
+  //       default:
+  //         break;
+  //     }
+  //   },
+  //   [api],
+  // );
 
   const handleClickAddToCart = useCallback(
     async (item) => {
+      // setIsLoadingLocal(true);
+
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
-        axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
-        axiosClient.get("/time-flashsale"),
-      ]);
+      // const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+      //   axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+      //   axiosClient.get("/time-flashsale"),
+      // ]);
 
-      if (getTimeFlashsale.data.payload.expirationTime) {
-        let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+      // if (getTimeFlashsale.data.payload.expirationTime) {
+      //   let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
-        endOfSale += " 23:59:59";
+      //   endOfSale += " 23:59:59";
 
-        const checkTimeF = checkTime(endOfSale);
+      //   const checkTimeF = checkTime(endOfSale);
 
-        if (checkTimeF <= 0) {
-          openNotificationWithIcon("error", "The flash sale period has ended");
+      //   if (checkTimeF <= 0) {
+      //     openNotificationWithIcon("error", "The flash sale period has ended");
 
-          return;
-        }
+      //     return;
+      //   }
 
-        if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
-          openNotificationWithIcon("error", "Flash sale has not opened yet");
+      //   if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+      //     openNotificationWithIcon("error", "Flash sale has not opened yet");
 
-          return;
-        }
-      }
+      //     return;
+      //   }
+      // }
 
-      if (checkStockFlashsale.data.flashsaleStock <= 0) {
-        openNotificationWithIcon("error", "The product has been sold out");
-        return;
-      }
+      // if (checkStockFlashsale.data.flashsaleStock <= 0) {
+      //   openNotificationWithIcon("error", "The product has been sold out");
+      //   return;
+      // }
 
-      if (cart.length > 0) {
-        openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
-        return;
-      }
+      // if (cart.length > 0) {
+      //   openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+      //   return;
+      // }
 
       try {
-        const url = "/authCustomers/profile";
+        // const url = "/authCustomers/profile";
 
-        const response = await axiosClient.get(url);
+        // const response = await axiosClient.get(url);
 
-        if (getToken && getRefreshToken && response.data.payload) {
+        if (getToken && getRefreshToken) {
           const data = {
             productId: item.id,
             name: item.name,
@@ -104,9 +112,9 @@ function CardFlashsale(props) {
             quantity: 1,
           };
 
-          addToCart(data);
+          addFlashsaleToCart(data);
 
-          openNotificationWithIcon("success", "product added to cart!!!");
+          // openNotificationWithIcon("success", "product added to cart!!!");
         } else {
           deleteCookie("TOKEN");
           deleteCookie("REFRESH_TOKEN");
@@ -120,12 +128,18 @@ function CardFlashsale(props) {
         signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart.length, openNotificationWithIcon],
+    [addFlashsaleToCart],
   );
+
+  // useEffect(() => {
+  // if () {
+
+  // }
+  // }, []);
 
   return (
     <>
-      {contextHolder}
+      {/* {contextHolder} */}
 
       <div className="h-[22.875rem] w-[16.875rem] flex flex-col items-start gap-[1rem] rounded-[0.25rem]">
         <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
@@ -140,6 +154,12 @@ function CardFlashsale(props) {
               Stock: {product.stock}
             </span>
           </div>
+
+          {isLoadingAddCart && (
+            <div className="absolute top-[6rem] left-[6.25rem]">
+              <Loading />
+            </div>
+          )}
 
           {/* <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
             <button

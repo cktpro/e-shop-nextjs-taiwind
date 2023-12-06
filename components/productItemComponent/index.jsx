@@ -1,13 +1,15 @@
 import React, { useCallback } from "react";
-import { Eye, Heart } from "lucide-react";
+// import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 import PropTypes from "prop-types";
 
 // import { axiosClient } from "@/helper/axios/axiosClient";
 import { formattedDiscount, formattedDiscountPrice, formattedMoney } from "@/helper/formatDocument";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
+
+import Loading from "../svg/loading";
 // import useCartStore from "@/store/cart/useCartStore";
 // import useScaleCart from "@/store/isScaleCart";
 // import useNotification from "@/store/showNotification";
@@ -15,6 +17,8 @@ import useCartStore from "@/store/cart/useCartStore";
 function ProductItemComponent(props) {
   const { product } = props;
   const addCart = useCartStore((state) => state.addToCart);
+
+  const isLoadingAddCart = useCartStore((state) => state.isLoading);
   // const timeoutNotificationRef = useRef(null);
 
   // const timeoutScaleRef = useRef(null);
@@ -50,7 +54,13 @@ function ProductItemComponent(props) {
           </span>
         </div>
 
-        <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
+        {isLoadingAddCart && (
+          <div className="absolute top-[6rem] left-[6.25rem]">
+            <Loading />
+          </div>
+        )}
+
+        {/* <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
           <button
             type="button"
             className="flex items-center justify-center bg-white rounded-full min-w-[2.125rem] min-h-[2.125rem]"
@@ -64,7 +74,7 @@ function ProductItemComponent(props) {
           >
             <Eye />
           </Link>
-        </div>
+        </div> */}
 
         <Image
           className="max-w-[16.875rem] max-h-[15.625rem] object-contain"

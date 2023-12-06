@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { notification } from "antd";
+// import { notification } from "antd";
 import { deleteCookie, getCookie } from "cookies-next";
 // import { Eye, Heart } from "lucide-react";
 import Image from "next/image";
@@ -7,9 +7,11 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
-import { axiosClient } from "@/helper/axios/axiosClient";
+// import { axiosClient } from "@/helper/axios/axiosClient";
 import { renderStars } from "@/helper/renderStar";
 import useCartStore from "@/store/cart/useCartStore";
+
+import Loading from "../svg/loading";
 
 function Card(props) {
   let { product } = props;
@@ -19,80 +21,82 @@ function Card(props) {
     discountedPrice: (parseInt(product?.price, 10) * (100 - parseInt(product?.discount, 10))) / 100,
   };
 
-  const [api, contextHolder] = notification.useNotification();
+  // const [api, contextHolder] = notification.useNotification();
 
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const cart = useCartStore((state) => state.cart);
+  const isLoadingAddCart = useCartStore((state) => state.isLoading);
 
-  const openNotificationWithIcon = useCallback(
-    (type, message) => {
-      switch (type) {
-        case "error":
-          api[type]({
-            message: "ERROR",
-            description: message,
-          });
-          break;
+  // const cart = useCartStore((state) => state.cart);
 
-        case "success":
-          api[type]({
-            message: "SUCCESS",
-            description: message,
-          });
-          break;
+  // const openNotificationWithIcon = useCallback(
+  //   (type, message) => {
+  //     switch (type) {
+  //       case "error":
+  //         api[type]({
+  //           message: "ERROR",
+  //           description: message,
+  //         });
+  //         break;
 
-        default:
-          break;
-      }
-    },
-    [api],
-  );
+  //       case "success":
+  //         api[type]({
+  //           message: "SUCCESS",
+  //           description: message,
+  //         });
+  //         break;
+
+  //       default:
+  //         break;
+  //     }
+  //   },
+  //   [api],
+  // );
 
   const handleClickAddToCart = useCallback(
     async (item) => {
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      if (cart.length > 0) {
-        const [checkFlashsaleOnCart, checkFlashsaleThisProduct] = await Promise.all([
-          axiosClient.get(`/flashsale/check-flashsale?productId=${cart[0].product.productId}`),
-          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
-        ]);
+      // if (cart.length > 0) {
+      //   const [checkFlashsaleOnCart, checkFlashsaleThisProduct] = await Promise.all([
+      //     axiosClient.get(`/flashsale/check-flashsale?productId=${cart[0].product.productId}`),
+      //     axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+      //   ]);
 
-        if (checkFlashsaleOnCart.data.message === "found") {
-          openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+      //   if (checkFlashsaleOnCart.data.message === "found") {
+      //     openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
 
-          return;
-        }
+      //     return;
+      //   }
 
-        if (checkFlashsaleThisProduct.data.message === "found") {
-          openNotificationWithIcon(
-            "error",
-            "This is a flash sale product, please add to cart in the flash sale section",
-          );
+      //   if (checkFlashsaleThisProduct.data.message === "found") {
+      //     openNotificationWithIcon(
+      //       "error",
+      //       "This is a flash sale product, please add to cart in the flash sale section",
+      //     );
 
-          return;
-        }
-      } else {
-        const checkFlashsaleThisProduct = await axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`);
+      //     return;
+      //   }
+      // } else {
+      //   const checkFlashsaleThisProduct = await axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`);
 
-        if (checkFlashsaleThisProduct.data.message === "found") {
-          openNotificationWithIcon(
-            "error",
-            "This is a flash sale product, please add to cart in the flash sale section",
-          );
+      //   if (checkFlashsaleThisProduct.data.message === "found") {
+      //     openNotificationWithIcon(
+      //       "error",
+      //       "This is a flash sale product, please add to cart in the flash sale section",
+      //     );
 
-          return;
-        }
-      }
+      //     return;
+      //   }
+      // }
 
       try {
-        const url = "/authCustomers/profile";
+        // const url = "/authCustomers/profile";
 
-        const response = await axiosClient.get(url);
+        // const response = await axiosClient.get(url);
 
-        if (getToken && getRefreshToken && response.data.payload) {
+        if (getToken && getRefreshToken) {
           const data = {
             productId: item.id,
             name: item.name,
@@ -103,7 +107,7 @@ function Card(props) {
 
           addToCart(data);
 
-          openNotificationWithIcon("success", "product added to cart!!!");
+          // openNotificationWithIcon("success", "product added to cart!!!");
         } else {
           deleteCookie("TOKEN");
           deleteCookie("REFRESH_TOKEN");
@@ -117,12 +121,12 @@ function Card(props) {
         signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart, openNotificationWithIcon],
+    [addToCart],
   );
 
   return (
     <>
-      {contextHolder}
+      {/* {contextHolder} */}
 
       <div className="h-[22.875rem] w-[16.875rem] flex flex-col items-start gap-[1rem] rounded-[0.25rem]">
         <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
@@ -131,6 +135,12 @@ function Card(props) {
               -{product.discount}%
             </span>
           </div>
+
+          {isLoadingAddCart && (
+            <div className="absolute top-[6rem] left-[6.25rem]">
+              <Loading />
+            </div>
+          )}
 
           {/* <div className="absolute top-[0.75rem] right-[0.75rem] inline-flex flex-col items-start gap-[0.5rem]">
             <button

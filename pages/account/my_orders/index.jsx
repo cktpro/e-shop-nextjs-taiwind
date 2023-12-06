@@ -94,7 +94,7 @@ function MyOrders() {
       {/* <span className="max-w-[9.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
         Your Order
       </span> */}
-      {order.length <= 0 && <p>Bạn chưa có đơn hàng nào</p>}
+      {order.length <= 0 && <p>You not have any order</p>}
       <Table rowKey="_id" style={{ width: "auto" }} columns={columns} dataSource={order} pagination={false} />
       {/* {order.map((item) => {
         return (

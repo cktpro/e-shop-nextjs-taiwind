@@ -13,7 +13,7 @@ function Footer() {
         <li className="col-span-6 sm:col-span-6 xl:col-span-3 min-w-[13.5625rem] mb-10 xl:mb-0 flex flex-col items-start xl:items-start gap-[1rem]">
           <div className="flex flex-col items-start gap-[1.5rem]">
             <h1 className="text-text-1 font-inter text-[1.5rem] font-[700] leading-[1.5rem] tracking-[0.045rem]">
-              Exclusive
+              E-Shop
             </h1>
 
             <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Subscribe</h2>
@@ -45,9 +45,7 @@ function Footer() {
                 111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
               </span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                exclusive@gmail.com
-              </span>
+              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">eshops@gmail.com</span>
 
               <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
                 +88015-88888-9999

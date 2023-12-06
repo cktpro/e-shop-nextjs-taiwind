@@ -28,13 +28,13 @@ function About() {
 
           <div className="flex flex-col items-start gap-[1.5rem]">
             <p className="max-w-[32.8125rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.625rem]">
-              Launced in 2015, Exclusive is South Asia’s premier online shopping makterplace with an active presense in
-              Bangladesh. Supported by wide range of tailored marketing, data and service solutions, Exclusive has
-              10,500 sallers and 300 brands and serves 3 millioons customers across the region.
+              Launced in 2015, E-Shop is South Asia’s premier online shopping makterplace with an active presense in
+              Bangladesh. Supported by wide range of tailored marketing, data and service solutions, E-Shop has 10,500
+              sallers and 300 brands and serves 3 millioons customers across the region.
             </p>
 
             <p className="max-w-[31.5625rem] font-poppins text-[1rem] font-[400] leading-[1.625rem]">
-              Exclusive has more than 1 Million products to offer, growing at a very fast. Exclusive offers a diverse
+              E-Shop has more than 1 Million products to offer, growing at a very fast. E-Shop offers a diverse
               assotment in categories ranging from consumer.
             </p>
           </div>

@@ -68,11 +68,11 @@ function Contact() {
                 </span>
 
                 <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                  Emails: customer@exclusive.com
+                  Emails: customer@eshops.com
                 </span>
 
                 <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-                  Emails: support@exclusive.com
+                  Emails: support@eshops.com
                 </span>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { notification } from "antd";
+// import { notification } from "antd";
 import classNames from "classnames";
 import { deleteCookie, getCookie } from "cookies-next";
 import { Minus, Plus } from "lucide-react";
@@ -9,10 +9,11 @@ import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
-import { checkTime } from "@/helper/checkTimeFlashSale";
+// import { checkTime } from "@/helper/checkTimeFlashSale";
 import useCartStore from "@/store/cart/useCartStore";
 
 import Card from "../card";
+import Loading from "../svg/loading";
 import Rectangle from "../svg/rectangle";
 
 import styles from "./productDetails.module.scss";
@@ -24,13 +25,15 @@ function ProductDetails(props) {
     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vectors%2Fno-picture-vectors&psig=AOvVaw0azVwCrbXOTKbmnnotREZt&ust=1701421028071000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMiPm7Kt64IDFQAAAAAdAAAAABAJ",
   );
 
-  const [api, contextHolder] = notification.useNotification();
+  // const [api, contextHolder] = notification.useNotification();
 
   const [inputQuantity, setInputQuantity] = useState(1);
 
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const cart = useCartStore((state) => state.cart);
+  const isLoadingAddCart = useCartStore((state) => state.isLoading);
+
+  // const cart = useCartStore((state) => state.cart);
 
   const [isFlashsale, setIsFlashsale] = useState(false);
 
@@ -57,84 +60,84 @@ function ProductDetails(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
-  const openNotificationWithIcon = useCallback(
-    (type, message) => {
-      switch (type) {
-        case "error":
-          api[type]({
-            message: "ERROR",
-            description: message,
-          });
-          break;
+  // const openNotificationWithIcon = useCallback(
+  //   (type, message) => {
+  //     switch (type) {
+  //       case "error":
+  //         api[type]({
+  //           message: "ERROR",
+  //           description: message,
+  //         });
+  //         break;
 
-        case "success":
-          api[type]({
-            message: "SUCCESS",
-            description: message,
-          });
-          break;
+  //       case "success":
+  //         api[type]({
+  //           message: "SUCCESS",
+  //           description: message,
+  //         });
+  //         break;
 
-        default:
-          break;
-      }
-    },
-    [api],
-  );
+  //       default:
+  //         break;
+  //     }
+  //   },
+  //   [api],
+  // );
 
   const handleClickAddToCart = useCallback(
     async (item) => {
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      if (cart.length > 0) {
-        const checkFlashsale = await axiosClient.get(
-          `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
-        );
+      // if (cart.length > 0) {
+      //   const checkFlashsale = await axiosClient.get(
+      //     `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
+      //   );
 
-        if (checkFlashsale.data.message === "found") {
-          openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+      //   if (checkFlashsale.data.message === "found") {
+      //     openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
 
-          return;
-        }
-      } else {
-        const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
-          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
-          axiosClient.get("/time-flashsale"),
-        ]);
+      //     return;
+      //   }
+      // } else {
+      //   const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+      //     axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+      //     axiosClient.get("/time-flashsale"),
+      //   ]);
 
-        if (checkStockFlashsale.data.message === "found") {
-          if (getTimeFlashsale.data.payload.expirationTime) {
-            let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+      //   if (checkStockFlashsale.data.message === "found") {
+      //     if (getTimeFlashsale.data.payload.expirationTime) {
+      //       let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
-            endOfSale += " 23:59:59";
+      //       endOfSale += " 23:59:59";
 
-            const checkTimeF = checkTime(endOfSale);
+      //       const checkTimeF = checkTime(endOfSale);
 
-            if (checkTimeF <= 0) {
-              openNotificationWithIcon("error", "The flash sale period has ended");
+      //       if (checkTimeF <= 0) {
+      //         openNotificationWithIcon("error", "The flash sale period has ended");
 
-              return;
-            }
+      //         return;
+      //       }
 
-            if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
-              openNotificationWithIcon("error", "Flash sale has not opened yet");
+      //       if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+      //         openNotificationWithIcon("error", "Flash sale has not opened yet");
 
-              return;
-            }
-          }
+      //         return;
+      //       }
+      //     }
 
-          if (checkStockFlashsale.data.flashsaleStock <= 0) {
-            openNotificationWithIcon("error", "The product has been sold out");
+      //     if (checkStockFlashsale.data.flashsaleStock <= 0) {
+      //       openNotificationWithIcon("error", "The product has been sold out");
 
-            return;
-          }
-        }
-      }
+      //       return;
+      //     }
+      //   }
+      // }
 
       try {
-        const response = await axiosClient.get("/authCustomers/profile");
+        // const response = await axiosClient.get("/authCustomers/profile");
 
-        if (getToken && getRefreshToken && response.data.payload) {
+        if (getToken && getRefreshToken) {
           const data = {
             productId: item.id,
             name: item.name,
@@ -145,7 +148,7 @@ function ProductDetails(props) {
 
           addToCart(data);
 
-          openNotificationWithIcon("success", "product added to cart!!!");
+          // openNotificationWithIcon("success", "product added to cart!!!");
         } else {
           deleteCookie("TOKEN");
           deleteCookie("REFRESH_TOKEN");
@@ -159,7 +162,7 @@ function ProductDetails(props) {
         signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart, inputQuantity, openNotificationWithIcon],
+    [addToCart, inputQuantity],
   );
 
   const handleClickPlus = useCallback(() => {
@@ -189,7 +192,7 @@ function ProductDetails(props) {
   }, []);
   return (
     <>
-      {contextHolder}
+      {/* {contextHolder} */}
 
       <div className="container mt-[5rem] flex flex-col items-center justify-center">
         <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
@@ -390,7 +393,7 @@ function ProductDetails(props) {
               </ul>
             </div> */}
 
-            <div className="mt-[1.5rem] flex items-center justify-start">
+            <div className="relative mt-[1.5rem] flex items-center justify-start">
               {!isFlashsale && (
                 <>
                   <button
@@ -433,6 +436,12 @@ function ProductDetails(props) {
               >
                 <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
               </button>
+
+              {isLoadingAddCart && (
+                <div className="absolute top-[-0.5rem] left-[22rem]">
+                  <Loading />
+                </div>
+              )}
 
               {/* <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
                 <Heart />

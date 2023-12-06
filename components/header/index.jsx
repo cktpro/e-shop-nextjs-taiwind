@@ -281,7 +281,7 @@ function Header() {
 
         <div className="container pt-[40px] pb-[16px] flex items-center">
           <Link href="/" className="font-inter font-[700] text-[1.5rem] leading-[1.5rem] tracking-[0.045rem] mr-auto">
-            <h1>Exclusive</h1>
+            <h1>E-Shop</h1>
           </Link>
 
           <ul className="hidden lg:flex items-start gap-[3rem]">

@@ -2,6 +2,7 @@ import { message } from "antd";
 import { create } from "zustand";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
+import { checkTime } from "@/helper/checkTimeFlashSale";
 
 const initialState = {
   cart: [],
@@ -75,16 +76,16 @@ const useCartStore = create((set, get) => ({
       }
       const result = await axiosClient.get("/cart");
       set({ cart: result.data.payload, isLoading: false });
-      message.success("Cập nhật thành công");
+      message.success("Update Success");
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
-      message.error("Cập nhật thất bại");
+      message.error("Update Failed");
     }
   },
   getListCart: async () => {
-    set({ isLoading: true });
+    // set({ isLoading: true });
     try {
       const result = await axiosClient.get("/cart");
       const data = result.data.payload;
@@ -97,7 +98,7 @@ const useCartStore = create((set, get) => ({
   },
 
   getListCartFlashSale: async () => {
-    set({ isLoading: true });
+    // set({ isLoading: true });
     try {
       const result = await axiosClient.get("/cart/get-cart-flashsale");
       const data = result.data.payload;
@@ -113,6 +114,50 @@ const useCartStore = create((set, get) => ({
     set({
       isLoading: true,
     });
+
+    const { cart } = get();
+
+    if (cart.length > 0) {
+      const [checkFlashsaleOnCart, checkFlashsaleThisProduct] = await Promise.all([
+        axiosClient.get(`/flashsale/check-flashsale?productId=${cart[0].product.productId}`),
+        axiosClient.get(`/flashSale/check-flashsale?productId=${product.productId}`),
+      ]);
+
+      if (checkFlashsaleOnCart.data.message === "found") {
+        set({ isLoading: false });
+        message.error("The shopping cart contains flash sale products, which cannot be added!!!");
+        // openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+
+        return;
+      }
+
+      if (checkFlashsaleThisProduct.data.message === "found") {
+        set({ isLoading: false });
+        message.error("This is a flash sale product, please add to cart in the flash sale section");
+        // openNotificationWithIcon(
+        // "error",
+        // "This is a flash sale product, please add to cart in the flash sale section",
+        // );
+
+        return;
+      }
+    } else {
+      const checkFlashsaleThisProduct = await axiosClient.get(
+        `/flashSale/check-flashsale?productId=${product.productId}`,
+      );
+
+      if (checkFlashsaleThisProduct.data.message === "found") {
+        set({ isLoading: false });
+        message.error("This is a flash sale product, please add to cart in the flash sale section");
+        // openNotificationWithIcon(
+        // "error",
+        // "This is a flash sale product, please add to cart in the flash sale section",
+        // );
+
+        return;
+      }
+    }
+
     try {
       await axiosClient.post("cart", product);
       const newCart = await axiosClient.get("/cart");
@@ -130,57 +175,71 @@ const useCartStore = create((set, get) => ({
       console.log("◀◀◀ error ▶▶▶", error);
       message.error("Add cart failed");
     }
-    // const { cart } = get();
+  },
 
-    // const shipping = 5;
+  addFlashsaleToCart: async (product) => {
+    set({
+      isLoading: true,
+    });
 
-    // const cartItem = cart.find((item) => item.id === product.id);
+    const { cart } = get();
 
-    // if (cartItem) {
-    //   const updatedCart = cart.map((item) => {
-    //     return item.id === product.id
-    //       ? { ...item, quantity: parseInt(item.quantity, 10) + parseInt(product.quantity, 10) }
-    //       : item;
-    //   });
+    const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+      axiosClient.get(`/flashSale/check-flashsale?productId=${product.productId}`),
+      axiosClient.get("/time-flashsale"),
+    ]);
 
-    //   set((state) => ({
-    //     cart: updatedCart,
+    if (getTimeFlashsale.data.payload.expirationTime) {
+      let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
-    //     totalItem: parseInt(state.totalItem, 10) + product.quantity,
+      endOfSale += " 23:59:59";
 
-    //     subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
+      const checkTimeF = checkTime(endOfSale);
 
-    //     shipping: parseFloat(shipping).toFixed(2),
+      if (checkTimeF <= 0) {
+        set({ isLoading: false });
+        message.error("The flash sale period has ended");
 
-    //     coupon: "",
+        return;
+      }
 
-    //     total: (
-    //       parseFloat(state.subtotal) +
-    //       parseFloat(shipping) +
-    //       parseFloat(product.price) * parseInt(product.quantity, 10)
-    //     ).toFixed(2),
-    //   }));
-    // } else {
-    //   const updatedCart = [...cart, { ...product, quantity: product.quantity }];
+      if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+        set({ isLoading: false });
+        message.error("Flash sale has not opened yet");
 
-    //   set((state) => ({
-    //     cart: updatedCart,
+        return;
+      }
+    }
 
-    //     totalItem: parseInt(state.totalItem, 10) + product.quantity,
+    if (checkStockFlashsale.data.flashsaleStock <= 0) {
+      set({ isLoading: false });
+      message.error("The product has been sold out");
+      return;
+    }
 
-    //     subtotal: (parseFloat(state.subtotal) + parseFloat(product.price) * parseInt(product.quantity, 10)).toFixed(2),
+    if (cart.length > 0) {
+      set({ isLoading: false });
+      message.error("The shopping cart contains flash sale products, which cannot be added!!!");
+      return;
+    }
 
-    //     shipping: parseFloat(shipping).toFixed(2),
-
-    //     coupon: "",
-
-    //     total: (
-    //       parseFloat(state.subtotal) +
-    //       parseFloat(shipping) +
-    //       parseFloat(product.price) * parseInt(product.quantity, 10)
-    //     ).toFixed(2),
-    //   }));
-    // }
+    try {
+      await axiosClient.post("cart", product);
+      const newCart = await axiosClient.get("/cart");
+      set({
+        isLoading: false,
+        cart: newCart.data.payload,
+        totalItem: newCart.data.payload.length,
+      });
+      message.success("Add cart success");
+    } catch (error) {
+      set({
+        isLoading: false,
+      });
+      // eslint-disable-next-line no-console
+      console.log("◀◀◀ error ▶▶▶", error);
+      message.error("Add cart failed");
+    }
   },
 
   increase: (product) => {
@@ -247,18 +306,17 @@ const useCartStore = create((set, get) => ({
       await axiosClient.delete(`/cart/${product.productId}`);
       const result = await axiosClient.get("/cart");
       const data = result.data.payload;
-      console.log("««««« data »»»»»", data);
       set(() => ({
         cart: data,
         totalItem: data.length,
         isLoading: false,
       }));
-      message.success("Xóa thành công");
+      message.success("Delete Success");
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
       set({ isLoading: false });
-      message.error("Xóa thất bại");
+      message.error("Delete Failed");
     }
   },
 

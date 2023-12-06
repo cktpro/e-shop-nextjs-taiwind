@@ -160,7 +160,7 @@ function MyAccount() {
 
         <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <label htmlFor="firtsName" className="flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Tỉnh/Thành Phô</span>
+            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Province</span>
 
             {/* <input
             defaultValue={address?.provinceName}
@@ -198,7 +198,7 @@ function MyAccount() {
           </label>
 
           <label htmlFor="lastName" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Quận/Huyện</span>
+            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">District</span>
 
             {/* <input
             defaultValue={address?.districtName}
@@ -243,7 +243,7 @@ function MyAccount() {
 
         <div className="mt-[1.5rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <label htmlFor="email" className="flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Phường Xã</span>
+            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Ward</span>
 
             {/* <input
             defaultValue={address?.wardName}
