@@ -119,7 +119,7 @@ function OrderDetails(props) {
                       height={1000}
                     />
 
-                    <span className="min-w-[10.5rem] max-w-[10.5rem] sm:min-w-[15.5rem] sm:max-w-[15.5rem] md:min-w-[20.5rem] md:max-w-[20.5rem] lg:min-w-[29.5rem] lg:max-w-[29.5rem] truncate font-inter text-[1rem] font-[400] leading-[1rem]">
+                    <span className="mr-[1.75rem] sm:mr-[1.75rem] md:mr-0 min-w-[8.5rem] max-w-[8.5rem] sm:min-w-[13.5rem] sm:max-w-[13.5rem] md:min-w-[20.5rem] md:max-w-[20.5rem] lg:min-w-[29.5rem] lg:max-w-[29.5rem] truncate font-inter text-[1rem] font-[400] leading-[1rem]">
                       {item?.product?.name}
                     </span>
                   </Link>
