@@ -289,8 +289,8 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                  isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                  isActiveNavbar === "/" && "border-b-text-2 border-b-[2px]",
                 )}
                 href="/"
               >
@@ -301,8 +301,8 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                  isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                  isActiveNavbar === "/contact" && "border-b-text-2 border-b-[2px]",
                 )}
                 href="/contact"
               >
@@ -313,8 +313,8 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                  isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                  isActiveNavbar === "/about" && "border-b-text-2 border-b-[2px]",
                 )}
                 href="/about"
               >
@@ -325,8 +325,8 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                  isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                  isActiveNavbar === "/sign-up" && "border-b-text-2 border-b-[2px]",
                 )}
                 href="/sign-up"
               >
@@ -791,8 +791,8 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                isActiveNavbar === "/" && "border-b-text-2 border-b-[2px]",
               )}
               href="/"
             >
@@ -802,8 +802,8 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                isActiveNavbar === "/contact" && "border-b-text-2 border-b-[2px]",
               )}
               href="/contact"
             >
@@ -813,8 +813,8 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                isActiveNavbar === "/about" && "border-b-text-2 border-b-[2px]",
               )}
               href="/about"
             >
@@ -824,8 +824,8 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
-                isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1.125rem] font-inter font-[500] leading-[1.5rem]",
+                isActiveNavbar === "/sign-up" && "border-b-text-2 border-b-[2px]",
               )}
               href="/sign-up"
             >
