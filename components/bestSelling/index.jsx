@@ -3,7 +3,7 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 
 import ViewAll from "../buttons/viewAll";
-import Card from "../card";
+import CardBestSelling from "../cardBestSelling";
 import Rectangle from "../svg/rectangle";
 
 function BestSelling(props) {
@@ -59,10 +59,10 @@ function BestSelling(props) {
             bestSelling.map((item) => {
               return (
                 <div
-                  className="max-w-[16.875rem] min-h-[15.625rem] bg-white rounded-[0.25rem] col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
+                  className="w-[22.875rem] sm:w-[28.875rem] md:w-[25.875rem] lg:w-[16.875rem] min-h-[15.625rem] bg-white rounded-[0.25rem] col-span-12 sm:col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 mb-[2.875rem] sm:mb-0"
                   key={item.name}
                 >
-                  <Card product={item} />
+                  <CardBestSelling product={item} />
                 </div>
               );
             })
