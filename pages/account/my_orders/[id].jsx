@@ -150,6 +150,13 @@ function OrderDetails(props) {
 
           <div className="flex flex-col items-start justify-center mt-[2rem]">
             <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
+              Shipping:{" "}
+              <span className="px-[0.5rem] py-[0.2rem] rounded-md bg-yellow-300 text-text-2">
+                {formattedMoney(orderDetail?.shippingFee)}
+              </span>
+            </span>
+
+            <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
               Total:{" "}
               <span className="px-[0.5rem] py-[0.2rem] rounded-md bg-green-600 text-text-1">
                 {formattedMoney(parseFloat(orderDetail?.totalPrice) + parseFloat(orderDetail?.shippingFee))}
