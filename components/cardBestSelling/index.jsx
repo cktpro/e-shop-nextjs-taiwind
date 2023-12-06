@@ -13,7 +13,7 @@ import useCartStore from "@/store/cart/useCartStore";
 
 import Loading from "../svg/loading";
 
-function Card(props) {
+function CardBestSelling(props) {
   let { product } = props;
 
   product = {
@@ -128,8 +128,8 @@ function Card(props) {
     <>
       {/* {contextHolder} */}
 
-      <div className="h-[22.875rem] w-[16.875rem] flex flex-col items-start gap-[1rem] rounded-[0.25rem]">
-        <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
+      <div className="w-[22.875rem] sm:w-[28.875rem] h-[35.875rem] md:w-[25.875rem] md:h-[35.875rem] lg:w-[16.875rem] lg:h-[22.875rem] flex flex-col items-start gap-[1rem] rounded-[0.25rem]">
+        <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[23.625rem] md:min-w-[16.875rem] md:min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
           <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
             <span className="text-text-1 font-inter text-[0.75rem] font-[400] leading-[1.125rem]">
               -{product.discount}%
@@ -137,7 +137,7 @@ function Card(props) {
           </div>
 
           {isLoadingAddCart && (
-            <div className="absolute top-[6rem] left-[6.25rem]">
+            <div className="absolute top-[7.25rem] left-[7.25rem]">
               <Loading />
             </div>
           )}
@@ -162,7 +162,7 @@ function Card(props) {
 
           <Link href={`/${product.id}`}>
             <Image
-              className="max-w-[16.875rem] max-h-[15.625rem] object-contain rounded-[0.25rem]"
+              className="w-[22.875rem] sm:w-[28.875rem] md:w-[25.875rem] lg:w-[16.875rem] lg:max-h-[15.625rem] object-contain rounded-[0.25rem]"
               src={product?.image.location}
               alt="..."
               width={1000}
@@ -182,7 +182,7 @@ function Card(props) {
         </div>
 
         <div className="pl-[0.5rem] pb-[0.5rem] flex flex-col items-start gap-[0.5rem]">
-          <h4 className="text-text-2 max-w-[16.875rem] truncate font-inter text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
+          <h4 className="text-text-2 max-w-[16.875rem] truncate font-inter text-[1.5rem] lg:text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
             <Link href={`/${product.id}`}>{product?.name}</Link>
           </h4>
 
@@ -209,8 +209,8 @@ function Card(props) {
   );
 }
 
-export default Card;
+export default CardBestSelling;
 
-Card.propTypes = {
+CardBestSelling.propTypes = {
   product: PropTypes.instanceOf(Object).isRequired,
 };
