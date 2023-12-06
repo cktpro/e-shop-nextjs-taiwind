@@ -8,10 +8,7 @@ function Contact() {
   return (
     <div className="container mt-[5rem]">
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
-        <Link
-          href="/"
-          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
-        >
+        <Link href="/" className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
           Home
         </Link>
 

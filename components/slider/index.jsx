@@ -28,6 +28,7 @@ function Slider() {
       const res = await axiosClient.get("/categories");
       setCategories(res.data.payload);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
     }
   };
