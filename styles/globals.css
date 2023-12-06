@@ -178,3 +178,9 @@ body {
 #nprogress .peg {
   box-shadow: 0 0 10px red, 0 0 5px red;
 }
+
+.cover_order .ant-table-cell {
+  font-family: Inter !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}

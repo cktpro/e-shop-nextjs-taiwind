@@ -57,25 +57,25 @@ function AccountLayout({ children }) {
         <ul className="mt-[10rem] ml-[3rem] mr-[2rem] flex flex-col items-start justify-center">
           <li className="flex flex-col items-start justify-center">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-              <span className="max-w-[10.375rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[10.375rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 Manage My Account
               </span>
             </Link>
 
             <ul className="mt-[1rem] ml-[2.19rem] inline-flex flex-col items-start gap-[0.5rem]">
-              <li className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <li className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account">
                   My Profile
                 </Link>
               </li>
 
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <li className="opacity-50 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_address">
                   Address Book
                 </Link>
               </li>
 
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <li className="opacity-50 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/change_password">
                   Change Password
                 </Link>
@@ -85,13 +85,13 @@ function AccountLayout({ children }) {
 
           <li className="mt-[1.5rem] flex flex-col items-start justify-center">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-              <span className="max-w-[5.125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[5.125rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 My Orders
               </span>
             </Link>
 
             <ul className="mt-[1rem] ml-[2.19rem] inline-flex flex-col items-start gap-[0.5rem]">
-              <li className="opacity-50 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <li className="opacity-50 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 <Link
                   className="hover:opacity-50"
                   onClick={closeDrawerLeft}
@@ -105,7 +105,7 @@ function AccountLayout({ children }) {
 
           {/* <li className="mt-[1rem]">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/wish-list">
-              <span className="max-w-[5.8125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[5.8125rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 My WishList
               </span>
             </Link>
@@ -125,7 +125,7 @@ function AccountLayout({ children }) {
         <div className="whitespace-nowrap flex items-center gap-[0.75rem] max-h-[1.3125rem] max-w-[9.6875rem]">
           <Link
             href="/"
-            className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+            className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
           >
             Home
           </Link>
@@ -134,12 +134,12 @@ function AccountLayout({ children }) {
             /
           </span>
 
-          <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">My Account</span>
+          <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">My Account</span>
         </div>
 
-        <span className="min-w-[8.6875rem] whitespace-nowrap text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+        <span className="min-w-[8.6875rem] whitespace-nowrap text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
           Welcome!{" "}
-          <span className="text-secondary-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+          <span className="text-secondary-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
             {profile?.fullName}
           </span>
         </span>
@@ -149,7 +149,7 @@ function AccountLayout({ children }) {
         <ul className="hidden xl:flex flex-col items-start justify-center">
           <li className="flex flex-col items-start justify-center">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-              <span className="max-w-[10.375rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[10.375rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 Manage My Account
               </span>
             </Link>
@@ -158,7 +158,7 @@ function AccountLayout({ children }) {
               <li
                 className={`${
                   router.pathname === "/account" ? "text-secondary-2 " : `text-text-2 opacity-50`
-                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+                } font-inter text-[1rem] font-[400] leading-[1.5rem]`}
               >
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account">
                   My Profile
@@ -168,7 +168,7 @@ function AccountLayout({ children }) {
               <li
                 className={`${
                   router.pathname === "/account/my_address" ? "text-secondary-2 " : `text-text-2 opacity-50`
-                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+                } font-inter text-[1rem] font-[400] leading-[1.5rem]`}
               >
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/my_address">
                   Address Book
@@ -178,7 +178,7 @@ function AccountLayout({ children }) {
               <li
                 className={`${
                   router.pathname === "/account/change_password" ? "text-secondary-2 " : `text-text-2 opacity-50`
-                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+                } font-inter text-[1rem] font-[400] leading-[1.5rem]`}
               >
                 <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/account/change_password">
                   Change Password
@@ -189,7 +189,7 @@ function AccountLayout({ children }) {
 
           <li className="mt-[1.5rem] flex flex-col items-start justify-center">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">
-              <span className="max-w-[5.125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[5.125rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 My Orders
               </span>
             </Link>
@@ -198,7 +198,7 @@ function AccountLayout({ children }) {
               <li
                 className={`${
                   router.pathname === "/account/my_orders" ? "text-secondary-2 " : `text-text-2 opacity-50`
-                } font-poppins text-[1rem] font-[400] leading-[1.5rem]`}
+                } font-inter text-[1rem] font-[400] leading-[1.5rem]`}
               >
                 <Link
                   className="hover:opacity-50"
@@ -213,7 +213,7 @@ function AccountLayout({ children }) {
 
           {/* <li className="mt-[1rem]">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/wish-list">
-              <span className="max-w-[5.8125rem] text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="max-w-[5.8125rem] text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 My WishList
               </span>
             </Link>

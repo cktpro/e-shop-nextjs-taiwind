@@ -10,14 +10,14 @@ function Contact() {
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
         <Link
           href="/"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
         >
           Home
         </Link>
 
         <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Cantact</span>
+        <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">Cantact</span>
       </div>
 
       <div className="mt-[5rem] flex flex-col xl:flex-row xl:items-center xl:justify-start gap-[1.88rem]">
@@ -33,15 +33,15 @@ function Contact() {
                   height={1000}
                 />
 
-                <h3 className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Call To Us</h3>
+                <h3 className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">Call To Us</h3>
               </div>
 
               <div className="flex flex-col items-start gap-[1rem]">
-                <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   We are available 24/7, 7 days a week.
                 </span>
 
-                <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Phone: +8801611112222
                 </span>
               </div>
@@ -59,19 +59,19 @@ function Contact() {
                   height={1000}
                 />
 
-                <h3 className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Write To US</h3>
+                <h3 className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">Write To US</h3>
               </div>
 
               <div className="flex flex-col items-start gap-[1rem]">
-                <span className="max-w-[15.625rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="max-w-[15.625rem] text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Fill out our form and we will contact you within 24 hours.
                 </span>
 
-                <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Emails: customer@eshops.com
                 </span>
 
-                <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Emails: support@eshops.com
                 </span>
               </div>
@@ -84,7 +84,7 @@ function Contact() {
             <div className="grid grid-cols-3 gap-[1rem]">
               <label className="col-span-3 sm:col-span-1" htmlFor="yourName">
                 <input
-                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
+                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
                   type="text"
                   id="yourName"
                   name="yourName"
@@ -94,7 +94,7 @@ function Contact() {
 
               <label className="col-span-3 sm:col-span-1" htmlFor="yourEmail">
                 <input
-                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
+                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
                   type="text"
                   id="yourEmail"
                   name="yourEmail"
@@ -104,7 +104,7 @@ function Contact() {
 
               <label className="col-span-3 sm:col-span-1" htmlFor="yourPhone">
                 <input
-                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
+                  className="rounded-[0.25rem] bg-secondary-1 min-w-full sm:min-w-[14.6875rem] max-h-[3.125rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
                   type="text"
                   id="yourPhone"
                   name="yourPhone"
@@ -115,7 +115,7 @@ function Contact() {
 
             <label htmlFor="yourMessage">
               <textarea
-                className="min-w-full sm:min-w-[46.0625rem] min-h-[12.9375rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
+                className="min-w-full sm:min-w-[46.0625rem] min-h-[12.9375rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem px-[1rem] py-[0.81rem]"
                 id="yourMessage"
                 name="yourMessage"
                 placeholder="Your Message"

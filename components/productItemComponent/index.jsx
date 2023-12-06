@@ -49,7 +49,7 @@ function ProductItemComponent(props) {
     <div className="flex flex-col items-start gap-[1rem] border">
       <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
         <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
-          <span className="text-text-1 font-poppins text-[0.75rem] font-[400] leading-[1.125rem]">
+          <span className="text-text-1 font-inter text-[0.75rem] font-[400] leading-[1.125rem]">
             {formattedDiscount(product.discount)}
           </span>
         </div>
@@ -91,21 +91,21 @@ function ProductItemComponent(props) {
           type="button"
           className="absolute bottom-0 flex min-w-[16.875rem] min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
         >
-          <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Add To Cart</span>
+          <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Add To Cart</span>
         </button>
       </div>
 
       <div className="flex flex-col items-start gap-[0.5rem]">
-        <h4 className="text-text-2 max-w-[16.875rem] truncate font-poppins text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
+        <h4 className="text-text-2 max-w-[16.875rem] truncate font-inter text-[1rem] font-[500] leading-[1.5rem] overflow-hidden">
           {product?.name}
         </h4>
 
         <div className="flex items-start gap-[0.57rem]">
-          <div className="text-secondary-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+          <div className="text-secondary-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
             {formattedDiscountPrice(product?.price, product?.discount)}
           </div>
 
-          <div className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem] line-through opacity-[0.5]">
+          <div className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem] line-through opacity-[0.5]">
             {formattedMoney(product?.price)}
           </div>
         </div>
@@ -113,7 +113,7 @@ function ProductItemComponent(props) {
         <div className="flex items-start gap-[0.5rem]">
           <div className="flex items-start">{renderStars(product?.rating?.rate || 4.5)}</div>
 
-          <div className="min-w-[2rem] min-h-[1.25rem] text-text-2 font-poppins text-[0.875rem] font-[600] leading-[1.3125rem] opacity-[0.5]">
+          <div className="min-w-[2rem] min-h-[1.25rem] text-text-2 font-inter text-[0.875rem] font-[600] leading-[1.3125rem] opacity-[0.5]">
             ({product?.rating?.count || 99})
           </div>
         </div>

@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import RePayment from "@/components/buttons/rePayment";
+import Loading from "@/components/svg/loading";
 
 import { axiosServer } from "@/helper/axios/axiosServer";
 import useFetchCheckout from "@/store/checkout";
@@ -21,6 +22,8 @@ function OrderDetails(props) {
   const fetchCheckout = useFetchCheckout((state) => state.fetch);
 
   const urlVnpay = useFetchCheckout((state) => state.payload.url);
+
+  const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
     if (urlVnpay) {
@@ -57,6 +60,8 @@ function OrderDetails(props) {
   };
 
   const onClick = useCallback((finalTotal) => {
+    setIsloading(true);
+
     setCookie("orderId", orderDetail?._id);
 
     const data = {
@@ -71,81 +76,92 @@ function OrderDetails(props) {
   }, []);
 
   return (
-    <div className="container mt-[5rem]">
-      <div className="min-w-[20rem] min-h-fit bg-text-1 shadow-md rounded-sm px-[2rem] py-[2rem] whitespace-nowrap">
-        <div className="py-[0.5rem] mb-[1rem] flex items-center justify-start">
-          <span className="pl-[0.5rem] min-w-[33.5rem] max-w-[33.5rem] font-inter text-[1rem] font-[700] leading-[1rem]">
-            Product
-          </span>
-          <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[700] leading-[1rem]">Quantity</span>
-          <span className="min-w-[7.5rem] max-w-[7.5rem] font-inter text-[1rem] font-[700] leading-[1rem]">
-            Discount
-          </span>
-          <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[700] leading-[1rem]">Price</span>
-          <span className="min-w-[8rem] max-w-[8rem] font-inter text-[1rem] font-[700] leading-[1rem]">
-            Discounted Price
-          </span>
+    <>
+      {isLoading && (
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+          <Loading />
         </div>
-        {orderDetail?.orderDetails?.map((item) => {
-          return (
-            <div key={item.productId} className="py-[0.5rem] flex items-center justify-start">
-              <Link title={item?.product?.name} className="flex items-center justify-start" href={`/${item.productId}`}>
-                <Image
-                  className="max-w-[4rem] max-h-[4rem] mr-[0.5rem]"
-                  src={item?.product?.image?.location}
-                  alt="..."
-                  width={1000}
-                  height={1000}
-                />
-
-                <span className="min-w-[29.5rem] max-w-[29.5rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                  {item?.product?.name}
-                </span>
-              </Link>
-
-              <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                {item?.quantity}
-              </span>
-
-              <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                {item?.discount}%
-              </span>
-
-              <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                ${parseFloat(item?.price).toFixed(2)}
-              </span>
-
-              <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
-                ${(parseFloat(item?.price) * (100 - parseInt(item?.discount, 10))) / 100}
-              </span>
-            </div>
-          );
-        })}
-        <div className="flex flex-col items-start justify-center mt-[2rem]">
-          <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
-            Status:{" "}
-            <span className={classNames("px-[0.5rem] py-[0.2rem] rounded-md", renderStatus(orderDetail?.status))}>
-              {orderDetail?.status}
+      )}
+      <div className="container mt-[5rem]">
+        <div className="min-w-[20rem] min-h-fit bg-text-1 shadow-md rounded-sm px-[2rem] py-[2rem] whitespace-nowrap">
+          <div className="py-[0.5rem] mb-[1rem] flex items-center justify-start">
+            <span className="pl-[0.5rem] min-w-[33.5rem] max-w-[33.5rem] font-inter text-[1rem] font-[700] leading-[1rem]">
+              Product
             </span>
-          </span>
-          <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
-            Payment type: <span>{orderDetail?.paymentType}</span>
-          </span>
+            <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[700] leading-[1rem]">Quantity</span>
+            <span className="min-w-[7.5rem] max-w-[7.5rem] font-inter text-[1rem] font-[700] leading-[1rem]">
+              Discount
+            </span>
+            <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[700] leading-[1rem]">Price</span>
+            <span className="min-w-[8rem] max-w-[8rem] font-inter text-[1rem] font-[700] leading-[1rem]">
+              Discounted Price
+            </span>
+          </div>
+          {orderDetail?.orderDetails?.map((item) => {
+            return (
+              <div key={item.productId} className="py-[0.5rem] flex items-center justify-start">
+                <Link
+                  title={item?.product?.name}
+                  className="flex items-center justify-start"
+                  href={`/${item.productId}`}
+                >
+                  <Image
+                    className="max-w-[4rem] max-h-[4rem] mr-[0.5rem]"
+                    src={item?.product?.image?.location}
+                    alt="..."
+                    width={1000}
+                    height={1000}
+                  />
 
-          <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
-            Buy type: <span>{orderDetail?.buyType}</span>
-          </span>
-        </div>
-        <div className="mt-[2rem]">
-          <RePayment
-            disabled={isDisable}
-            text="Repayment"
-            type="button"
-            onClick={() => onClick(orderDetail?.totalPrice)}
-          />
+                  <span className="min-w-[29.5rem] max-w-[29.5rem] truncate font-inter text-[1rem] font-[400] leading-[1rem]">
+                    {item?.product?.name}
+                  </span>
+                </Link>
+
+                <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[400] leading-[1rem]">
+                  {item?.quantity}
+                </span>
+
+                <span className="min-w-[7rem] max-w-[7rem] font-inter text-[1rem] font-[400] leading-[1rem]">
+                  {item?.discount}%
+                </span>
+
+                <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
+                  ${parseFloat(item?.price).toFixed(2)}
+                </span>
+
+                <span className="min-w-[10rem] max-w-[10rem] font-inter text-[1rem] font-[400] leading-[1rem]">
+                  ${(parseFloat(item?.price) * (100 - parseInt(item?.discount, 10))) / 100}
+                </span>
+              </div>
+            );
+          })}
+          <div className="flex flex-col items-start justify-center mt-[2rem]">
+            <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
+              Status:{" "}
+              <span className={classNames("px-[0.5rem] py-[0.2rem] rounded-md", renderStatus(orderDetail?.status))}>
+                {orderDetail?.status}
+              </span>
+            </span>
+            <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
+              Payment type: <span>{orderDetail?.paymentType}</span>
+            </span>
+
+            <span className="font-inter text-[1rem] font-[500] leading-[2rem]">
+              Buy type: <span>{orderDetail?.buyType}</span>
+            </span>
+          </div>
+          <div className="mt-[2rem]">
+            <RePayment
+              disabled={isDisable}
+              text="Repayment"
+              type="button"
+              onClick={() => onClick(orderDetail?.totalPrice)}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

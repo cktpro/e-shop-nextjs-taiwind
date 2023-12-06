@@ -39,7 +39,7 @@ function FlashSale(props) {
               <Rectangle />
             </div>
 
-            <h3 className="text-white font-poppins text-[1rem] font-[600] leading-[1.25rem]">
+            <h3 className="text-white font-inter text-[1rem] font-[600] leading-[1.25rem]">
               {useTrans("flashSale.today")}
             </h3>
           </div>

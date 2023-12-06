@@ -14,7 +14,7 @@ function NewArrival() {
               <Rectangle />
             </div>
 
-            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Featured</h3>
+            <h3 className="text-secondary-2 font-inter text-[1rem] font-[600] leading-[1.25rem]">Featured</h3>
           </div>
 
           <h2 className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[3rem] tracking-[0.09rem] max-w-[13.5rem] max-h-[3rem] whitespace-nowrap">
@@ -41,14 +41,14 @@ function NewArrival() {
                   PlayStation 5
                 </h4>
 
-                <span className="max-w-[15.125rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                <span className="max-w-[15.125rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                   Black and White version of the PS5 coming out on sale.
                 </span>
               </div>
 
               <Link
                 href="/"
-                className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
               >
                 Shop Now
               </Link>
@@ -74,14 +74,14 @@ function NewArrival() {
                     Women’s Collections
                   </h4>
 
-                  <span className="max-w-[15.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                  <span className="max-w-[15.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                     Featured woman collections that give you another vibe.
                   </span>
                 </div>
 
                 <Link
                   href="/"
-                  className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                  className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                 >
                   Shop Now
                 </Link>
@@ -107,14 +107,14 @@ function NewArrival() {
                       Speakers
                     </h4>
 
-                    <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="max-w-[11.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Amazon wireless speakers
                     </span>
                   </div>
 
                   <Link
                     href="/"
-                    className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                    className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                   >
                     Shop Now
                   </Link>
@@ -140,14 +140,14 @@ function NewArrival() {
                       Perfume
                     </h4>
 
-                    <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="max-w-[11.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       GUCCI INTENSE OUD EDP
                     </span>
                   </div>
 
                   <Link
                     href="/"
-                    className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                    className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                   >
                     Shop Now
                   </Link>
@@ -176,14 +176,14 @@ function NewArrival() {
                     PlayStation 5
                   </h4>
 
-                  <span className="max-w-[15.125rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                  <span className="max-w-[15.125rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                     Black and White version of the PS5 coming out on sale.
                   </span>
                 </div>
 
                 <Link
                   href="/"
-                  className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                  className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                 >
                   Shop Now
                 </Link>
@@ -210,14 +210,14 @@ function NewArrival() {
                         Women’s Collections
                       </h4>
 
-                      <span className="max-w-[15.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="max-w-[15.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Featured woman collections that give you another vibe.
                       </span>
                     </div>
 
                     <Link
                       href="/"
-                      className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                      className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                     >
                       Shop Now
                     </Link>
@@ -244,14 +244,14 @@ function NewArrival() {
                             Speakers
                           </h4>
 
-                          <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                          <span className="max-w-[11.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                             Amazon wireless speakers
                           </span>
                         </div>
 
                         <Link
                           href="/"
-                          className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                          className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                         >
                           Shop Now
                         </Link>
@@ -277,14 +277,14 @@ function NewArrival() {
                             Perfume
                           </h4>
 
-                          <span className="max-w-[11.9375rem] text-text-1 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                          <span className="max-w-[11.9375rem] text-text-1 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                             GUCCI INTENSE OUD EDP
                           </span>
                         </div>
 
                         <Link
                           href="/"
-                          className="text-primary-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
+                          className="text-primary-1 font-inter text-[1rem] font-[500] leading-[1.5rem] border-b-gray-400 border-b-[2px]"
                         >
                           Shop Now
                         </Link>

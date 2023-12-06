@@ -48,7 +48,7 @@ function Slider() {
   return (
     <div className="container flex items-center">
       <div className="hidden lg:block w-fit min-h-[26rem] mr-auto border-r-gray-400 border-r-[1px]">
-        <ul className="text-black h-[25rem] pt-[2.5rem] font-poppins gap-[1rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
+        <ul className="text-black h-[25rem] pt-[2.5rem] font-inter gap-[1rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
           {categories?.map((item, index) => {
             if (item?.child) {
               return (
@@ -135,7 +135,7 @@ function Slider() {
           <XCircle />
         </button>
 
-        <ul className="text-black font-poppins gap-[1rem] pt-[5.5rem] pl-[1rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
+        <ul className="text-black font-inter gap-[1rem] pt-[5.5rem] pl-[1rem] text-[1rem] font-[400] leading[1.5rem] flex flex-col">
           {categories?.map((item, index) => {
             if (item?.child) {
               return (
