@@ -10,14 +10,14 @@ function About() {
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
         <Link
           href="/"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
         >
           Home
         </Link>
 
         <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">About</span>
+        <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">About</span>
       </div>
 
       <div className="mt-[2.63rem] grid grid-cols-2 2xl:flex items-center justify-start gap-[4.69rem]">
@@ -27,13 +27,13 @@ function About() {
           </h2>
 
           <div className="flex flex-col items-start gap-[1.5rem]">
-            <p className="max-w-[32.8125rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.625rem]">
+            <p className="max-w-[32.8125rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.625rem]">
               Launced in 2015, E-Shop is South Asia’s premier online shopping makterplace with an active presense in
               Bangladesh. Supported by wide range of tailored marketing, data and service solutions, E-Shop has 10,500
               sallers and 300 brands and serves 3 millioons customers across the region.
             </p>
 
-            <p className="max-w-[31.5625rem] font-poppins text-[1rem] font-[400] leading-[1.625rem]">
+            <p className="max-w-[31.5625rem] font-inter text-[1rem] font-[400] leading-[1.625rem]">
               E-Shop has more than 1 Million products to offer, growing at a very fast. E-Shop offers a diverse
               assotment in categories ranging from consumer.
             </p>
@@ -67,7 +67,7 @@ function About() {
                 10.5k
               </h3>
 
-              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Sallers active our site
               </span>
             </div>
@@ -89,7 +89,7 @@ function About() {
                 33k
               </h3>
 
-              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Mopnthly Produduct Sale
               </span>
             </div>
@@ -111,7 +111,7 @@ function About() {
                 45.5k
               </h3>
 
-              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Customer active in our site
               </span>
             </div>
@@ -133,7 +133,7 @@ function About() {
                 25k
               </h3>
 
-              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 group-hover:text-text-1 transition-colors duration-300 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Anual gross sale in our site
               </span>
             </div>
@@ -159,7 +159,7 @@ function About() {
                 Tom Cruise
               </h3>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Founder & Chairman
               </span>
             </div>
@@ -215,7 +215,7 @@ function About() {
                 Emma Watson
               </h3>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Managing Director
               </span>
             </div>
@@ -271,7 +271,7 @@ function About() {
                 Will Smith
               </h3>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Product Designer</span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Product Designer</span>
             </div>
 
             <div className="flex items-start gap-[1rem]">

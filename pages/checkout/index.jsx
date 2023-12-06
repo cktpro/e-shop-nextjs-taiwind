@@ -123,7 +123,7 @@ function Checkout() {
       <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
         <Link
           href="/"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
         >
           Home
         </Link>
@@ -132,14 +132,14 @@ function Checkout() {
 
         <Link
           href="/cart"
-          className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+          className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
         >
           Cart
         </Link>
 
         <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5] mb-[0.3rem]">/</span>
 
-        <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
+        <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
       </div>
 
       <h2 className="max-w-[15.75rem] mt-[5rem] text-text-2 font-inter text-[2.25rem] font-[500] leading-[1.875rem] tracking-[0.09rem] whitespace-nowrap">
@@ -155,27 +155,27 @@ function Checkout() {
             <div className="flex flex-col items-start gap-[2rem]">
               <label htmlFor="firstName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                 <div className="max-h-[1.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     First Name
                   </span>
 
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                  <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                 </div>
                 {/* <Form.Item name="firstName" initialValue={session?.user?.firstName || 0}>
-                  <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
+                  <Input className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]" />
                 </Form.Item> */}
                 <input
                   type="text"
                   id="firstName"
                   name="firstName"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={profile?.firstName || null}
                   {...register("firstName")}
                 />
               </label>
 
               <label htmlFor="companyName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                <span className="max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                <span className="max-h-[1.5rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                   Last Name
                 </span>
 
@@ -183,14 +183,14 @@ function Checkout() {
                   type="text"
                   id="companyName"
                   name="companyName"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={profile?.lastName || null}
                   {...register("lastName")}
                 />
               </label>
               {address.length > 0 && (
                 <label htmlFor="apartment" className="max-h-[full] flex flex-col items-start gap-[0.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Your Address
                   </span>
                   {address.length > 0 &&
@@ -198,7 +198,7 @@ function Checkout() {
                       return (
                         <div
                           key={item.id}
-                          className="flex justify-between items-center sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] p-[1rem]"
+                          className="flex justify-between items-center sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] p-[1rem]"
                         >
                           <span className=" max-w-[25rem] ">
                             {item?.streetAddress} - {item.wardName} - {item.districtName} <br /> - {item.provinceName}
@@ -216,7 +216,7 @@ function Checkout() {
                 type="text"
                 id="apartment"
                 name="apartment"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
                 </label>
               )}
@@ -225,11 +225,11 @@ function Checkout() {
                 <div className="flex flex-col items-start gap-[2rem]">
                   <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                     <div>
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                         Street Address
                       </span>
 
-                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                      <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                     </div>
 
                     <input
@@ -237,7 +237,7 @@ function Checkout() {
                       type="text"
                       id="streetAddress"
                       name="streetAddress"
-                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                       {...register("streetAddress", {
                         required: true,
                         onChange: (e) =>
@@ -250,12 +250,12 @@ function Checkout() {
                   </label>
 
                   <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Province
                     </span>
                     <select
                       required
-                      className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      className=" min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                       // onChange={(e) => shipping.getDistrict(e.target.value)}
                       name="province"
                       {...register("province", {
@@ -290,20 +290,20 @@ function Checkout() {
                 type="text"
                 id="apartment"
                 name="apartment"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
                   </label>
 
                   <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                     <div>
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                         District
                       </span>
 
-                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                      <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                     </div>
                     <select
-                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                       // onChange={(e) => {
                       //   setDistrictId(e.target.value);
                       //   shipping.getWard(e.target.value);
@@ -357,20 +357,20 @@ function Checkout() {
                 type="text"
                 id="city"
                 name="city"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
                   </label>
 
                   <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                     <div>
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                         Ward
                       </span>
 
-                      <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                      <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                     </div>
                     <select
-                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                      className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                       name="distric"
                       // onChange={async (e) => {
                       //   setAddress((prev) => ({
@@ -415,7 +415,7 @@ function Checkout() {
                 type="text"
                 id="phoneNumber"
                 name="phoneNumber"
-                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
               /> */}
                   </label>
                 </div>
@@ -423,18 +423,18 @@ function Checkout() {
 
               <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                 <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Phone Number
                   </span>
 
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                  <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                 </div>
 
                 <input
                   type="text"
                   id="phoneNumber"
                   name="phoneNumber"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.phoneNumber}
                   {...register("phoneNumber")}
                 />
@@ -442,18 +442,18 @@ function Checkout() {
 
               <label htmlFor="emailAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                 <div>
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Email Address
                   </span>
 
-                  <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                  <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                 </div>
 
                 <input
                   type="text"
                   id="emailAddress"
                   name="emailAddress"
-                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
+                  className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                   defaultValue={session?.user?.email}
                   {...register("email")}
                 />
@@ -471,7 +471,7 @@ function Checkout() {
                 className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
                 {...register("save")}
               />
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Save this information for faster check-out next time
               </span>
             </label>
@@ -488,9 +488,9 @@ function Checkout() {
             />
 
             <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">LCD Monitor</span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">LCD Monitor</span>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">$650</span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">$650</span>
             </div>
           </div> */}
 
@@ -511,15 +511,15 @@ function Checkout() {
 
                   <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
                     <div className="flex flex-col gap-1">
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                         {item?.productDetail?.name}
                       </span>
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                         Quantity: {item?.product.quantity}
                       </span>
                     </div>
 
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {formattedMoney(item?.productDetail?.price)}
                     </span>
                   </div>
@@ -529,9 +529,9 @@ function Checkout() {
 
             <div className="flex flex-col items-start gap-[1rem]">
               <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
 
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   {formattedMoney(totalPrice)}
                 </span>
               </div>
@@ -539,9 +539,9 @@ function Checkout() {
               <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
               <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
 
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 || 0)}
                 </span>
               </div>
@@ -549,9 +549,9 @@ function Checkout() {
               <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
               <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
 
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   {/* {shipping.isLoading === false
                   ? formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)
                   : "Loading"} */}
@@ -572,7 +572,7 @@ function Checkout() {
                   required
                 />
 
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
               </label>
 
               <div className="flex items-start gap-[0.5rem]">
@@ -635,12 +635,12 @@ function Checkout() {
                 {...register("paymentType")}
               />
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
             </label>
 
             <div className="sm:flex items-end gap-[1rem]">
               <input
-                className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]"
                 type="text"
                 placeholder="Coupon Code"
               />

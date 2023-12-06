@@ -123,7 +123,7 @@ function Product(props) {
               <div className="min-w-[1.25rem] min-h-[2.5rem]">
                 <Rectangle />
               </div>
-              <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Products</h3>
+              <h3 className="text-secondary-2 font-inter text-[1rem] font-[600] leading-[1.25rem]">Products</h3>
             </div>
           </div>
         </div>

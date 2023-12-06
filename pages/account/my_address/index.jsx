@@ -105,7 +105,7 @@ function MyAccount() {
   return (
     <div className="w-full flex flex-col gap-1">
       <div className="w-full px-[2.5rem] sm:px-[5rem] py-[2.5rem] flex flex-col items-start justify-center max-w-[54.375rem] sm:max-h-[39.375rem] flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom gap-[1rem]">
-        <span className="max-w-[12.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
+        <span className="max-w-[12.6875rem] text-secondary-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">
           Your Address
         </span>
         {address?.map((item) => {
@@ -115,9 +115,9 @@ function MyAccount() {
           return (
             <div
               key={item.id}
-              className="w-full flex justify-between px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              className="w-full flex justify-between px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
             >
-              <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 {item.streetAddress} - {item.wardName} - {item.districtName} - {item.provinceName}
               </span>{" "}
               <div className="flex gap-2">
@@ -154,13 +154,13 @@ function MyAccount() {
           showForm ? "flex" : "hidden"
         } `}
       >
-        <span className="max-w-[12.6875rem] text-secondary-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">
+        <span className="max-w-[12.6875rem] text-secondary-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">
           Add New Address
         </span>
 
         <div className="mt-[1rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <label htmlFor="firtsName" className="flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Province</span>
+            <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Province</span>
 
             {/* <input
             defaultValue={address?.provinceName}
@@ -168,10 +168,10 @@ function MyAccount() {
             type="text"
             id="firtsName"
             name="firtsName"
-            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
           /> */}
             <select
-              className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
               // onChange={(e) => shipping.getDistrict(e.target.value)}
               name="province"
               // defaultValue={session?.user?.address[0]?.provinceId || ""}
@@ -198,7 +198,7 @@ function MyAccount() {
           </label>
 
           <label htmlFor="lastName" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">District</span>
+            <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">District</span>
 
             {/* <input
             defaultValue={address?.districtName}
@@ -206,10 +206,10 @@ function MyAccount() {
             type="text"
             id="lastName"
             name="lastName"
-            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
           /> */}
             <select
-              className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
               // onChange={(e) => shipping.getDistrict(e.target.value)}
               name="province"
               // defaultValue={session?.user?.address[0]?.provinceId || ""}
@@ -243,7 +243,7 @@ function MyAccount() {
 
         <div className="mt-[1.5rem] min-w-full sm:inline-flex items-start gap-[3.125rem]">
           <label htmlFor="email" className="flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Ward</span>
+            <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Ward</span>
 
             {/* <input
             defaultValue={address?.wardName}
@@ -251,12 +251,12 @@ function MyAccount() {
             type="text"
             id="email"
             name="email"
-            className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+            className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
           /> */}
             <select
               required
               autoComplete="off"
-              className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
               name="distric"
               onChange={async (e) => {
                 setNewAddress((prev) => ({
@@ -283,7 +283,7 @@ function MyAccount() {
           </label>
 
           <label htmlFor="address" className="mt-[1.5rem] sm:mt-0 flex flex-col items-start gap-[0.5rem]">
-            <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Street Address</span>
+            <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Street Address</span>
 
             <input
               required
@@ -291,7 +291,7 @@ function MyAccount() {
               type="text"
               id="address"
               name="address"
-              className="px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              className="px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
               onChange={(e) =>
                 setNewAddress((prev) => ({
                   ...prev,
@@ -304,7 +304,7 @@ function MyAccount() {
 
         {/* <div className="mt-[1.5rem] min-w-full inline-flex flex-col items-start gap-[1rem]">
         <label htmlFor="currentPassword" className="min-w-full flex flex-col items-start gap-[0.5rem]">
-          <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Password Changes</span>
+          <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Password Changes</span>
 
           <div className="min-w-full flex flex-col items-start gap-[1rem]">
             <input
@@ -314,7 +314,7 @@ function MyAccount() {
               name="currentPassword"
               type="password"
               placeholder="Current Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]"
             />
 
             <input
@@ -322,7 +322,7 @@ function MyAccount() {
               name="NewPasswod"
               type="password"
               placeholder="New Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]"
             />
 
             <input
@@ -330,7 +330,7 @@ function MyAccount() {
               name="confirmNewPasswod"
               type="password"
               placeholder="Confirm New Passwod"
-              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+              className="min-w-full md:min-w-[44.375rem] min-h-[3.125rem] flex-shrink-0 rounded-[0.25rem] bg-secondary-1 px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]"
             />
           </div>
         </label>
@@ -338,7 +338,7 @@ function MyAccount() {
 
         <div className="min-w-full flex items-center justify-end">
           <div className="mt-[1.5rem] inline-flex items-center gap-[2rem]">
-            <button type="button" className="text font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+            <button type="button" className="text font-inter text-[1rem] font-[400] leading-[1.5rem]">
               Cancel
             </button>
 

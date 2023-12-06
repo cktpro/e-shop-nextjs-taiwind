@@ -56,7 +56,7 @@ function TimeFlashSale() {
   return (
     <div className="flex lg:flex mb-[4rem] sm:mb-0 col-span-12 max-w-[18.875rem] min-h-[3.125rem]">
       <div className="inline-flex min-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[1.9375rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[1.9375rem] max-h-[1.125rem] text-white font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.days")}
         </span>
 
@@ -73,7 +73,7 @@ function TimeFlashSale() {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[2.1875rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[2.1875rem] max-h-[1.125rem] text-white font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.hours")}
         </span>
 
@@ -90,7 +90,7 @@ function TimeFlashSale() {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[3.0625rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[3.0625rem] max-h-[1.125rem] text-white font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.minutes")}
         </span>
 
@@ -107,7 +107,7 @@ function TimeFlashSale() {
       </div>
 
       <div className="inline-flex min-w-[2.625rem] max-h-[3.125rem] flex-col items-start gap-[0.25rem] flex-shrink-0">
-        <span className="min-w-[3.25rem] max-h-[1.125rem] text-white font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+        <span className="min-w-[3.25rem] max-h-[1.125rem] text-white font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
           {useTrans("flashSale.seconds")}
         </span>
 

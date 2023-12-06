@@ -59,7 +59,7 @@ function SaleHunter() {
     <div className="container mt-[8.75rem] flex justify-center items-center rounded-[0.25rem] bg-text-2">
       <div className="rounded-[0.25rem] grid grid-cols-12 bg-text-2 max-w-[73.125rem] min-h-[31.25rem]">
         <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-6 xl:col-span-6 flex flex-col items-start justify-start">
-          <h3 className="text-button-3 font-poppins text-[1rem] font-[600] leading-[1.25rem] mt-[4.31rem] ml-[3.5rem]">
+          <h3 className="text-button-3 font-inter text-[1rem] font-[600] leading-[1.25rem] mt-[4.31rem] ml-[3.5rem]">
             Categories
           </h3>
 
@@ -72,12 +72,12 @@ function SaleHunter() {
               <div className="flex flex-col items-center gap-[-0.25rem]">
                 <span
                   suppressHydrationWarning
-                  className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]"
+                  className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.25rem]"
                 >
                   {formatNumberToString(dateTime.hour)}
                 </span>
 
-                <span className="min-w-[2rem] text-text-2 font-poppins text-[0.6875rem] font-[400] leading-[1.125rem]">
+                <span className="min-w-[2rem] text-text-2 font-inter text-[0.6875rem] font-[400] leading-[1.125rem]">
                   Hours
                 </span>
               </div>
@@ -87,12 +87,12 @@ function SaleHunter() {
               <div className="flex flex-col items-center gap-[-0.25rem]">
                 <span
                   suppressHydrationWarning
-                  className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]"
+                  className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.25rem]"
                 >
                   {formatNumberToString(dateTime.day)}
                 </span>
 
-                <span className="min-w-[1.75rem] text-text-2 font-poppins text-[0.6875rem] font-[400] leading-[1.125rem]">
+                <span className="min-w-[1.75rem] text-text-2 font-inter text-[0.6875rem] font-[400] leading-[1.125rem]">
                   Days
                 </span>
               </div>
@@ -102,12 +102,12 @@ function SaleHunter() {
               <div className="flex flex-col items-center gap-[-0.25rem]">
                 <span
                   suppressHydrationWarning
-                  className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]"
+                  className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.25rem]"
                 >
                   {formatNumberToString(dateTime.minute)}
                 </span>
 
-                <span className="min-w-[2.6875rem] text-text-2 font-poppins text-[0.6875rem] font-[400] leading-[1.125rem]">
+                <span className="min-w-[2.6875rem] text-text-2 font-inter text-[0.6875rem] font-[400] leading-[1.125rem]">
                   Minutes
                 </span>
               </div>
@@ -117,12 +117,12 @@ function SaleHunter() {
               <div className="flex flex-col items-center gap-[-0.25rem]">
                 <span
                   suppressHydrationWarning
-                  className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]"
+                  className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.25rem]"
                 >
                   {formatNumberToString(dateTime.second)}
                 </span>
 
-                <span className="min-w-[3rem] text-text-2 font-poppins text-[0.6875rem] font-[400] leading-[1.125rem]">
+                <span className="min-w-[3rem] text-text-2 font-inter text-[0.6875rem] font-[400] leading-[1.125rem]">
                   Seconds
                 </span>
               </div>

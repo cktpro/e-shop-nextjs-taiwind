@@ -217,7 +217,7 @@ function Header() {
 
   return (
     <>
-      <section className="bg-black z-[1] font-poppins text-text-1 text-[0.875rem] leading-[1.3125rem] py-3">
+      <section className="bg-black z-[1] font-inter text-text-1 text-[0.875rem] leading-[1.3125rem] py-3">
         <div className="container grid grid-cols-12 gap-2">
           <div className="hidden lg:block col-span-2" />
 
@@ -274,7 +274,7 @@ function Header() {
               : "absolute top-[7rem] right-[1rem] z-[-10] scale-0 opacity-0 transition-all duration-300 max-w-[20rem] max-h-[20rem] bg-secondary-2 rounded-md shadow-md flex items-center justify-center p-[2rem]",
           )}
         >
-          <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem] cursor-default">
+          <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem] cursor-default">
             The shopping cart has been updated!!!
           </span>
         </div>
@@ -288,7 +288,7 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                   isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
                 )}
                 href="/"
@@ -300,7 +300,7 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                   isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
                 )}
                 href="/contact"
@@ -312,7 +312,7 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                   isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
                 )}
                 href="/about"
@@ -324,7 +324,7 @@ function Header() {
             <li>
               <Link
                 className={classNames(
-                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                  "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                   isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
                 )}
                 href="/sign-up"
@@ -368,7 +368,7 @@ function Header() {
                     return (
                       <li
                         key={item.name}
-                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.125rem]"
+                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-inter text-[1rem] font-[400] leading-[1.125rem]"
                       >
                         <Link
                           onClick={() => {
@@ -408,7 +408,7 @@ function Header() {
               <ShoppingCart className="group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
               <div className="absolute top-[-0.5rem] right-[-0.5rem] w-[1.5rem] h-[1.5rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
-                <span className="flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
+                <span className="flex-shrink-0 text-text-1 text-center font-inter text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
                   {totalCartItem || 0}
                 </span>
               </div>
@@ -446,7 +446,7 @@ function Header() {
                   >
                     <User className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Manage My Account
                     </span>
                   </Link>
@@ -457,7 +457,7 @@ function Header() {
                   >
                     <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Order
                     </span>
                   </Link>
@@ -468,7 +468,7 @@ function Header() {
                   >
                     <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Cancellations
                     </span>
                   </Link>
@@ -479,7 +479,7 @@ function Header() {
                   >
                     <Star className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       My Reviews
                     </span>
                   </Link>
@@ -491,7 +491,7 @@ function Header() {
                   >
                     <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Logout
                     </span>
                   </button>
@@ -504,7 +504,7 @@ function Header() {
                   >
                     <LogIn className="w-[2rem] h-[2rem] text-text-1" />
 
-                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                    <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                       Login
                     </span>
                   </Link>
@@ -628,7 +628,7 @@ function Header() {
                     return (
                       <li
                         key={item.name}
-                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-poppins text-[1rem] font-[400] leading-[1.125rem]"
+                        className="hover:opacity-50 transition-opacity inline-flex items-center justify-start whitespace-nowrap max-w-[16rem] min-h-[2rem] overflow-x-hidden text-ellipsis text-text-2 font-inter text-[1rem] font-[400] leading-[1.125rem]"
                       >
                         <Link
                           onClick={() => {
@@ -671,7 +671,7 @@ function Header() {
                 <ShoppingCart className="max-w-[2rem] max-h-[2rem] group-hover:text-text-1 transition-colors ease-in-out duration-300" />
 
                 <div className="absolute top-[-0.5rem] right-[-0.5rem] w-[1.5rem] h-[1.5rem] bg-button-2 flex items-center justify-center rounded-[5rem]">
-                  <span className="flex-shrink-0 text-text-1 text-center font-poppins text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
+                  <span className="flex-shrink-0 text-text-1 text-center font-inter text-[0.75rem] font-[400] leading-[1.125rem] flex items-center justify-center">
                     {totalCartItem || 0}
                   </span>
                 </div>
@@ -709,7 +709,7 @@ function Header() {
                     >
                       <User className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Manage My Account
                       </span>
                     </Link>
@@ -721,7 +721,7 @@ function Header() {
                     >
                       <ShoppingBag className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Order
                       </span>
                     </Link>
@@ -733,7 +733,7 @@ function Header() {
                     >
                       <XCircle className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Cancellations
                       </span>
                     </Link>
@@ -745,7 +745,7 @@ function Header() {
                     >
                       <Star className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         My Reviews
                       </span>
                     </Link>
@@ -760,7 +760,7 @@ function Header() {
                     >
                       <LogOut className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Logout
                       </span>
                     </button>
@@ -776,7 +776,7 @@ function Header() {
                     >
                       <LogIn className="w-[2rem] h-[2rem] text-text-1" />
 
-                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+                      <span className="text-text-1 flex items-center justify-start max-w-[9rem] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                         Login
                       </span>
                     </Link>
@@ -790,7 +790,7 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/" && "border-b-gray-400 border-b-[2px]",
               )}
               href="/"
@@ -801,7 +801,7 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[4.125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/contact" && "border-b-gray-400 border-b-[2px]",
               )}
               href="/contact"
@@ -812,7 +812,7 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/about" && "border-b-gray-400 border-b-[2px]",
               )}
               href="/about"
@@ -823,7 +823,7 @@ function Header() {
             <Link
               onClick={closeDrawerRight}
               className={classNames(
-                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-poppins font-[400] leading-[1.5rem]",
+                "hover:opacity-50 transition-opacity ease-in-out duration-300 flex flex-col items-center min-w-[3.8125rem] max-h-[1.5rem] text-text-2 text-center text-[1rem] font-inter font-[400] leading-[1.5rem]",
                 isActiveNavbar === "/sign-up" && "border-b-gray-400 border-b-[2px]",
               )}
               href="/sign-up"
