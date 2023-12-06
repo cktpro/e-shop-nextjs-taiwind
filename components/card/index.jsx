@@ -146,9 +146,9 @@ function Card(props) {
           <button
             type="button"
             onClick={() => handleClickAddToCart(product)}
-            title="view"
+            title="Add to cart"
             href={`/${product.id}`}
-            className="bg-secondary-2 absolute top-[2rem] right-[2rem] flex lg:hidden items-center justify-center rounded-full min-w-[3.125rem] min-h-[3.125rem]"
+            className="bg-secondary-2 absolute top-[1rem] right-[1rem] flex lg:hidden items-center justify-center rounded-full min-w-[3.125rem] min-h-[3.125rem]"
           >
             <ShoppingCart className="text-text-1" />
           </button>
