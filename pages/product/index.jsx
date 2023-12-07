@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import HeadMeta from "@/components/HeadMeta";
 import ProductItemComponent from "@/components/productItemComponent";
+import Loading from "@/components/svg/loading";
 import Rectangle from "@/components/svg/rectangle";
 
 // import ProductItemComponent from "@/components/productItemComponent";
@@ -208,7 +209,7 @@ function Product(props) {
                 return <ProductItemComponent key={item.id} product={item} />;
               })
             ) : (
-              <p>Loading</p>
+              <Loading />
             )}
           </div>
         </div>

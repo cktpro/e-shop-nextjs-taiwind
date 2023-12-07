@@ -47,7 +47,7 @@ function ProductItemComponent(props) {
   );
   return (
     <div className="flex flex-col items-start gap-[1rem] border">
-      <div className="group relative flex items-center justify-center min-w-[16.875rem] min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
+      <div className="group relative flex items-center justify-center min-w-full min-h-[15.625rem] rounded-[0.25rem] bg-primary-1">
         <div className="absolute top-[0.75rem] left-[0.75rem] inline-flex px-[0.75rem] py-[0.25rem] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2">
           <span className="text-text-1 font-inter text-[0.75rem] font-[400] leading-[1.125rem]">
             {formattedDiscount(product.discount)}
@@ -77,7 +77,8 @@ function ProductItemComponent(props) {
         </div> */}
 
         <Image
-          className="max-w-[16.875rem] max-h-[15.625rem] object-contain"
+          // className="max-w-[18.875rem] max-h-[17.625rem] object-contain"
+          className="max-w-full max-h-full object-contain"
           src={product?.image?.location || product?.imageList[0]?.location}
           alt="..."
           width={1000}
@@ -89,7 +90,7 @@ function ProductItemComponent(props) {
         <button
           onClick={() => handleClickAddToCart(product)}
           type="button"
-          className="absolute bottom-0 flex min-w-[16.875rem] min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
+          className="absolute bottom-0 flex min-w-full min-h-[2.5625rem] items-center justify-center transition-all opacity-0 duration-300 group-hover:opacity-100 flex-shrink-0 rounded-b-[0.25rem] bg-text-2"
         >
           <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Add To Cart</span>
         </button>

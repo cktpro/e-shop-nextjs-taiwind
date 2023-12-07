@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { message } from "antd";
 // import { notification } from "antd";
 import classNames from "classnames";
 import { deleteCookie, getCookie } from "cookies-next";
@@ -166,23 +167,36 @@ function ProductDetails(props) {
     [addToCart, inputQuantity],
   );
 
-  const handleClickPlus = useCallback(() => {
-    setInputQuantity((num) => parseInt(num, 10) + 1);
-  }, []);
+  const handleClickPlus = useCallback(
+    (quantity) => {
+      if (inputQuantity >= quantity) {
+        message.error(`The quantity you ordered is too large, only ${quantity} products left`);
+        setInputQuantity(quantity);
+      } else {
+        setInputQuantity((num) => parseInt(num, 10) + 1);
+      }
+    },
+    [inputQuantity],
+  );
 
   const handleClickMinus = useCallback(() => {
     if (inputQuantity <= 1) {
+      message.error(`Product quantity must be greater than 0`);
       setInputQuantity(1);
     } else {
       setInputQuantity((num) => parseInt(num, 10) - 1);
     }
   }, [inputQuantity]);
 
-  const handleChangeInputQuantity = useCallback((e) => {
-    if (e.target.value) {
-      setInputQuantity(e.target.value);
+  const handleChangeInputQuantity = useCallback((e, item) => {
+    if (parseInt(e.target.value, 10) > parseInt(item?.stock, 10)) {
+      message.error(`The quantity you ordered is too large, only ${item?.stock} products left`);
+      setInputQuantity(item.stock);
+    } else if (parseInt(e.target.value, 2) <= 0) {
+      message.error(`Product quantity must be greater than 0`);
+      setInputQuantity(1);
     } else {
-      setInputQuantity("");
+      setInputQuantity(e.target.value);
     }
   }, []);
 
@@ -415,7 +429,7 @@ function ProductDetails(props) {
                     type="number"
                     value={inputQuantity}
                     onBlur={(e) => handleBlurInputQuantity(e)}
-                    onChange={(e) => handleChangeInputQuantity(e)}
+                    onChange={(e) => handleChangeInputQuantity(e, product)}
                     className={classNames(
                       "flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]",
                       styles.no_arrow_input,
@@ -423,7 +437,7 @@ function ProductDetails(props) {
                   />
 
                   <button
-                    onClick={() => handleClickPlus()}
+                    onClick={() => handleClickPlus(product?.stock)}
                     type="button"
                     className="rounded-tr-[0.25rem] rounded-br-[0.25rem] flex min-w-[2.5625rem] min-h-[2.75rem] flex-col items-center justify-center bg-secondary-2"
                   >

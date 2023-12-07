@@ -79,7 +79,6 @@ function Checkout() {
     },
     [fetchCheckout],
   );
-
   const onSubmit = async (data) => {
     setIsloading(true);
     const dayShip = new Date();
@@ -161,7 +160,7 @@ function Checkout() {
           Billing Details
         </h2>
 
-        {status === "authenticated" ? (
+        {profile ? (
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="min-w-full grid grid-cols-12 lg:flex items-start justify-between"
@@ -219,7 +218,10 @@ function Checkout() {
                               {item?.streetAddress} - {item.wardName} - {item.districtName} <br /> - {item.provinceName}
                             </span>
                             <input
-                              onClick={() => setShippingAddress(item)}
+                              onClick={() => {
+                                setShippingAddress(item);
+                                shipping.getFee(item, cartData.cart);
+                              }}
                               className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
                               type="radio"
                               name="addressShipping"
@@ -451,7 +453,7 @@ function Checkout() {
                     name="phoneNumber"
                     className="min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]"
                     defaultValue={session?.user?.phoneNumber}
-                    {...register("phoneNumber")}
+                    {...register("phoneNumber", { required: true })}
                   />
                 </label>
 
@@ -669,7 +671,7 @@ function Checkout() {
             </div>
           </form>
         ) : (
-          ""
+          <Loading />
         )}
       </div>
     </>

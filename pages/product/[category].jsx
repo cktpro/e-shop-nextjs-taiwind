@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 import HeadMeta from "@/components/HeadMeta";
 import ProductItemComponent from "@/components/productItemComponent";
+import Loading from "@/components/svg/loading";
 
 // import ProductItemComponent from "@/components/productItemComponent";
 import { axiosClient } from "@/helper/axios/axiosClient";
@@ -185,7 +186,7 @@ function Product(props) {
               return <ProductItemComponent key={item.id} product={item} />;
             })
           ) : (
-            <p>Loading</p>
+            <Loading />
           )}
         </div>
       </div>
