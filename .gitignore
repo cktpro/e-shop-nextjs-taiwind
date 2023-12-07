@@ -38,3 +38,7 @@ next-env.d.ts
 # IDE
 .idea
 .vscode
+
+.firebase
+.firebaserc
+firebase.json
