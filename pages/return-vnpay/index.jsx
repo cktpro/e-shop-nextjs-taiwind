@@ -58,23 +58,23 @@ function ReturnVnpayPage() {
   }, [checkReturn, searchParams]);
 
   return (
-    <div className="container mt-[5rem] flex flex-col items-center justify-center">
+    <div className="container mt-[5rem] flex flex-col items-center justify-center text-left">
       {statusCode === "" && null}
 
       {statusCode === "00" && (
-        <span className="text-button-3 font-inter text-[2.875rem] font-[500] leading-[7.1875rem]">
+        <span className="text-[rgb(0,167,111)] font-inter text-[2.875rem] font-[500] leading-[2.875rem]">
           Payment successful, thank you!
         </span>
       )}
 
       {statusCode !== "" && statusCode !== "00" && statusCode !== "99" && (
-        <span className="text-button-2 font-inter text-[2.875rem] font-[500] leading-[7.1875rem]">
+        <span className="text-button-2 font-inter text-[2.875rem] font-[500] leading-[2.875rem]">
           Payment failed, please try again!
         </span>
       )}
 
       {statusCode !== "" && statusCode === "99" && (
-        <span className="text-button-2 font-inter text-[2.875rem] font-[500] leading-[7.1875rem]">
+        <span className="text-button-2 font-inter text-[2.875rem] font-[500] leading-[2.875rem]">
           illegal transactions!
         </span>
       )}

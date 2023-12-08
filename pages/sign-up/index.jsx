@@ -124,7 +124,7 @@ function SignUp() {
       {contextHolder}
 
       {createCustomer.isLoading && (
-        <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
       )}
@@ -143,7 +143,7 @@ function SignUp() {
               : "min-w-[20rem] min-h-[10rem] scale-0 transition-all duration-300 flex flex-col py-[3rem] items-center justify-center gap-[2rem] bg-white rounded-[1rem]",
           )}
         >
-          <span className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.5rem]">
+          <span className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.5rem]">
             Create account successful
           </span>
 
@@ -163,7 +163,7 @@ function SignUp() {
                 Create an account
               </span>
 
-              <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+              <span className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                 Enter your details below
               </span>
             </div>
@@ -174,7 +174,7 @@ function SignUp() {
                   <input
                     {...validation.firstName}
                     className={classNames(
-                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                       errors.firstName && "border-solid border-secondary-2 border-[2px]",
                     )}
                     type="text"
@@ -183,7 +183,7 @@ function SignUp() {
                   />
 
                   {errors.firstName && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.firstName.message}
                     </p>
                   )}
@@ -193,7 +193,7 @@ function SignUp() {
                   <input
                     {...validation.lastName}
                     className={classNames(
-                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                       errors.lastName && "border-solid border-secondary-2 border-[2px]",
                     )}
                     type="text"
@@ -202,7 +202,7 @@ function SignUp() {
                   />
 
                   {errors.lastName && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.lastName.message}
                     </p>
                   )}
@@ -212,7 +212,7 @@ function SignUp() {
                   <input
                     {...validation.email}
                     className={classNames(
-                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                       errors.email && "border-solid border-secondary-2 border-[2px]",
                     )}
                     type="text"
@@ -221,7 +221,7 @@ function SignUp() {
                   />
 
                   {errors.email && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.email.message}
                     </p>
                   )}
@@ -231,7 +231,7 @@ function SignUp() {
                   <input
                     {...validation.phoneNumber}
                     className={classNames(
-                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                       errors.phoneNumber && "border-solid border-secondary-2 border-[2px]",
                     )}
                     type="text"
@@ -240,7 +240,7 @@ function SignUp() {
                   />
 
                   {errors.phoneNumber && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.phoneNumber.message}
                     </p>
                   )}
@@ -250,7 +250,7 @@ function SignUp() {
                   <input
                     {...validation.password}
                     className={classNames(
-                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                      "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                       errors.password && "border-solid border-secondary-2 border-[2px]",
                     )}
                     type="password"
@@ -259,7 +259,7 @@ function SignUp() {
                   />
 
                   {errors.password && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.password.message}
                     </p>
                   )}
@@ -271,9 +271,7 @@ function SignUp() {
                   type="submit"
                   className="flex px-[7.625rem] h-[3.5rem] py-[1rem ] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-button-2"
                 >
-                  <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
-                    Create Account
-                  </span>
+                  <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Create Account</span>
                 </button>
 
                 <div className="flex flex-col items-center gap-[2rem]">
@@ -286,20 +284,20 @@ function SignUp() {
                     <div className="flex items-start gap-[1rem]">
                       <LogoGoogle />
 
-                      <span className="flex items-center justify-center text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      <span className="flex items-center justify-center text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                         Sign up with Google
                       </span>
                     </div>
                   </button>
 
                   <div className="flex items-center gap-[1rem]">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.7]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.7]">
                       Already have account?
                     </span>
 
                     <Link
                       href="./log-in"
-                      className="flex items-start h-[1.65rem] border-solid border-b-black border-b-[1px] border-opacity-50 text-text-2 font-poppins text-[1rem] font-[600] leading-[1.5rem] opacity-[0.7]"
+                      className="flex items-start h-[1.65rem] border-solid border-b-black border-b-[1px] border-opacity-50 text-text-2 font-inter text-[1rem] font-[600] leading-[1.5rem] opacity-[0.7]"
                     >
                       Log in
                     </Link>

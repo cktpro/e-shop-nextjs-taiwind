@@ -19,7 +19,7 @@ function CategoryItem(props) {
           height={100}
         />
 
-        <h4 className="text-text-2 group-hover:text-text-1 transition-colors ease-in-out duration-300 font-poppins text-[1rem] font-[400] leading-[1.4rem] max-h-[1rem]">
+        <h4 className="text-text-2 group-hover:text-text-1 transition-colors ease-in-out duration-300 font-inter text-[1rem] font-[400] leading-[1.4rem] max-h-[1rem]">
           {category.name}
         </h4>
       </div>

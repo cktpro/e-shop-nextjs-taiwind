@@ -13,12 +13,12 @@ function Footer() {
         <li className="col-span-6 sm:col-span-6 xl:col-span-3 min-w-[13.5625rem] mb-10 xl:mb-0 flex flex-col items-start xl:items-start gap-[1rem]">
           <div className="flex flex-col items-start gap-[1.5rem]">
             <h1 className="text-text-1 font-inter text-[1.5rem] font-[700] leading-[1.5rem] tracking-[0.045rem]">
-              Exclusive
+              E-Shop
             </h1>
 
-            <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Subscribe</h2>
+            <h2 className="text-text-1 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">Subscribe</h2>
 
-            <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+            <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">
               Get 10% off your first order
             </span>
           </div>
@@ -27,7 +27,7 @@ function Footer() {
             <input
               placeholder="Enter your email"
               type="text"
-              className="text-text-1 bg-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4] max-w-[8.125rem]"
+              className="text-text-1 bg-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4] max-w-[8.125rem]"
             />
 
             <button title="send mail" type="submit" className="min-w-[1.5rem] min-h-[1.5rem] flex-shrink-0">
@@ -38,64 +38,60 @@ function Footer() {
 
         <li className="col-span-6 sm:col-span-6 xl:col-span-3 min-w-[10.9375rem] mb-10 xl:mb-0 flex flex-col items-start xl:items-start">
           <div className="flex flex-col items-start gap-[1.5rem] max-w-[10.9375rem]">
-            <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Support</h2>
+            <h2 className="text-text-1 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">Support</h2>
 
             <div className="flex flex-col items-start gap-[1rem]">
-              <span className="min-w-[10.9375rem] text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <span className="min-w-[10.9375rem] text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 111 Bijoy sarani, Dhaka, DH 1515, Bangladesh.
               </span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                exclusive@gmail.com
-              </span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">eshops@gmail.com</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                +88015-88888-9999
-              </span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">+88015-88888-9999</span>
             </div>
           </div>
         </li>
 
         <li className="col-span-6 sm:col-span-6 xl:col-span-2 min-w-[7.6875rem] mb-10 xl:mb-0 flex flex-col items-start xl:items-start">
           <div className="flex flex-col items-start gap-[1.5rem]">
-            <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Account</h2>
+            <h2 className="text-text-1 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">Account</h2>
 
             <div className="flex flex-col items-start gap-[1rem]">
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">My Account</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">My Account</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Login / Register</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Login / Register</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Cart</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Cart</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Wishlist</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Wishlist</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shop</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Shop</span>
             </div>
           </div>
         </li>
 
         <li className="col-span-6 sm:col-span-6 xl:col-span-2 min-w-[6.8125rem] mb-10 xl:mb-0 flex flex-col items-start xl:items-start">
           <div className="flex flex-col items-start gap-[1.5rem]">
-            <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Quick Link</h2>
+            <h2 className="text-text-1 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">Quick Link</h2>
 
             <div className="flex flex-col items-start gap-[1rem]">
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Privacy Policy</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Privacy Policy</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Terms Of Use</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Terms Of Use</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">FAQ</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">FAQ</span>
 
-              <span className="text-text-1 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Contact</span>
+              <span className="text-text-1 font-inter text-[1rem] font-[400] leading-[1.5rem]">Contact</span>
             </div>
           </div>
         </li>
 
         <li className="col-span-6 sm:col-span-6 xl:col-span-2 min-w-[12.375rem] mb-10 lg:mb-0 flex flex-col items-start xl:items-start">
           <div className="flex flex-col items-start gap-[1.5rem]">
-            <h2 className="text-text-1 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]">Download App</h2>
+            <h2 className="text-text-1 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">Download App</h2>
 
             <div className="flex flex-col items-start gap-[0.5rem]">
-              <span className="text-text-1 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+              <span className="text-text-1 font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
                 Save $3 with App New User Only
               </span>
 

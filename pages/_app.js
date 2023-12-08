@@ -7,6 +7,7 @@ import Layout from "@/components/layout";
 import RouterLoader from "@/components/loader/routerLoader";
 
 import "@/styles/globals.css";
+import "./global.scss";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const getLayout = Component.getLayout || ((page) => page);

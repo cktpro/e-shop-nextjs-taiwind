@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { notification } from "antd";
+import { message } from "antd";
+// import { notification } from "antd";
 import classNames from "classnames";
 import { deleteCookie, getCookie } from "cookies-next";
 import { Minus, Plus } from "lucide-react";
@@ -9,10 +10,12 @@ import { signOut } from "next-auth/react";
 import PropTypes from "prop-types";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
-import { checkTime } from "@/helper/checkTimeFlashSale";
+import { formattedMoney } from "@/helper/formatDocument";
+// import { checkTime } from "@/helper/checkTimeFlashSale";
 import useCartStore from "@/store/cart/useCartStore";
 
 import Card from "../card";
+import Loading from "../svg/loading";
 import Rectangle from "../svg/rectangle";
 
 import styles from "./productDetails.module.scss";
@@ -24,13 +27,15 @@ function ProductDetails(props) {
     "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vectors%2Fno-picture-vectors&psig=AOvVaw0azVwCrbXOTKbmnnotREZt&ust=1701421028071000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMiPm7Kt64IDFQAAAAAdAAAAABAJ",
   );
 
-  const [api, contextHolder] = notification.useNotification();
+  // const [api, contextHolder] = notification.useNotification();
 
   const [inputQuantity, setInputQuantity] = useState(1);
 
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const cart = useCartStore((state) => state.cart);
+  const isLoadingAddCart = useCartStore((state) => state.isLoading);
+
+  // const cart = useCartStore((state) => state.cart);
 
   const [isFlashsale, setIsFlashsale] = useState(false);
 
@@ -57,84 +62,84 @@ function ProductDetails(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
-  const openNotificationWithIcon = useCallback(
-    (type, message) => {
-      switch (type) {
-        case "error":
-          api[type]({
-            message: "ERROR",
-            description: message,
-          });
-          break;
+  // const openNotificationWithIcon = useCallback(
+  //   (type, message) => {
+  //     switch (type) {
+  //       case "error":
+  //         api[type]({
+  //           message: "ERROR",
+  //           description: message,
+  //         });
+  //         break;
 
-        case "success":
-          api[type]({
-            message: "SUCCESS",
-            description: message,
-          });
-          break;
+  //       case "success":
+  //         api[type]({
+  //           message: "SUCCESS",
+  //           description: message,
+  //         });
+  //         break;
 
-        default:
-          break;
-      }
-    },
-    [api],
-  );
+  //       default:
+  //         break;
+  //     }
+  //   },
+  //   [api],
+  // );
 
   const handleClickAddToCart = useCallback(
     async (item) => {
       const getToken = getCookie("TOKEN");
       const getRefreshToken = getCookie("REFRESH_TOKEN");
 
-      if (cart.length > 0) {
-        const checkFlashsale = await axiosClient.get(
-          `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
-        );
+      // if (cart.length > 0) {
+      //   const checkFlashsale = await axiosClient.get(
+      //     `/flashsale/check-flashsale?productId=${cart[0].product.productId}`,
+      //   );
 
-        if (checkFlashsale.data.message === "found") {
-          openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
+      //   if (checkFlashsale.data.message === "found") {
+      //     openNotificationWithIcon("error", "The shopping cart contains flash sale products, which cannot be added!!!");
 
-          return;
-        }
-      } else {
-        const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
-          axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
-          axiosClient.get("/time-flashsale"),
-        ]);
+      //     return;
+      //   }
+      // } else {
+      //   const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
+      //     axiosClient.get(`/flashSale/check-flashsale?productId=${item.id}`),
+      //     axiosClient.get("/time-flashsale"),
+      //   ]);
 
-        if (checkStockFlashsale.data.message === "found") {
-          if (getTimeFlashsale.data.payload.expirationTime) {
-            let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
+      //   if (checkStockFlashsale.data.message === "found") {
+      //     if (getTimeFlashsale.data.payload.expirationTime) {
+      //       let endOfSale = getTimeFlashsale.data.payload.expirationTime.slice(0, 10);
 
-            endOfSale += " 23:59:59";
+      //       endOfSale += " 23:59:59";
 
-            const checkTimeF = checkTime(endOfSale);
+      //       const checkTimeF = checkTime(endOfSale);
 
-            if (checkTimeF <= 0) {
-              openNotificationWithIcon("error", "The flash sale period has ended");
+      //       if (checkTimeF <= 0) {
+      //         openNotificationWithIcon("error", "The flash sale period has ended");
 
-              return;
-            }
+      //         return;
+      //       }
 
-            if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
-              openNotificationWithIcon("error", "Flash sale has not opened yet");
+      //       if (!getTimeFlashsale.data.payload.isOpenFlashsale) {
+      //         openNotificationWithIcon("error", "Flash sale has not opened yet");
 
-              return;
-            }
-          }
+      //         return;
+      //       }
+      //     }
 
-          if (checkStockFlashsale.data.flashsaleStock <= 0) {
-            openNotificationWithIcon("error", "The product has been sold out");
+      //     if (checkStockFlashsale.data.flashsaleStock <= 0) {
+      //       openNotificationWithIcon("error", "The product has been sold out");
 
-            return;
-          }
-        }
-      }
+      //       return;
+      //     }
+      //   }
+      // }
 
       try {
-        const response = await axiosClient.get("/authCustomers/profile");
+        // const response = await axiosClient.get("/authCustomers/profile");
 
-        if (getToken && getRefreshToken && response.data.payload) {
+        if (getToken && getRefreshToken) {
           const data = {
             productId: item.id,
             name: item.name,
@@ -145,7 +150,7 @@ function ProductDetails(props) {
 
           addToCart(data);
 
-          openNotificationWithIcon("success", "product added to cart!!!");
+          // openNotificationWithIcon("success", "product added to cart!!!");
         } else {
           deleteCookie("TOKEN");
           deleteCookie("REFRESH_TOKEN");
@@ -159,26 +164,39 @@ function ProductDetails(props) {
         signOut({ callbackUrl: "/log-in" });
       }
     },
-    [addToCart, cart, inputQuantity, openNotificationWithIcon],
+    [addToCart, inputQuantity],
   );
 
-  const handleClickPlus = useCallback(() => {
-    setInputQuantity((num) => parseInt(num, 10) + 1);
-  }, []);
+  const handleClickPlus = useCallback(
+    (quantity) => {
+      if (inputQuantity >= quantity) {
+        message.error(`The quantity you ordered is too large, only ${quantity} products left`);
+        setInputQuantity(quantity);
+      } else {
+        setInputQuantity((num) => parseInt(num, 10) + 1);
+      }
+    },
+    [inputQuantity],
+  );
 
   const handleClickMinus = useCallback(() => {
     if (inputQuantity <= 1) {
+      message.error(`Product quantity must be greater than 0`);
       setInputQuantity(1);
     } else {
       setInputQuantity((num) => parseInt(num, 10) - 1);
     }
   }, [inputQuantity]);
 
-  const handleChangeInputQuantity = useCallback((e) => {
-    if (e.target.value) {
-      setInputQuantity(e.target.value);
+  const handleChangeInputQuantity = useCallback((e, item) => {
+    if (parseInt(e.target.value, 10) > parseInt(item?.stock, 10)) {
+      message.error(`The quantity you ordered is too large, only ${item?.stock} products left`);
+      setInputQuantity(item.stock);
+    } else if (parseInt(e.target.value, 2) <= 0) {
+      message.error(`Product quantity must be greater than 0`);
+      setInputQuantity(1);
     } else {
-      setInputQuantity("");
+      setInputQuantity(e.target.value);
     }
   }, []);
 
@@ -189,22 +207,26 @@ function ProductDetails(props) {
   }, []);
   return (
     <>
-      {contextHolder}
+      {/* {contextHolder} */}
+
+      {isLoadingAddCart && (
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+          <Loading />
+        </div>
+      )}
 
       <div className="container mt-[5rem] flex flex-col items-center justify-center">
         <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
           <Link
             href="/"
-            className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+            className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
           >
             Home
           </Link>
 
           <span className="flex items-center justify-center w-[0.82456rem] text-text-2 opacity-[0.5]">/</span>
 
-          <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
-            {product?.name}
-          </span>
+          <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">{product?.name}</span>
         </div>
 
         <div className="min-w-full mt-[5rem] grid grid-cols-12">
@@ -274,9 +296,9 @@ function ProductDetails(props) {
             <div className="relative flex w-[29.25rem] sm:w-[31.25rem] h-[37.5rem] flex-col items-center justify-center">
               {isFlashsale && (
                 <div className="absolute top-0 left-0 gap-[1rem] flex flex-col items-center justify-center px-[0.75rem] py-[0.75rem] bg-secondary-2 rounded-[0.25rem]">
-                  <span className="text-text-1 font-poppins text-[2rem] font-[700] leading-[2rem]">FLASH SALE</span>
+                  <span className="text-text-1 font-inter text-[2rem] font-[700] leading-[2rem]">FLASH SALE</span>
 
-                  <span className="text-text-1 font-poppins text-[1.5rem] font-[700] leading-[1.5rem]">
+                  <span className="text-text-1 font-inter text-[1.5rem] font-[700] leading-[1.5rem]">
                     Stock: {stockFlashsale}
                   </span>
                 </div>
@@ -307,22 +329,22 @@ function ProductDetails(props) {
                 height={1000}
               />
 
-              <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
+              <span className="whitespace-nowrap ml-[0.5rem] max-w-[5.9375rem] max-h-[1.3125rem] text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]">
                 ({product?.rateCount} Reviews)
               </span>
 
               <div className="ml-[1rem] mt-[0.1rem] min-h-[1rem] min-w-[0.0625rem] bg-black opacity-[0.5]" />
 
-              <span className="ml-[1rem] opacity-[0.6] text-button-3 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+              <span className="ml-[1rem] opacity-[0.6] text-[rgb(0,167,111)] font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
                 In Stock
               </span>
             </div>
 
             <span className="mt-[1rem] text-text-2 font-inter text-[1.5rem] font-[400] leading-[1.5rem] tracking-[0.045rem]">
-              ${parseFloat(product?.price).toFixed(2)}
+              {formattedMoney(product?.price)}
             </span>
 
-            <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">
+            <span className="mt-[1.5rem] max-w-[23.3125rem] max-h-[3.9375rem] overflow-hidden text-ellipsis text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">
               {product?.description}
             </span>
 
@@ -359,38 +381,38 @@ function ProductDetails(props) {
 
               <ul className="flex items-start gap-[1rem]">
                 <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
-                  <span className="min-w-[1.125rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                  <span className="min-w-[1.125rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-inter font-[500] leading-[1.3125rem]">
                     XS
                   </span>
                 </li>
 
                 <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
-                  <span className="min-w-[0.5rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                  <span className="min-w-[0.5rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-inter font-[500] leading-[1.3125rem]">
                     S
                   </span>
                 </li>
 
                 <li className="bg-secondary-2 flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
-                  <span className="min-w-[0.75rem] min-h-[1.125rem] flex-shrink-0 text-text-1 font-poppins font-[500] leading-[1.3125rem]">
+                  <span className="min-w-[0.75rem] min-h-[1.125rem] flex-shrink-0 text-text-1 font-inter font-[500] leading-[1.3125rem]">
                     M
                   </span>
                 </li>
 
                 <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
-                  <span className="min-w-[0.375rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                  <span className="min-w-[0.375rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-inter font-[500] leading-[1.3125rem]">
                     L
                   </span>
                 </li>
 
                 <li className="flex min-w-[2rem] min-h-[2rem] items-center justify-center rounded-[0.25rem] border-solid border-[1px] border-[rgba(0,0,0,0.50)]">
-                  <span className="min-w-[1rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-poppins font-[500] leading-[1.3125rem]">
+                  <span className="min-w-[1rem] min-h-[1.125rem] flex-shrink-0 text-text-2 font-inter font-[500] leading-[1.3125rem]">
                     XL
                   </span>
                 </li>
               </ul>
             </div> */}
 
-            <div className="mt-[1.5rem] flex items-center justify-start">
+            <div className="relative mt-[1.5rem] flex items-center justify-start">
               {!isFlashsale && (
                 <>
                   <button
@@ -407,15 +429,15 @@ function ProductDetails(props) {
                     type="number"
                     value={inputQuantity}
                     onBlur={(e) => handleBlurInputQuantity(e)}
-                    onChange={(e) => handleChangeInputQuantity(e)}
+                    onChange={(e) => handleChangeInputQuantity(e, product)}
                     className={classNames(
-                      "flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-poppins text-[1.25rem] font-[500] leading-[1.75rem]",
+                      "flex px-[1rem] text-center max-w-[5rem] min-h-[2.75rem] border-t-[1px] border-b-[1px] border-solid border-[rgba(0,0,0,0.50)] items-center justify-center text-text-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]",
                       styles.no_arrow_input,
                     )}
                   />
 
                   <button
-                    onClick={() => handleClickPlus()}
+                    onClick={() => handleClickPlus(product?.stock)}
                     type="button"
                     className="rounded-tr-[0.25rem] rounded-br-[0.25rem] flex min-w-[2.5625rem] min-h-[2.75rem] flex-col items-center justify-center bg-secondary-2"
                   >
@@ -431,7 +453,7 @@ function ProductDetails(props) {
                 type="button"
                 className="whitespace-nowrap ml-[1rem] inline-flex px-[3rem] py-[0.625rem] items-center justify-center gap-[0.625rem] rounded-[0.25rem] bg-secondary-2"
               >
-                <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
+                <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Buy Now</span>
               </button>
 
               {/* <div className="ml-[1.19rem] flex min-w-[2.5rem] min-h-[2.5rem] p-[0.25rem] items-center justify-center flex-shrink-0 rounded-[0.25rem] border-[1px] border-solid border-[rgba(0,0,0,0.50)]">
@@ -450,11 +472,9 @@ function ProductDetails(props) {
                 />
 
                 <div className="flex flex-col items-start gap-[0.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
-                    Free Delivery
-                  </span>
+                  <span className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">Free Delivery</span>
 
-                  <span className="text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem] underline">
+                  <span className="text-text-2 font-inter text-[0.75rem] font-[500] leading-[1.125rem] underline">
                     Enter your postal code for Delivery Availability
                   </span>
                 </div>
@@ -472,11 +492,11 @@ function ProductDetails(props) {
                 />
 
                 <div className="flex flex-col items-start gap-[0.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
                     Return Delivery
                   </span>
 
-                  <span className="text-text-2 font-poppins text-[0.75rem] font-[500] leading-[1.125rem]">
+                  <span className="text-text-2 font-inter text-[0.75rem] font-[500] leading-[1.125rem]">
                     Free 30 Days Delivery Returns. <u>Details</u>
                   </span>
                 </div>
@@ -491,7 +511,7 @@ function ProductDetails(props) {
               <Rectangle />
             </div>
 
-            <h3 className="text-secondary-2 font-poppins text-[1rem] font-[600] leading-[1.25rem]">Related Item</h3>
+            <h3 className="text-secondary-2 font-inter text-[1rem] font-[600] leading-[1.25rem]">Related Item</h3>
           </div>
 
           <div className="min-w-full grid grid-cols-12 xl:flex items-start xl:gap-[1.875rem]">

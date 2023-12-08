@@ -82,7 +82,7 @@ function Login() {
   return (
     <>
       {isLoading && (
-        <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
       )}
@@ -101,7 +101,7 @@ function Login() {
               : "min-w-[20rem] min-h-[10rem] scale-0 transition-all duration-300 flex flex-col py-[3rem] items-center justify-center gap-[2rem] bg-white rounded-[1rem]",
           )}
         >
-          <span className="text-text-2 font-poppins text-[1rem] font-[600] leading-[1.5rem]">{errorMessage}</span>
+          <span className="text-text-2 font-inter text-[1rem] font-[600] leading-[1.5rem]">{errorMessage}</span>
 
           <BtnOk handleClickOk={handleClickOk} />
         </div>
@@ -115,10 +115,10 @@ function Login() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center 2xl:items-start gap-[3rem]">
           <div className="flex flex-col items-start gap-[1.5rem]">
             <span className="text-text-2 font-inter text-[2.25rem] font-[600] leading-[1.875rem] tracking-[0.09rem]">
-              Log in to Exclusive
+              Log in to E-Shop
             </span>
 
-            <span className="text-text-2 font-poppins text-[1rem] font-[500] leading-[1.5rem]">
+            <span className="text-text-2 font-inter text-[1rem] font-[500] leading-[1.5rem]">
               Enter your details below
             </span>
           </div>
@@ -129,7 +129,7 @@ function Login() {
                 <input
                   {...validation.username}
                   className={classNames(
-                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                     errors.username && "border-solid border-secondary-2 border-[2px]",
                   )}
                   type="text"
@@ -138,7 +138,7 @@ function Login() {
                 />
 
                 {errors.username && (
-                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                     Username is required.
                   </p>
                 )}
@@ -148,7 +148,7 @@ function Login() {
                 <input
                   {...validation.password}
                   className={classNames(
-                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]",
+                    "pl-[0.5rem] w-[23.125rem] h-[2rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]",
                     errors.password && "border-solid border-secondary-2 border-[2px]",
                   )}
                   type="password"
@@ -157,7 +157,7 @@ function Login() {
                 />
 
                 {errors.password && (
-                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                     Password is required.
                   </p>
                 )}
@@ -169,10 +169,10 @@ function Login() {
                 type="submit"
                 className="flex px-[3rem] h-[3.5rem]  py-[1rem ] justify-center items-center gap-[0.625rem] rounded-[0.25rem] bg-button-2"
               >
-                <span className="text-text-1 font-poppins text-[1rem] font-[500] leading-[1.5rem]">Log In</span>
+                <span className="text-text-1 font-inter text-[1rem] font-[500] leading-[1.5rem]">Log In</span>
               </button>
 
-              <Link href="/" className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+              <Link href="/" className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                 Forget Password?
               </Link>
             </div>
@@ -186,7 +186,7 @@ function Login() {
               <div className="flex items-start gap-[1rem]">
                 <LogoGoogle />
 
-                <span className="flex items-center justify-center text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <span className="flex items-center justify-center text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   Log in with Google
                 </span>
               </div>

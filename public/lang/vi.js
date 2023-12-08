@@ -1,78 +1,78 @@
 const trans = {
   topHeader: {
-    title: "Giảm giá mùa hè cho tất cả đồ bơi và giao hàng nhanh miễn phí - GIẢM GIÁ 50%!",
+    title: "Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!",
   },
 
-  shopNow: "Mua Ngay",
+  shopNow: "Shop Now",
 
   navBar: {
-    lang: "Tiếng Việt",
-    home: "Trang Chủ",
-    contact: "Liên Hệ",
-    about: "Thông Tin",
-    signup: "Đăng Ký",
-    inputSearch: "Bạn đang tìm gì?",
+    lang: "English",
+    home: "Home",
+    contact: "Contact",
+    about: "About",
+    signup: "Sign Up",
+    inputSearch: "What are you looking for?",
   },
 
   slideBar: [
     {
-      name: "Thời Trang Nữ",
+      name: "Woman’s Fashion",
       child: [
         {
-          name: "Thời Trang Nữ 1",
+          name: "Woman’s Fashion 1",
         },
         {
-          name: "Thời Trang Nữ 2",
+          name: "Woman’s Fashion 2",
         },
         {
-          name: "Thời Trang Nữ 3",
+          name: "Woman’s Fashion 3",
         },
       ],
     },
     {
-      name: "Thời Trang Nam",
+      name: "Men’s Fashion",
       child: [
         {
-          name: "Thời Trang Nam 1",
+          name: "Men’s Fashion 1",
         },
         {
-          name: "Thời Trang Nam 2",
+          name: "Men’s Fashion 2",
         },
         {
-          name: "Thời Trang Nam 3",
+          name: "Men’s Fashion 3",
         },
       ],
     },
     {
-      name: "Đồ Điện Tử",
+      name: "Electronics",
     },
     {
-      name: "Nhà & Phong Cách Sống",
+      name: "Home & Lifestyle",
     },
     {
-      name: "Dược Phẩm",
+      name: "Medicine",
     },
     {
-      name: "Thể Thao & Ngoài Trời",
+      name: "Sports & Outdoor",
     },
     {
-      name: "Đồ Chơi Trẻ Em",
+      name: "Baby’s & Toys",
     },
     {
-      name: "Tạp Hóa & Thú Cưng",
+      name: "Groceries & Pets",
     },
     {
-      name: "Sức Khỏe & Làm Đẹp",
+      name: "Health & Beauty",
     },
   ],
 
   flashSale: {
-    today: "Hôm Nay",
-    flashSale: "Giảm Nhanh",
-    days: "Ngày",
-    hours: "Giờ",
-    minutes: "Phút",
-    seconds: "Giây",
+    today: "Today’s",
+    flashSale: "Flash Sales",
+    days: "Days",
+    hours: "Hours",
+    minutes: "Minutes",
+    seconds: "Seconds",
   },
 };
 

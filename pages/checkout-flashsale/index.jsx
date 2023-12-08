@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import * as yup from "yup";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
+import Loading from "@/components/svg/loading";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 import { checkTime } from "@/helper/checkTimeFlashSale";
@@ -103,6 +104,7 @@ function CheckoutFlashsale() {
 
   const [address, setAddress] = useState([]);
   const [districtId, setDistrictId] = useState("");
+  const [isLoading, setIsloading] = useState(false);
   // const totalPrice = 0;
   const [totalPrice, setTotalPrice] = useState(0);
   const shipping = useShippingStore((state) => state);
@@ -184,6 +186,8 @@ function CheckoutFlashsale() {
   );
 
   const onSubmit = async (data) => {
+    setIsloading(true);
+
     const [checkStockFlashsale, getTimeFlashsale] = await Promise.all([
       axiosClient.get(`/flashSale/check-flashsale?productId=${cartData.cart[0].product.productId}`),
       axiosClient.get("/time-flashsale"),
@@ -279,11 +283,17 @@ function CheckoutFlashsale() {
     <>
       {contextHolder}
 
+      {isLoading && (
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+          <Loading />
+        </div>
+      )}
+
       <div className="container mt-[5rem]">
         <div className="flex items-center gap-[0.75rem] max-h-[1.3125rem] min-w-full">
           <Link
             href="/"
-            className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+            className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
           >
             Home
           </Link>
@@ -294,7 +304,7 @@ function CheckoutFlashsale() {
 
           <Link
             href="/cart"
-            className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
+            className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem] opacity-[0.5]"
           >
             Cart
           </Link>
@@ -303,7 +313,7 @@ function CheckoutFlashsale() {
             /
           </span>
 
-          <span className="text-text-2 font-poppins text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
+          <span className="text-text-2 font-inter text-[0.875rem] font-[400] leading-[1.3125rem]">Checkout</span>
         </div>
 
         <h2 className="max-w-[15.75rem] mt-[5rem] text-text-2 font-inter text-[2.25rem] font-[500] leading-[1.875rem] tracking-[0.09rem] whitespace-nowrap">
@@ -319,11 +329,11 @@ function CheckoutFlashsale() {
               <div className="flex flex-col items-start gap-[2rem]">
                 <label htmlFor="firstName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div className="max-h-[1.5rem]">
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       First Name
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
 
                   <input
@@ -332,21 +342,21 @@ function CheckoutFlashsale() {
                     id="firstName"
                     name="firstName"
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.firstName && "border-solid border-secondary-2 border-[2px]",
                     )}
                     defaultValue={profile?.firstName}
                   />
 
                   {errors.firstName && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.firstName.message}
                     </p>
                   )}
                 </label>
 
                 <label htmlFor="lastName" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                  <span className="max-h-[1.5rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="max-h-[1.5rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Last Name
                   </span>
 
@@ -356,21 +366,21 @@ function CheckoutFlashsale() {
                     id="lastName"
                     name="lastName"
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.lastName && "border-solid border-secondary-2 border-[2px]",
                     )}
                     defaultValue={profile?.lastName}
                   />
 
                   {errors.lastName && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.lastName.message}
                     </p>
                   )}
                 </label>
 
                 <label htmlFor="apartment" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                     Province
                   </span>
 
@@ -387,7 +397,7 @@ function CheckoutFlashsale() {
                       shipping.getDistrict(e.target.value);
                     }}
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem]  rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.province && "border-solid border-secondary-2 border-[2px]",
                     )}
                     name="province"
@@ -413,7 +423,7 @@ function CheckoutFlashsale() {
                   </select>
 
                   {errors.province && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.province.message}
                     </p>
                   )}
@@ -421,11 +431,11 @@ function CheckoutFlashsale() {
 
                 <label htmlFor="city" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       District
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
                   <select
                     {...validation.district}
@@ -440,7 +450,7 @@ function CheckoutFlashsale() {
                       shipping.getWard(e.target.value);
                     }}
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.district && "border-solid border-secondary-2 border-[2px]",
                     )}
                     id="district"
@@ -476,7 +486,7 @@ function CheckoutFlashsale() {
                   </select>
 
                   {errors.district && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.district.message}
                     </p>
                   )}
@@ -484,16 +494,16 @@ function CheckoutFlashsale() {
 
                 <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Ward
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
                   <select
                     {...validation.ward}
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.ward && "border-solid border-secondary-2 border-[2px]",
                     )}
                     name="ward"
@@ -531,7 +541,7 @@ function CheckoutFlashsale() {
                   </select>
 
                   {errors.ward && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.ward.message}
                     </p>
                   )}
@@ -539,11 +549,11 @@ function CheckoutFlashsale() {
 
                 <label htmlFor="streetAddress" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Street Address
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
 
                   <input
@@ -552,14 +562,14 @@ function CheckoutFlashsale() {
                     id="streetAddress"
                     name="streetAddress"
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.streetAddress && "border-solid border-secondary-2 border-[2px]",
                     )}
                     // defaultValue={session?.user?.address[0]?.address}
                   />
 
                   {errors.streetAddress && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.streetAddress.message}
                     </p>
                   )}
@@ -567,11 +577,11 @@ function CheckoutFlashsale() {
 
                 <label htmlFor="phoneNumber" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Phone Number
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
 
                   <input
@@ -579,7 +589,7 @@ function CheckoutFlashsale() {
                     id="phoneNumber"
                     name="phoneNumber"
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.phoneNumber && "border-solid border-secondary-2 border-[2px]",
                     )}
                     defaultValue={profile?.phoneNumber?.includes("null") ? "" : profile?.phoneNumber}
@@ -587,7 +597,7 @@ function CheckoutFlashsale() {
                   />
 
                   {errors.phoneNumber && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.phoneNumber.message}
                     </p>
                   )}
@@ -595,11 +605,11 @@ function CheckoutFlashsale() {
 
                 <label htmlFor="email" className="max-h-[5.125rem] flex flex-col items-start gap-[0.5rem]">
                   <div>
-                    <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
+                    <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] opacity-[0.4]">
                       Email Address
                     </span>
 
-                    <span className="text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">*</span>
+                    <span className="text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">*</span>
                   </div>
 
                   <input
@@ -608,14 +618,14 @@ function CheckoutFlashsale() {
                     id="email"
                     name="email"
                     className={classNames(
-                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
+                      "min-w-full sm:min-w-[29.375rem] min-h-[3.125rem] rounded-[0.25rem] bg-secondary-1 text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] px-[1rem]",
                       errors.email && "border-solid border-secondary-2 border-[2px]",
                     )}
                     defaultValue={profile?.email}
                   />
 
                   {errors.email && (
-                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                    <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                       {errors.email.message}
                     </p>
                   )}
@@ -632,7 +642,7 @@ function CheckoutFlashsale() {
                   name="saveInfo"
                   className="min-w-[1.5rem] min-h-[1.5rem] accent-secondary-2"
                 />
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   Save this information for faster check-out next time
                 </span>
               </label>
@@ -652,15 +662,15 @@ function CheckoutFlashsale() {
 
                     <div className="min-w-[15rem] sm:min-w-[21.6875rem] flex items-center justify-between">
                       <div className="flex flex-col gap-1">
-                        <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                        <span className="max-w-[12rem] sm:max-w-[18rem] truncate text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                           {item.productDetail.name}
                         </span>
-                        <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                        <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                           Quantity: {item.product.quantity}
                         </span>
                       </div>
 
-                      <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                      <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                         {formattedMoney((item.productDetail.price * (100 - item.flashsales.discount)) / 100)}
                       </span>
                     </div>
@@ -670,9 +680,9 @@ function CheckoutFlashsale() {
 
               <div className="flex flex-col items-start gap-[1rem]">
                 <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Subtotal: </span>
 
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                     {formattedMoney(totalPrice)}
                   </span>
                 </div>
@@ -680,9 +690,9 @@ function CheckoutFlashsale() {
                 <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
                 <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Shipping:</span>
 
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                     {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 || 0)}
                   </span>
                 </div>
@@ -690,9 +700,9 @@ function CheckoutFlashsale() {
                 <hr className="min-w-[20rem] sm:min-w-[26.375rem] border-solid border-gray-400 border-[1px]" />
 
                 <div className="flex items-start justify-between min-w-[20rem] sm:min-w-[26.375rem]">
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Total:</span>
 
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                     {formattedMoney(parseInt(shipping?.feeShip, 10) / 24000 + totalPrice)}
                   </span>
                 </div>
@@ -718,7 +728,7 @@ function CheckoutFlashsale() {
                     // checked
                   />
 
-                  <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
+                  <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Bank</span>
                 </label>
 
                 <div className="flex items-start gap-[0.5rem]">
@@ -784,20 +794,18 @@ function CheckoutFlashsale() {
                   value="CASH"
                 />
 
-                <span className="text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
-                  Cash on delivery
-                </span>
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">Cash on delivery</span>
               </label>
 
               {errors.paymentType && (
-                <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]">
+                <p className="w-[23.125rem] h-[2rem] text-secondary-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
                   {errors.paymentType.message}
                 </p>
               )}
 
               <div className="sm:flex items-end gap-[1rem]">
                 <input
-                  className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-poppins text-[1rem] font-[400] leading-[1.5rem]"
+                  className="mb-[1rem] sm:mb-0 py-[1rem] px-[1.5rem] rounded-[0.25rem] border-solid border-black border-[1px] max-h-[3.5rem] min-w-full sm:min-w-[18.75rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]"
                   type="text"
                   placeholder="Coupon Code"
                 />
