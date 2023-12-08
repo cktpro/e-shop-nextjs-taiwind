@@ -79,7 +79,7 @@ function OrderDetails(props) {
   return (
     <>
       {isLoading && (
-        <div className="h-screen w-screen bg-[rgba(255,255,255,0.9)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
+        <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
       )}
