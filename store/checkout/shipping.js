@@ -28,10 +28,7 @@ const useShippingStore = create((set) => ({
         weight += product[i].productDetail.weight * product[i].product.quantity;
         length += product[i].productDetail.length * product[i].product.quantity;
       }
-      // console.log('◀◀◀  ▶▶▶',width,
-      // height,
-      // length,
-      // weight);
+      // console.log("◀◀◀  ▶▶▶", width, height, length, weight);
       const dataShip = {
         from_district_id: 1526,
         from_ward_code: "40103",
@@ -58,6 +55,7 @@ const useShippingStore = create((set) => ({
         "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee",
         dataShip,
       );
+      console.log("◀◀◀ res ▶▶▶", res);
       set({ isFeeShip: true, feeShip: res.data.data.total, isLoading: false });
     } catch (error) {
       set({ isError: true, isLoading: false });

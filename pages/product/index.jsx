@@ -13,7 +13,7 @@ import { axiosClient } from "@/helper/axios/axiosClient";
 
 const CheckboxGroup = Checkbox.Group;
 // const plainOptions = ['Hàng mới', 'Flash sale', 'Giảm giá'];
-const plainOptions = ["Hàng mới", "Flash sale", "Giảm giá"];
+const plainOptions = ["New", "Flash sale", "Sale"];
 function Product(props) {
   const { product, category, supplier } = props;
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,7 @@ function Product(props) {
   const [checkedList, setCheckedList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [supplierList, setsupplierList] = useState([]);
+  const [total, setTotal] = useState(product.total);
   const onChange = (list) => {
     setCheckedList(list);
   };
@@ -38,9 +39,12 @@ function Product(props) {
       const result = await axiosClient.get(
         `products?${filter?.categoryId ? `categoryId=${filter.categoryId}&` : ""}${
           filter?.supplierId ? `supplierId=${filter.supplierId}` : ""
+        }${filter?.startPrice ? `&startPrice=${filter.startPrice}` : ""}${
+          filter?.endPrice ? `&endPrice=${filter.endPrice}` : ""
         }`,
       );
       setProductList(result.data.payload);
+      setTotal(result.data.total);
       // console.log("◀◀◀ result ▶▶▶", result);
       setLoading(false);
       setFilter((prev) => ({
@@ -94,6 +98,41 @@ function Product(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [filter],
   );
+  const handleChangePrice = useCallback(
+    async (item) => {
+      if (!item.endPrice) {
+        setFilter((prev) => ({
+          ...prev,
+          startPrice: item.startPrice,
+          endPrice: null,
+          isChanged: true,
+        }));
+      } else {
+        setFilter((prev) => ({
+          ...prev,
+          startPrice: item.startPrice,
+          endPrice: item.endPrice,
+          isChanged: true,
+        }));
+      }
+      // setFilter((prev) => ({
+      //   ...prev,
+      //   supplierId: id,
+      //   isChanged: true,
+      // }));
+      // try {
+      //   setLoading(true);
+      //   const result = await axiosClient.get(`products?supplierId=${e}`);
+      //   setProductList(result.data.payload);
+      //   console.log("◀◀◀ result ▶▶▶", result);
+      //   setLoading(false);
+      // } catch (error) {
+      //   console.log("◀◀◀ error ▶▶▶", error);
+      // }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filter],
+  );
   useEffect(() => {
     const newList = category.map((item) => ({
       value: item.id,
@@ -130,9 +169,9 @@ function Product(props) {
         </div>
         <div className=" my-0">
           <Space wrap>
-            <span>Bộ lọc</span>
+            <span>Filter</span>
             <Select
-              defaultValue="Loại sản phẩm"
+              defaultValue="Category"
               style={{
                 width: "8rem",
               }}
@@ -142,23 +181,45 @@ function Product(props) {
             />
 
             <Select
-              defaultValue="Giá"
+              defaultValue="Price"
               style={{
-                width: 120,
+                width: 140,
               }}
+              onChange={(id, item) => handleChangePrice(item)}
               options={[
                 {
-                  value: "lucy",
-                  label: "$0-$1000",
+                  value: "1",
+                  startPrice: 0,
+                  endPrice: 100,
+                  label: "$0-$100",
                 },
                 {
-                  value: "lucy2",
-                  label: "$1000-$3000",
+                  value: "2",
+                  startPrice: 100,
+                  endPrice: 500,
+                  label: "$100-$500",
+                },
+                {
+                  value: "3",
+                  startPrice: 500,
+                  endPrice: 1000,
+                  label: "$500-$1000",
+                },
+                {
+                  value: "4",
+                  startPrice: 1000,
+                  endPrice: 5000,
+                  label: "$1000-$5000",
+                },
+                {
+                  value: "5",
+                  startPrice: 5000,
+                  label: "$5000 - Max",
                 },
               ]}
             />
             <Select
-              defaultValue="Nhà cung cấp"
+              defaultValue="Supplier"
               style={{
                 width: "12rem",
               }}
@@ -189,7 +250,7 @@ function Product(props) {
           </Space>
           <div className="d-flex justify-content-start align-items-center mt-3 gap-3">
             <span>
-              <b>{productList.length}</b> Kết quả
+              <b>{total}</b> Result
             </span>
             {productList?.length > 0 && (
               <div>

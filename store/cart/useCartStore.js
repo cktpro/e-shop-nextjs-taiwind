@@ -16,55 +16,6 @@ const initialState = {
 
 const useCartStore = create((set, get) => ({
   ...initialState,
-  getFee: async (address, product) => {
-    set({ isLoading: true, isFeeShip: false });
-    try {
-      let width = 0;
-      let height = 0;
-      let length = 0;
-      let weight = 0;
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < product.length; i++) {
-        width += product[i].productDetail.width * product[i].product.quantity;
-        height += product[i].productDetail.height * product[i].product.quantity;
-        weight += product[i].productDetail.weight * product[i].product.quantity;
-        length += product[i].productDetail.length * product[i].product.quantity;
-      }
-      // console.log('◀◀◀  ▶▶▶',width,
-      // height,
-      // length,
-      // weight);
-      const dataShip = {
-        from_district_id: 1526,
-        from_ward_code: "40103",
-        // service_id: 53320,
-        service_type_id: 2,
-        // "to_district_id":1526,
-        // "to_ward_code":"40103",
-        height,
-        length,
-        weight,
-        width,
-        to_district_id: parseInt(address.districtId, 10),
-        to_ward_code: address.wardId.toString(),
-        // height: 50,
-        // length: 20,
-        // weight: 200,
-        // width: 20,
-        insurance_value: 0,
-        cod_failed_amount: 2000,
-        coupon: null,
-      };
-      axiosClient.defaults.headers.common.token = "b100dde3-66b8-11ee-96dc-de6f804954c9";
-      const res = await axiosClient.post(
-        "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee",
-        dataShip,
-      );
-      set({ isFeeShip: true, feeShip: res.data.data.total, isLoading: false });
-    } catch (error) {
-      set({ isError: true, isLoading: false });
-    }
-  },
   updateCart: async (data) => {
     set({ isLoading: true });
     try {
@@ -173,7 +124,9 @@ const useCartStore = create((set, get) => ({
       });
       // eslint-disable-next-line no-console
       console.log("◀◀◀ error ▶▶▶", error);
-      message.error("Add cart failed");
+      if (error.response.status === 412) {
+        message.error("Products in stock are not enough");
+      } else message.error("Add cart failed");
     }
   },
 
