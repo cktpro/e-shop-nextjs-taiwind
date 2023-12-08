@@ -171,10 +171,10 @@ body {
 } */
 /* Nprogress styles */
 #nprogress .bar {
-  background: red;
-  height: 0.3rem;
+  background: red !important;
+  height: 0.3rem !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px red, 0 0 5px red;
+  box-shadow: 0 0 10px red, 0 0 5px red !important;
 }
