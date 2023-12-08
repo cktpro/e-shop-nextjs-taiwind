@@ -29,7 +29,7 @@ function ProductDetailPage(props) {
         <meta content={product.description} name="description" key="desc" />
         <meta content={product.name} property="og:title" />
         <meta content={product.description} property="og:description" />
-        <meta content={product.image} property="og:image" />
+        <meta content={product.image.location} property="og:image" />
       </Head>
 
       <section>
