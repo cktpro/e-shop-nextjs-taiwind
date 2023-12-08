@@ -145,7 +145,7 @@ function AccountLayout({ children }) {
         </span>
       </div>
 
-      <div className="mt-[5rem] flex items-start w-full justify-center lg:gap-[6.25rem]">
+      <div className="mt-[5rem] flex items-start w-full justify-start lg:gap-[6.25rem]">
         <ul className="hidden xl:flex flex-col items-start justify-center">
           <li className="flex flex-col items-start justify-center">
             <Link className="hover:opacity-50" onClick={closeDrawerLeft} href="/">

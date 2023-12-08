@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Form, Input } from "antd";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
+import Loading from "@/components/svg/loading";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 
@@ -265,7 +266,11 @@ function AccountPage() {
       </Form>
     );
   }
-  return <span>Loading</span>;
+  return (
+    <div className="w-full flex justify-center items-center">
+      <Loading />
+    </div>
+  );
 }
 
 export default AccountPage;

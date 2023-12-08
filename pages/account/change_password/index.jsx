@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Form, Input, message } from "antd";
 
+import Loading from "@/components/svg/loading";
+
 import { axiosClient } from "@/helper/axios/axiosClient";
 
 import AccountLayout from "../layout";
@@ -316,7 +318,11 @@ function ChangePass() {
       </Form>
     );
   }
-  return <span>Loading</span>;
+  return (
+    <div className="w-full flex justify-center items-center">
+      <Loading />
+    </div>
+  );
 }
 
 export default ChangePass;

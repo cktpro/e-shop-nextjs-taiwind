@@ -126,29 +126,35 @@ function MyOrders() {
   ];
   return (
     <>
-      {isLoading && (
+      {/* {isLoading && (
         <div className="h-screen w-screen bg-[rgba(255,255,255,0.3)] fixed top-0 flex items-center justify-center cursor-default z-[9999]">
           <Loading />
         </div>
-      )}
+      )} */}
 
-      <div className="cover_order w-full overflow-x-auto flex flex-col items-start justify-center  max-w-[54.375rem]  flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
-        {/* <span className="max-w-[9.6875rem] text-secondary-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">
-        Your Order
-      </span> */}
-        {order.length <= 0 && <p>You not have any order</p>}
-        <Table
-          scroll={{
-            y: 450,
-            x: 650,
-          }}
-          rowKey="_id"
-          style={{ width: "auto" }}
-          columns={columns}
-          dataSource={order}
-          pagination={false}
-        />
-      </div>
+      {!isLoading ? (
+        <div className="cover_order w-full overflow-x-auto flex flex-col items-start justify-center  max-w-[54.375rem]  flex-shrink-0 rounded-[0.25rem] bg-primary-1 shadow-custom">
+          {/* <span className="max-w-[9.6875rem] text-secondary-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">
+      Your Order
+    </span> */}
+          {order.length <= 0 && <p>You not have any order</p>}
+          <Table
+            scroll={{
+              y: 450,
+              x: 650,
+            }}
+            rowKey="_id"
+            style={{ width: "auto" }}
+            columns={columns}
+            dataSource={order}
+            pagination={false}
+          />
+        </div>
+      ) : (
+        <div className="w-full flex justify-center items-center">
+          <Loading />
+        </div>
+      )}
     </>
   );
 }

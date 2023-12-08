@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { message, Modal } from "antd";
 
 import ViewAllProducts from "@/components/buttons/viewAllProduct";
+import Loading from "@/components/svg/loading";
 
 import { axiosClient } from "@/helper/axios/axiosClient";
 import { useShippingStore } from "@/store/checkout/shipping";
@@ -109,37 +110,43 @@ function MyAccount() {
         <span className="max-w-[12.6875rem] text-secondary-2 font-inter text-[1.25rem] font-[500] leading-[1.75rem]">
           Your Address
         </span>
-        {address?.map((item) => {
-          if (item.isDeleted === true) {
-            return null;
-          }
-          return (
-            <div
-              key={item.id}
-              className="w-full flex justify-between px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
-            >
-              <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
-                {item.streetAddress} - {item.wardName} - {item.districtName} - {item.provinceName}
-              </span>{" "}
-              <div className="flex gap-2">
-                <button type="button" onClick={() => setOpen(true)}>
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleDelete(item.id);
-                  }}
-                >
-                  Delete
-                </button>
+        {address.length > 0 ? (
+          address?.map((item) => {
+            if (item.isDeleted === true) {
+              return null;
+            }
+            return (
+              <div
+                key={item.id}
+                className="w-full flex justify-between px-[1rem] py-[0.81rem] text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem] min-w-full md:min-w-[20.625rem] min-h-[3.125rem] flex-shrink-0-s rounded-[0.25rem] bg-secondary-1"
+              >
+                <span className="text-text-2 font-inter text-[1rem] font-[400] leading-[1.5rem]">
+                  {item.streetAddress} - {item.wardName} - {item.districtName} - {item.provinceName}
+                </span>{" "}
+                <div className="flex gap-2">
+                  <button type="button" onClick={() => setOpen(true)}>
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleDelete(item.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+                <Modal open={open} onCancel={() => setOpen(false)} footer>
+                  <FormAddress addressItem={item} onOk={handleUpdate} />
+                </Modal>
               </div>
-              <Modal open={open} onCancel={() => setOpen(false)} footer>
-                <FormAddress addressItem={item} onOk={handleUpdate} />
-              </Modal>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div className="w-full flex justify-center items-center">
+            <Loading />
+          </div>
+        )}
         <ViewAllProducts
           text={!showForm ? "Add New Address" : "Close"}
           type="button"
